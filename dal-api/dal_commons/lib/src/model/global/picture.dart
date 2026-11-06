@@ -6,9 +6,17 @@ class Picture {
 
   factory Picture.fromJson(Map<String, dynamic>? json) {
     return json != null
-        ? Picture(
-            large: json["large"].toString(), medium: json["medium"].toString())
+        ? Picture(large: _url(json["large"]), medium: _url(json["medium"]))
         : Picture();
+  }
+
+  /// A missing key used to become the literal string "null" through
+  /// `toString()`, which then reached image loaders and notification image
+  /// downloads as a bogus URL.
+  static String? _url(dynamic value) {
+    final text = value?.toString().trim();
+    if (text == null || text.isEmpty || text == 'null') return null;
+    return text;
   }
 
   Map<String, dynamic> toJson() {
