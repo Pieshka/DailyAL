@@ -714,7 +714,11 @@ class NodeStatusValue {
   Color? color;
   int? index;
 
-  NodeStatusValue({required status, color = Colors.transparent});
+  // The parameters used to be plain (non-`this.`) names, so this constructor
+  // silently produced a badge with no status and no colour.
+  NodeStatusValue({required String status, Color color = Colors.transparent})
+      : status = status,
+        color = color;
 
   NodeStatusValue.fromListStatus(myListStatus) {
     try {

@@ -288,8 +288,8 @@ class _UserStatsScreenState extends State<UserStatsScreen> {
       SB.lh10,
       SliverWrapper(keyed(
           'score',
-          _scoreDistribution(
-              insights.statusScoreDistributionMap, insights.unrankedShows ?? 0))),
+          _scoreDistribution(insights.statusScoreDistributionMap,
+              insights.unrankedShows ?? 0))),
       SB.lh10,
       SliverWrapper(keyed('genre', _genreDistribution(insights))),
       SB.lh10,
@@ -364,7 +364,8 @@ class _UserStatsScreenState extends State<UserStatsScreen> {
         ),
         SB.h20,
         SizedBox(
-          height: 260.0,
+          // Poster (180 * 1.4) + score bar + title; anything less clips the bar.
+          height: 340.0,
           child: _ILikeItTheyHateItList(insights),
         ),
       ],
