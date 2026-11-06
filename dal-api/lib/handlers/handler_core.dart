@@ -453,14 +453,28 @@ class HandlerCore {
       PathMatcher p1, Request p2) async {
     final username = queryParams(p2, 'username', '');
     final type = queryParams(p2, 'type', '');
-    final url = '${Constants.htmlEnd}history/$username/$type';
-    return {
-      'data': await HttpConnect.htmlPage(
-        url,
-        (p0) => HtmlParsers.parseUserHistory(p0, type),
-      )
-    };
+    // MAL's untyped history page only lists anime, so the combined view has to
+    // ask for both categories itself. Without this the app's Manga tab can
+    // never show anything.
+    if (type == null || type.isBlank) {
+      final pages = await Future.wait([
+        _userHistoryPage(username ?? '', 'anime'),
+        _userHistoryPage(username ?? '', 'manga'),
+      ]);
+      return {
+        'data': [...pages[0], ...pages[1]],
+      };
+    }
+    return {'data': await _userHistoryPage(username ?? '', type)};
   }
+
+  Future<List<Map<String, dynamic>>> _userHistoryPage(
+          String username, String type) async =>
+      await HttpConnect.htmlPage<List<Map<String, dynamic>>>(
+        '${Constants.htmlEnd}history/$username/$type',
+        (p0) => HtmlParsers.parseUserHistory(p0, type),
+      ) ??
+      const [];
 
   Future<Map<String, dynamic>> _handleClubs(PathMatcher p1, Request p2) async {
     final id = queryParams<int>(p2, 'id');

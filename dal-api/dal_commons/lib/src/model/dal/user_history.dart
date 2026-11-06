@@ -56,7 +56,9 @@ class Datum {
         id: json["id"],
         title: json["title"],
         history: json["history"],
-        category: categoryValues.map[json["category"]]!,
+        // An unknown category must not take the whole history page down, so no
+        // force unwrap here.
+        category: categoryValues.map[json["category"]],
         time: json["time"],
     );
 

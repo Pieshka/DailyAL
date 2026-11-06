@@ -18,23 +18,20 @@ class HtmlParsers {
   static Map<String, String> parseMagazines(Document? d, ContentType type) {
     if (d == null) return {};
     try {
-      final toReplace =
-          type == ContentType.anime ? "/anime/producer/" : "/manga/magazine/";
-      final gLink = d.querySelectorAll('.genre-link')[4];
-      final gList = gLink.querySelectorAll('.genre-list a') ?? [];
+      // The producers block on anime.php and the magazines block on manga.php
+      // are not at the same position (index 4 only happened to work for
+      // anime.php), so entries are matched by the link they point at instead.
+      final pattern = RegExp(type == ContentType.anime
+          ? r'/anime/producer/(\d+)/([^/?#]+)'
+          : r'/manga/magazine/(\d+)/([^/?#]+)');
       final prodMap = <String, String>{};
-      for (var e in gList) {
-        String? href = e.attributes['href'] ?? '';
-        if (href.isNotBlank) {
-          href = href.replaceAll(toReplace, '');
-          final split = href.split('/');
-          if (split.isNotEmpty) {
-            final id = int.tryParse(split[0]);
-            final name = split[1].replaceAll('_', ' ');
-            if (id != null && name.isNotBlank) {
-              prodMap['$id'] = name;
-            }
-          }
+      for (final entry in d.querySelectorAll('.genre-list a')) {
+        final match = pattern.firstMatch(entry.attributes['href'] ?? '');
+        if (match == null) continue;
+        final id = int.tryParse(match.group(1) ?? '');
+        final name = (match.group(2) ?? '').replaceAll('_', ' ').trim();
+        if (id != null && name.isNotBlank) {
+          prodMap['$id'] = name;
         }
       }
       return prodMap;
@@ -1721,46 +1718,69 @@ class HtmlParsers {
     return data;
   }
 
-  static parseUserHistory(Document? p0, String? type) {
+  static List<Map<String, dynamic>> parseUserHistory(
+      Document? p0, String? type) {
     final content = p0?.body?.querySelector('.history_content_wrapper');
-    if (content != null) {
-      final history = content
-          .querySelectorAll('tr')
-          .where((e) => e.querySelector('.normal_header') == null)
-          .map((e) {
-            final a = e.querySelector('a');
-            final url = a?.attributes.tryAt('href') ?? '';
-            final id = queryParamsUri(Uri.tryParse(url), 'id');
-            final category = url.isBlank
-                ? null
-                : (url.contains('anime') ? 'anime' : 'manga');
-            final title = a?.text.trim();
-            e.querySelector('td.borderClass a')?.remove();
-            final splits = e
-                .querySelector('td.borderClass')
-                ?.text
-                .trim()
-                .replaceAll('\n', '')
-                .split(' ');
-            final history = splits
-                ?.map((e) => e.trim())
-                .where((e) => e.isNotBlank)
-                .join(' ');
-            final time = unescape.convert(
-                e.querySelectorAll('td.borderClass').tryAt(1)?.text.trim() ??
-                    '');
-            return {
-              'id': id,
-              'title': title,
-              'history': history,
-              'category': category,
-              'time': time,
-            };
-          })
-          .where((e) => e['id'] != null)
-          .toList();
-      return history;
+    if (content == null) return const [];
+    // The page that was fetched knows which category it holds; the combined
+    // (no type) history page fetches both, so the type is authoritative.
+    final requestedType = (type ?? '').trim().toLowerCase();
+    final history = content
+        .querySelectorAll('tr')
+        .where((e) => e.querySelector('.normal_header') == null)
+        .map((e) {
+          final a = e.querySelector('a');
+          final url = a?.attributes.tryAt('href') ?? '';
+          final id = historyEntryId(url);
+          final category = historyEntryCategory(url, requestedType);
+          final title = a?.text.trim();
+          e.querySelector('td.borderClass a')?.remove();
+          final splits = e
+              .querySelector('td.borderClass')
+              ?.text
+              .trim()
+              .replaceAll('\n', '')
+              .split(' ');
+          final history = splits
+              ?.map((e) => e.trim())
+              .where((e) => e.isNotBlank)
+              .join(' ');
+          final time = unescape.convert(
+              e.querySelectorAll('td.borderClass').tryAt(1)?.text.trim() ?? '');
+          return {
+            'id': id,
+            'title': title,
+            'history': history,
+            'category': category,
+            'time': time,
+          };
+        })
+        .where((e) => e['id'] != null)
+        .toList();
+    return history;
+  }
+
+  /// MAL has linked history entries as `/anime.php?id=123` and as
+  /// `/anime/123/Title`; both shapes are accepted.
+  static String? historyEntryId(String url) {
+    if (url.isBlank) return null;
+    final fromQuery = queryParamsUri(Uri.tryParse(url), 'id');
+    if (fromQuery != null && fromQuery.toString().isNotBlank) {
+      return fromQuery.toString();
     }
+    final pathMatch = RegExp(r'/(?:anime|manga)/(\d+)').firstMatch(url);
+    return pathMatch?.group(1);
+  }
+
+  /// Falls back to the link when no category was requested, which is the case
+  /// for MAL's own combined history page.
+  static String? historyEntryCategory(String url, String requestedType) {
+    if (requestedType == 'anime' || requestedType == 'manga') {
+      return requestedType;
+    }
+    if (url.contains('manga')) return 'manga';
+    if (url.contains('anime')) return 'anime';
+    return null;
   }
 
   static parseGenres(Document document, String category) {
