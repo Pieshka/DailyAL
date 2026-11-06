@@ -1479,8 +1479,10 @@ Widget? unseenUsingScheduleData({
     if (episodesAired != null) {
       episodesAired--;
     } else {
-      var contenDetailed = baseNode?.content as AnimeDetailed;
-      episodesAired ??= contenDetailed.numEpisodes;
+      // baseNode may be absent or a different content type; a hard cast used
+      // to throw a TypeError and blank the whole list row.
+      final contenDetailed = baseNode?.content as AnimeDetailed?;
+      episodesAired ??= contenDetailed?.numEpisodes;
     }
     if (episodesAired != null) {
       return onBuild(episodesAired, episodesWatched);
@@ -1514,6 +1516,9 @@ Widget usingScheduler(int id, Widget Function(ScheduleData) widget) {
       ScheduleData? data;
       if (sn.hasData && sn.data!.containsKey(id)) {
         data = sn.data![id]!;
+        // A schedule entry without a usable timestamp cannot drive a
+        // countdown; skip it instead of crashing the row.
+        if (data.timestamp == null || data.timestamp! <= 0) return SB.z;
         return widget(data);
       }
       return SB.z;

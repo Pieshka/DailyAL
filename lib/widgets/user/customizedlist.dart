@@ -214,6 +214,7 @@ class _CustomizableFieldWidgetState extends State<CustomizableFieldWidget> {
     props = widget.props;
     _fieldValues =
         Map.fromIterable(props.fields, key: (e) => e.type, value: (e) => e);
+    DalApi.i.scheduleRevision.addListener(_onScheduleChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DalApi.i.onScheduleLoaded(() {
         logDal('Schedule loaded');
@@ -222,6 +223,16 @@ class _CustomizableFieldWidgetState extends State<CustomizableFieldWidget> {
         }
       });
     });
+  }
+
+  void _onScheduleChanged() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    DalApi.i.scheduleRevision.removeListener(_onScheduleChanged);
+    super.dispose();
   }
 
   AnimeDetailed? get node => widget.node?.content as AnimeDetailed?;

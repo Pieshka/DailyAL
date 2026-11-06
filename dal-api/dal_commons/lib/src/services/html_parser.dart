@@ -1266,24 +1266,38 @@ class HtmlParsers {
 
   static parseLiveChartSchedule(Document? doc) {
     if (doc == null) return null;
-    final cards = doc.querySelectorAll('.anime-card') ?? [];
+    // LiveChart redesigned its anime grid: the old `.anime-card` markup is
+    // now `article.lc-anime-details-card`, the countdown moved from
+    // `.episode-countdown time` to `time.lc-text-countdown[data-timestamp]`,
+    // the episode label from `.release-schedule-info` to the poster overlay
+    // (`EP6 · TV (JP)`), and the related links from `.related-links a` to
+    // footer icon links (`a.mal.logo` ...). Match both layouts so a site
+    // redesign can never blank out the whole airing schedule again.
+    final cards = doc.querySelectorAll('.anime-card, .lc-anime-details-card');
     return cards
         .map((e) {
-          final countDownEle = e.querySelector('.episode-countdown time');
+          final countDownEle = e.querySelector('.episode-countdown time') ??
+              e.querySelector('time[data-timestamp]');
           if (countDownEle != null) {
             final timestamp =
                 int.tryParse(countDownEle.attributes['data-timestamp'] ?? '');
+            final scheduleInfo = e.querySelector('.release-schedule-info') ??
+                e.querySelector(
+                    'a.lc-anime-details-card__poster-overlays__release-state div');
             final episode = _getBeforeInt(
-                e.querySelector('.release-schedule-info')?.text.trim() ?? '',
+                scheduleInfo?.text.trim() ?? '',
                 startPattern: 'EP',
                 endPattern: '·');
             if (timestamp != null && episode != null) {
               final relatedLinksMap = {};
-              e.querySelectorAll('.related-links a').forEach((rl) {
-                final className = rl.className;
+              e
+                  .querySelectorAll(
+                      '.related-links a, .lc-anime-details-card__footer a')
+                  .forEach((rl) {
                 final href = rl.attributes['href'];
-                if (href != null) {
-                  relatedLinksMap[className.replaceAll("-icon", '')] = href;
+                final key = _liveChartLinkKey(rl.className);
+                if (href != null && key != null) {
+                  relatedLinksMap[key] = href;
                 }
               });
 
@@ -1299,6 +1313,27 @@ class HtmlParsers {
         })
         .where((e) => e != null)
         .toList();
+  }
+
+  /// Maps a LiveChart related-link anchor class to the RelatedLinks key
+  /// ('mal', 'anilist', 'crunchyroll', ...). Old markup used e.g.
+  /// `mal-icon`; the redesign uses `mal logo lc-anime-details-card__footer__icon
+  /// shrink-0 ...`, so the first short, non-utility class token is the key.
+  static String? _liveChartLinkKey(String className) {
+    for (final raw in className.split(RegExp(r'\s+'))) {
+      final token = raw.replaceAll('-icon', '').trim();
+      if (token.isEmpty || token == 'logo') continue;
+      if (token.startsWith('lc-') ||
+          token.startsWith('lcm3') ||
+          token.contains('__') ||
+          token == 'shrink-0' ||
+          token == 'rounded-full' ||
+          token == 'inline-block') {
+        continue;
+      }
+      return token;
+    }
+    return null;
   }
 
   static parseUserAboutPage(Document? p0) {
