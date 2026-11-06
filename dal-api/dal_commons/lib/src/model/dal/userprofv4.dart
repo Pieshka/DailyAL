@@ -28,16 +28,23 @@ class UserProfileV4 implements DataUnion {
 
   UserProfileV4.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
-    username = json['username'];
-    url = json['url'];
-    images =
-        json['images'] != null ? Images.fromJson(json['images']) : null;
-    lastOnline = json['last_online'];
-    gender = json['gender'];
-    birthday = json['birthday'];
-    location = json['location'];
-    joined = json['joined'];
+    malId = json['mal_id'] ?? json['malId'];
+    // jikan-edge nests the flat Jikan v4 fields under a "profile" object.
+    final profile = json['profile'] is Map
+        ? Map<String, dynamic>.from(json['profile'] as Map)
+        : json;
+    username = profile['username'];
+    url = profile['url'] ?? profile['profileUrl'];
+    if (profile['images'] != null) {
+      images = Images.fromJson(profile['images']);
+    } else {
+      images = Images.fromUrl(profile['avatarUrl']);
+    }
+    lastOnline = profile['last_online'] ?? profile['lastOnlineAt'];
+    gender = profile['gender'];
+    birthday = profile['birthday'];
+    location = profile['location'];
+    joined = profile['joined'] ?? profile['joinedAt'];
     statistics = json['statistics'] != null
         ? Statistics.fromJson(json['statistics'])
         : null;
@@ -115,16 +122,20 @@ class AnimeStats {
 
   AnimeStats.fromJson(Map<String, dynamic> ?json) {
     if (json == null) return;
-    daysWatched = double.tryParse('${json['days_watched']}');
-    meanScore = double.tryParse('${json['mean_score']}');
+    // Accept both Jikan v4 snake_case and jikan-edge camelCase keys.
+    daysWatched =
+        double.tryParse('${pickJson(json, ['days_watched', 'daysWatched'])}');
+    meanScore =
+        double.tryParse('${pickJson(json, ['mean_score', 'meanScore'])}');
     watching = json['watching'];
     completed = json['completed'];
-    onHold = json['on_hold'];
+    onHold = pickJson(json, ['on_hold', 'onHold']);
     dropped = json['dropped'];
-    planToWatch = json['plan_to_watch'];
-    totalEntries = json['total_entries'];
+    planToWatch = pickJson(json, ['plan_to_watch', 'planToWatch']);
+    totalEntries = pickJson(json, ['total_entries', 'totalEntries']);
     rewatched = json['rewatched'];
-    episodesWatched = json['episodes_watched'];
+    episodesWatched =
+        pickJson(json, ['episodes_watched', 'episodesWatched']);
   }
 
   Map<String, dynamic> toJson() {
@@ -171,17 +182,20 @@ class MangaStats {
 
   MangaStats.fromJson(Map<String, dynamic> ?json) {
     if (json == null) return;
-    daysRead = double.tryParse('${json['days_read']}');
-    meanScore = double.tryParse('${json['mean_score']}');
+    // Accept both Jikan v4 snake_case and jikan-edge camelCase keys.
+    daysRead =
+        double.tryParse('${pickJson(json, ['days_read', 'daysRead'])}');
+    meanScore =
+        double.tryParse('${pickJson(json, ['mean_score', 'meanScore'])}');
     reading = json['reading'];
     completed = json['completed'];
-    onHold = json['on_hold'];
+    onHold = pickJson(json, ['on_hold', 'onHold']);
     dropped = json['dropped'];
-    planToRead = json['plan_to_read'];
-    totalEntries = json['total_entries'];
+    planToRead = pickJson(json, ['plan_to_read', 'planToRead']);
+    totalEntries = pickJson(json, ['total_entries', 'totalEntries']);
     reread = json['reread'];
-    chaptersRead = json['chapters_read'];
-    volumesRead = json['volumes_read'];
+    chaptersRead = pickJson(json, ['chapters_read', 'chaptersRead']);
+    volumesRead = pickJson(json, ['volumes_read', 'volumesRead']);
   }
 
   Map<String, dynamic> toJson() {

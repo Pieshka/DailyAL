@@ -61,6 +61,9 @@ void main() async {
     dalLogConfig.debugMode = kDebugMode;
     await dotenv.load(fileName: 'assets/n8TN5qDG22PAuP50Il');
     Environment.i.malClientId = CredMal.clientId;
+    // The bundled DAL handlers call the Jikan-compatible API too; keep them
+    // on the same (configurable) base URL as the app itself.
+    Constants.jikanV4 = CredMal.jikanV4;
     if (!kIsWeb) HttpOverrides.global = _SystemProxyHttpOverrides();
     ErrorReporting.init();
     await StreamUtils.i.init();

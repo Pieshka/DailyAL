@@ -5,7 +5,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CredMal {
   static Map<String, Object> get environment {
-    return dotenv.env;
+    try {
+      return dotenv.env;
+    } catch (_) {
+      // dotenv is not loaded yet (unit tests, very early startup). Falling
+      // back to an empty map lets env-only features use their defaults
+      // instead of crashing unrelated code paths.
+      return const {};
+    }
   }
 
   ///EndPoint
@@ -82,7 +89,36 @@ class CredMal {
 
   static final String apiUserAvatar = cdnEndPoint + "images/useravatars/";
 
-  static const String jikanV4 = "https://api.jikan.moe/v4/";
+  /// Jikan-compatible API base. api.jikan.moe has been unreliable/dead, so
+  /// the default is the community replacement (jikan-edge). Order of
+  /// precedence: in-app settings override -> JIKAN_BASE_URL env var ->
+  /// built-in default. Always ends with a trailing slash.
+  static const String defaultJikanBaseUrl = 'https://jikan.lucashdo.com/v1/';
+  static String? _jikanBaseUrlOverride;
+
+  /// Notified whenever the effective Jikan base changes (settings page).
+  static final ValueNotifier<String> jikanBaseUrlNotifier =
+      ValueNotifier(defaultJikanBaseUrl);
+
+  static void setJikanBaseUrlOverride(String? url) {
+    final trimmed = url?.trim() ?? '';
+    _jikanBaseUrlOverride = trimmed.isEmpty ? null : trimmed;
+    // Keep the bundled DAL handlers on the same base URL.
+    Constants.jikanV4 = jikanV4;
+    jikanBaseUrlNotifier.value = jikanV4;
+  }
+
+  static String? get jikanBaseUrlOverride => _jikanBaseUrlOverride;
+
+  static String get jikanV4 {
+    var base = _jikanBaseUrlOverride;
+    if (base == null || base.isEmpty) {
+      final fromEnv = environment['JIKAN_BASE_URL']?.toString().trim();
+      if (fromEnv != null && fromEnv.isNotEmpty) base = fromEnv;
+    }
+    base = (base == null || base.isEmpty) ? defaultJikanBaseUrl : base;
+    return base.endsWith('/') ? base : '$base/';
+  }
 
   static const String dalWeb = 'https://dailyanimelist.web.app/';
 

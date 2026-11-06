@@ -47,12 +47,13 @@ class CharacterV4Data implements DataUnion {
 
   CharacterV4Data.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
+    malId = pickJson(json, ['mal_id', 'malId']);
     url = json['url'];
-    images =
-        json['images'] != null ? Images.fromJson(json['images']) : null;
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl']);
     name = json['name'];
-    nameKanji = json['name_kanji'];
+    nameKanji = pickJson(json, ['name_kanji', 'nameKanji']);
     final rawNicknames = json['nicknames'];
     nicknames = rawNicknames is List
         ? rawNicknames.whereType<String>().toList()

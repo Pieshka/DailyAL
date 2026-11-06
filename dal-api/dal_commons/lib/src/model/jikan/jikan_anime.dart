@@ -86,26 +86,28 @@ class JikanAnime {
     });
 
     factory JikanAnime.fromJson(Map<String, dynamic> json) => JikanAnime(
-        malId: json["mal_id"],
+        malId: json["mal_id"] ?? json["malId"],
         url: json["url"],
-        images: Map.from(json["images"]!).map((k, v) => MapEntry<String, JImage>(k, JImage.fromJson(v))),
+        images: _imagesOf(json),
         trailer: json["trailer"] == null ? null : JTrailer.fromJson(json["trailer"]),
         approved: json["approved"],
         titles: json["titles"] == null ? [] : List<JTitle>.from(json["titles"]!.map((x) => JTitle.fromJson(x))),
         title: json["title"],
-        titleEnglish: json["title_english"],
-        titleJapanese: json["title_japanese"],
-        titleSynonyms: json["title_synonyms"] == null ? [] : List<String>.from(json["title_synonyms"]!.map((x) => x)),
+        titleEnglish: json["title_english"] ?? json["titleEnglish"],
+        titleJapanese: json["title_japanese"] ?? json["titleJapanese"],
+        titleSynonyms: json["title_synonyms"] == null
+            ? (json["titleSynonyms"] == null ? [] : List<String>.from(json["titleSynonyms"]!.map((x) => x)))
+            : List<String>.from(json["title_synonyms"]!.map((x) => x)),
         type: json["type"],
         source: json["source"],
         episodes: json["episodes"],
         status: json["status"],
         airing: json["airing"],
-        aired: json["aired"] == null ? null : JAired.fromJson(json["aired"]),
+        aired: json["aired"] == null ? _airedFromFlat(json) : JAired.fromJson(json["aired"]),
         duration: json["duration"],
         rating: json["rating"],
         score: double.tryParse(json["score"]?.toString() ?? ''),
-        scoredBy: json["scored_by"],
+        scoredBy: json["scored_by"] ?? json["scoredBy"],
         rank: json["rank"],
         popularity: json["popularity"],
         members: json["members"],
@@ -278,7 +280,7 @@ class JDemographic {
     });
 
     factory JDemographic.fromJson(Map<String, dynamic> json) => JDemographic(
-        malId: json["mal_id"],
+        malId: json["mal_id"] ?? json["malId"],
         type: json["type"],
         name: json["name"],
         url: json["url"],
@@ -348,9 +350,9 @@ class JTrailer {
     });
 
     factory JTrailer.fromJson(Map<String, dynamic> json) => JTrailer(
-        youtubeId: json["youtube_id"],
+        youtubeId: json["youtube_id"] ?? json["youtubeId"],
         url: json["url"],
-        embedUrl: json["embed_url"],
+        embedUrl: json["embed_url"] ?? json["embedUrl"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -358,4 +360,28 @@ class JTrailer {
         "url": url,
         "embed_url": embedUrl,
     };
+}
+
+/// Accepts Jikan v4's `images` map or jikan-edge's flat `imageUrl` string.
+Map<String, JImage>? _imagesOf(Map<String, dynamic> json) {
+  final raw = json["images"];
+  if (raw is Map) {
+    return Map.from(raw).map((k, v) => MapEntry<String, JImage>(
+        k.toString(),
+        JImage.fromJson(Map<String, dynamic>.from(v as Map))));
+  }
+  final url = json["imageUrl"];
+  if (url is String && url.isNotEmpty) {
+    return {'jpg': JImage(imageUrl: url, largeJImageUrl: url)};
+  }
+  return null;
+}
+
+/// jikan-edge search items expose startDate/endDate instead of an `aired`
+/// object; normalize both shapes into JAired.
+JAired? _airedFromFlat(Map<String, dynamic> json) {
+  final from = json["startDate"];
+  final to = json["endDate"];
+  if (from == null && to == null) return null;
+  return JAired(from: from?.toString(), to: to?.toString());
 }

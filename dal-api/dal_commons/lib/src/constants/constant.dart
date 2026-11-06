@@ -10,7 +10,11 @@ class Constants {
   ///Client Header
   static final String clientHeader = 'X-MAL-Client-ID';
 
-  static const String jikanV4 = "https://api.jikan.moe/v4/";
+  /// Jikan-compatible API base used by the DAL handlers. api.jikan.moe has
+  /// been unreliable/dead; default to the jikan-edge replacement. The app
+  /// overrides this at startup from its own settings/env (CredMal.jikanV4),
+  /// and the standalone server can set it from JIKAN_BASE_URL (see bin).
+  static String jikanV4 = 'https://jikan.lucashdo.com/v1/';
 }
 
 /// LOG-Config

@@ -21,13 +21,18 @@ class JikanAnimeStatistics {
   });
 
   factory JikanAnimeStatistics.fromJson(Map<String, dynamic> json) {
+    // Jikan v4 puts the counters at the top level with snake_case keys;
+    // jikan-edge nests them under "status" with camelCase keys.
+    final status = json['status'] is Map
+        ? Map<String, dynamic>.from(json['status'] as Map)
+        : json;
     return JikanAnimeStatistics(
-      watching: json['watching'],
-      completed: json['completed'],
-      onHold: json['on_hold'],
-      dropped: json['dropped'],
-      planToWatch: json['plan_to_watch'],
-      total: json['total'],
+      watching: status['watching'] ?? status['inProgress'],
+      completed: status['completed'],
+      onHold: status['on_hold'] ?? status['onHold'],
+      dropped: status['dropped'],
+      planToWatch: status['plan_to_watch'] ?? status['planned'],
+      total: status['total'],
       scores: json['scores'] != null
           ? (json['scores'] as List)
               .map((e) => ScoreStatistics.fromJson(e))
@@ -63,7 +68,7 @@ class ScoreStatistics {
   factory ScoreStatistics.fromJson(Map<String, dynamic> json) {
     return ScoreStatistics(
       score: json['score'],
-      votes: json['votes'],
+      votes: json['votes'] ?? json['vote_count'],
       percentage: (json['percentage'] as num?)?.toDouble(),
     );
   }

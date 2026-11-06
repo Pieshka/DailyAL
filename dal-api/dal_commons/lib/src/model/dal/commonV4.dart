@@ -91,6 +91,20 @@ class Images {
     if (json == null) return;
     jpg = json['jpg'] != null ? ImageUrl.fromJson(json['jpg']) : null;
     webp = json['webp'] != null ? ImageUrl.fromJson(json['webp']) : null;
+    // jikan-edge style images: {"small": "...", "medium": "...", "large": "..."}
+    if (jpg == null && webp == null) {
+      final url = json['large'] ?? json['medium'] ?? json['small'];
+      if (url is String && url.isNotEmpty) {
+        jpg = ImageUrl(imageUrl: url);
+      }
+    }
+  }
+
+  /// Synthesizes an Images object from a bare URL string (jikan-edge often
+  /// exposes `imageUrl` next to the object instead of an `images` map).
+  static Images? fromUrl(dynamic url) {
+    if (url is! String || url.isEmpty) return null;
+    return Images(jpg: ImageUrl(imageUrl: url));
   }
 
   Map<String, dynamic> toJson() {
@@ -99,6 +113,16 @@ class Images {
     data['webp'] = webp?.toJson();
     return data;
   }
+}
+
+/// Returns the first non-null value among [keys]. Jikan v4 uses snake_case
+/// keys while the jikan-edge replacement uses camelCase; models accept both.
+dynamic pickJson(Map<String, dynamic> json, List<String> keys) {
+  for (final key in keys) {
+    final value = json[key];
+    if (value != null) return value;
+  }
+  return null;
 }
 
 class About implements DataUnion {
@@ -122,8 +146,17 @@ class AnimeRole {
   AnimeRole.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     role = json['role'];
-    anime =
-        json['anime'] != null ? JikanV4Node.fromJson(json['anime']) : null;
+    if (json['anime'] != null) {
+      anime = JikanV4Node.fromJson(json['anime']);
+    } else if (json['malId'] != null || json['mal_id'] != null) {
+      // jikan-edge flattens the role entry: {malId, title, imageUrl, role}
+      anime = JikanV4Node(
+        malId: json['malId'],
+        url: json['url'],
+        title: json['title'],
+        images: Images.fromUrl(json['imageUrl']),
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -145,10 +178,11 @@ class JikanV4Node {
 
   JikanV4Node.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
+    malId = json['mal_id'] ?? json['malId'];
     url = json['url'];
-    images =
-        json['images'] != null ? Images.fromJson(json['images']) : null;
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl']);
     title = json['title'];
     name = json['name'];
   }
@@ -196,8 +230,17 @@ class MangaRole {
   MangaRole.fromJson(Map<String, dynamic> ?json) {
     if (json == null) return;
     role = json['role'];
-    manga =
-        json['manga'] != null ? JikanV4Node.fromJson(json['manga']) : null;
+    if (json['manga'] != null) {
+      manga = JikanV4Node.fromJson(json['manga']);
+    } else if (json['malId'] != null || json['mal_id'] != null) {
+      // jikan-edge flattens the role entry: {malId, title, imageUrl, role}
+      manga = JikanV4Node(
+        malId: json['malId'],
+        url: json['url'],
+        title: json['title'],
+        images: Images.fromUrl(json['imageUrl']),
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -217,8 +260,17 @@ class Voices {
   Voices.fromJson(Map<String, dynamic> ?json) {
     if (json == null) return;
     language = json['language'];
-    person =
-        json['person'] != null ? Person.fromJson(json['person']) : null;
+    if (json['person'] != null) {
+      person = Person.fromJson(json['person']);
+    } else if (json['malId'] != null || json['mal_id'] != null) {
+      // jikan-edge flattens voice entries: {malId, name, imageUrl, language}
+      person = Person(
+        malId: json['malId'],
+        url: json['url'],
+        name: json['name'],
+        images: Images.fromUrl(json['imageUrl']),
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -239,10 +291,11 @@ class Person {
 
   Person.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
+    malId = json['mal_id'] ?? json['malId'];
     url = json['url'];
-    images =
-        json['images'] != null ? Images.fromJson(json['images']) : null;
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl']);
     name = json['name'];
   }
 
@@ -382,9 +435,10 @@ class UserV4 {
   UserV4.fromJson(Map<String, dynamic>? json) {
     if(json == null) return;
     username = json['username'];
-    url = json['url'];
-    images =
-        json['images'] != null ? Images.fromJson(json['images']) : null;
+    url = json['url'] ?? json['profileUrl'];
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl'] ?? json['avatarUrl']);
   }
 
   Map<String, dynamic> toJson() {

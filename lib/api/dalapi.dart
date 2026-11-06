@@ -245,17 +245,20 @@ class DalApi {
 
   Future<int?> getRandom(String category) async {
     final result = await MalConnect.getContent(
-      '${CredMal.jikanV4}random/$category?sfw=false',
+      // jikan-edge rejects the sfw switch (MAL has no server-side equivalent).
+      '${CredMal.jikanV4}random/$category',
       withNoHeaders: true,
       fromCache: false,
       retryOnFail: false,
     );
 
     if (result != null && result is Map && result.containsKey('data')) {
-      return result['data']['mal_id'];
-    } else {
-      return null;
+      final data = result['data'];
+      if (data is Map) {
+        return (data['mal_id'] ?? data['malId']) as int?;
+      }
     }
+    return null;
   }
 
   Future<int?> getRandomFromList(String category, String status) async {
