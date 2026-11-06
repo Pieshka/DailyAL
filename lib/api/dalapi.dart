@@ -19,6 +19,11 @@ enum FeatureFlag { aireviews }
 class DalApi {
   static DalApi _internal = DalApi._();
   static DalApi i = _internal;
+
+  /// Set once the singleton has actually been constructed. Endpoint changes
+  /// use this so they can refresh the server pool without forcing the
+  /// (network-touching) constructor to run during startup or in tests.
+  static DalApi? initialized;
   late Future<Servers?> _dalConfigFuture;
   late Future<String> _preferredServer;
   Future<Map<int, ScheduleData>>? _scheduleForMalIds;
@@ -69,6 +74,7 @@ class DalApi {
   }
 
   DalApi._() {
+    initialized = this;
     _dalConfigFuture = _getDalConfigFuture();
     _preferredServer = _getPreferredServer();
     _scheduleForMalIds = _loadSchedule(fromCache: true);
@@ -81,6 +87,14 @@ class DalApi {
 
   void resetScheduleForMalIds() {
     _scheduleForMalIds = _loadSchedule(fromCache: false);
+  }
+
+  /// Re-resolves the DAL server pool / hosted API base after the user edits
+  /// the API endpoint overrides in settings.
+  void resetDalConfig() {
+    _dalConfigFuture = _getDalConfigFuture();
+    _preferredServer = _getPreferredServer();
+    _autoCompleteFuture = _getAutoCompleteFuture();
   }
 
   /// Fetches the schedule without ever completing with an error. A failed

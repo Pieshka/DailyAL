@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dailyanimelist/api/api_endpoint_settings.dart';
 import 'package:dailyanimelist/api/credmal.dart';
 import 'package:dailyanimelist/cache/dubinfomanager.dart';
 import 'package:dailyanimelist/constant.dart';
@@ -64,6 +65,8 @@ void main() async {
     // The bundled DAL handlers call the Jikan-compatible API too; keep them
     // on the same (configurable) base URL as the app itself.
     Constants.jikanV4 = CredMal.jikanV4;
+    // Apply any endpoint overrides the user configured in settings.
+    await ApiEndpointSettings.loadAndApply();
     if (!kIsWeb) HttpOverrides.global = _SystemProxyHttpOverrides();
     ErrorReporting.init();
     await StreamUtils.i.init();

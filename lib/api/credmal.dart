@@ -125,9 +125,26 @@ class CredMal {
   static const String webAssetsUrl =
       'https://raw.githubusercontent.com/JICA98/DailyAL/refs/heads/psycho/web_assets/';
 
+  static String get defaultAppConfigUrl => '${environment['APP_CONFIG_URL']}';
+
   static String get appConfigUrl {
-    return '${environment['APP_CONFIG_URL']}';
+    final override = _appConfigUrlOverride;
+    if (override != null && override.isNotEmpty) {
+      return override.endsWith('/')
+          ? override.substring(0, override.length - 1)
+          : override;
+    }
+    return defaultAppConfigUrl;
   }
+
+  static String? get appConfigUrlOverride => _appConfigUrlOverride;
+
+  static void setAppConfigUrlOverride(String? url) {
+    final trimmed = url?.trim() ?? '';
+    _appConfigUrlOverride = trimmed.isEmpty ? null : trimmed;
+  }
+
+  static String? _appConfigUrlOverride;
 
   static BuildVariant get buildVariant {
     return BuildVariant.fromString(environment['BUILD_VARIANT']);
@@ -157,9 +174,26 @@ class CredMal {
     return '${environment['SUPABASE_KEY']}';
   }
 
+  static String get defaultApiURL => '${environment['API_URL']}';
+
   static String get apiURL {
-    return '${environment['API_URL']}';
+    final override = _apiURLOverride;
+    if (override != null && override.isNotEmpty) {
+      return override.endsWith('/')
+          ? override.substring(0, override.length - 1)
+          : override;
+    }
+    return defaultApiURL;
   }
+
+  static String? get apiURLOverride => _apiURLOverride;
+
+  static void setApiURLOverride(String? url) {
+    final trimmed = url?.trim() ?? '';
+    _apiURLOverride = trimmed.isEmpty ? null : trimmed;
+  }
+
+  static String? _apiURLOverride;
 
   static String get apiSecret {
     return '${environment['API_SECRET']}';
