@@ -513,7 +513,8 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin {
 
   Positioned _floatingCategoryChangeWIdget() {
     return Positioned(
-      bottom: 20,
+      // Keep the button clear of the Android navigation bar.
+      bottom: 20 + MediaQuery.paddingOf(context).bottom,
       left: 20,
       child: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).canvasColor,

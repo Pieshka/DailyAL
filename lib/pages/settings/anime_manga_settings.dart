@@ -139,6 +139,18 @@ class _AnimeMangaSettingsState extends State<AnimeMangaSettings> {
                   ),
                 ),
                 OptionTile(
+                  text: S.current.AI_Review_Summary,
+                  iconData: Icons.auto_awesome,
+                  multiLine: true,
+                  desc: S.current.AI_Review_Summary_Desc,
+                  onPressed: () => _changeAiReviewSummary(
+                      !user.pref.showAiReviewSummary),
+                  trailing: ToggleButton(
+                    toggleValue: user.pref.showAiReviewSummary,
+                    onToggled: (value) => _changeAiReviewSummary(value),
+                  ),
+                ),
+                OptionTile(
                   text: S.current.Show_Private_Review,
                   iconData: Icons.notes_rounded,
                   multiLine: true,
@@ -256,6 +268,12 @@ class _AnimeMangaSettingsState extends State<AnimeMangaSettings> {
 
   void _changeCountDown(bool value) {
     user.pref.showCountDownInDetailed = value;
+    user.setIntance();
+    setState(() {});
+  }
+
+  void _changeAiReviewSummary(bool value) {
+    user.pref.showAiReviewSummary = value;
     user.setIntance();
     setState(() {});
   }

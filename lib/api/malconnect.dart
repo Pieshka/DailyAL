@@ -21,6 +21,22 @@ class MalConnect {
     final path = Uri.tryParse(url)?.path ?? '';
     return RegExp(r'^/(?:v4/)?(?:characters?|people)/[0-9]+(?:/full)?/?$').hasMatch(path);
   }
+
+  /// True for requests aimed at the Jikan-compatible API. That service
+  /// validates query parameters strictly and answers
+  /// `400 UNKNOWN_PARAMETER` for anything it does not recognise, so the
+  /// `nsfw`/`fromCache` markers the MAL and DAL endpoints tolerate must not
+  /// be appended to these URLs. Without this, every Jikan call (friend
+  /// profiles, their entry counts, favorites, clubs, updates) failed.
+  static bool _isJikanUrl(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null) return false;
+    final jikanBase = Uri.tryParse(CredMal.jikanV4);
+    if (jikanBase != null && uri.hasScheme && uri.authority == jikanBase.authority) {
+      return true;
+    }
+    return uri.host == 'api.jikan.moe';
+  }
   static String _diagnosticPath(String url) =>
       Uri.tryParse(url)?.path ?? '[invalid-uri]';
 
@@ -141,7 +157,7 @@ class MalConnect {
     Duration? timeoutDuration,
     int? timeinHours,
   }) async {
-    if (user?.pref?.nsfw != null && includeNsfw) {
+    if (user?.pref?.nsfw != null && includeNsfw && !_isJikanUrl(url)) {
       String op = Uri.dataFromString(url).queryParameters.isEmpty ? "?" : "&";
       url = "$url${op}nsfw=${user.pref.nsfw ? '1' : '0'}&fromCache=$fromCache";
     }

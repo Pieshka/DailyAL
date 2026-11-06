@@ -278,11 +278,10 @@ class _UserPrefSettingsState extends State<UserPrefSettings> {
             ),
           ),
           OptionTile(
-            text: 'Log Diagnostik',
+            text: S.current.Log_Diagnostics,
             iconData: Icons.bug_report_outlined,
             multiLine: true,
-            desc:
-                'Simpan log diagnostik per sesi. Jika akses penyimpanan umum ditolak, log disimpan di folder aplikasi.',
+            desc: S.current.Log_Diagnostics_Desc,
             onPressed: () => changeEnableLog(!user.pref.enableLog),
             trailing: ToggleButton(
               toggleValue: user.pref.enableLog,

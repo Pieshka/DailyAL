@@ -22,6 +22,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "AI_Review_Summary": MessageLookupByLibrary.simpleMessage(
+      "Yapay Zeka İnceleme Özeti",
+    ),
+    "AI_Review_Summary_Desc": MessageLookupByLibrary.simpleMessage(
+      "İnceleme sayfasında yapay zeka tarafından oluşturulan özeti gösterir",
+    ),
+    "API_Endpoints": MessageLookupByLibrary.simpleMessage("API Uç Noktaları"),
+    "API_Endpoints_Current": MessageLookupByLibrary.simpleMessage(
+      "Geçerli varsayılan",
+    ),
+    "API_Endpoints_Invalid_URL": MessageLookupByLibrary.simpleMessage(
+      "Geçersiz URL. Tam bir http:// veya https:// adresi kullanın.",
+    ),
+    "API_Endpoints_Saved": MessageLookupByLibrary.simpleMessage(
+      "API uç noktaları güncellendi",
+    ),
+    "API_Endpoints_desc": MessageLookupByLibrary.simpleMessage(
+      "Uygulamanın bağlandığı API sunucularını değiştirin. Varsayılanı kullanmak için alanı boş bırakın.",
+    ),
     "A_new_episode_is_out": MessageLookupByLibrary.simpleMessage(
       "Yeni bir bölüm çıktı!",
     ),
@@ -71,6 +90,92 @@ class MessageLookup extends MessageLookupByLibrary {
     "Allow_YT_Player_Desc": MessageLookupByLibrary.simpleMessage(
       "Youtube oynatıcısının uygulamada video oynatmasına izin ver",
     ),
+    "Ameo_Add_Username_Hint": MessageLookupByLibrary.simpleMessage(
+      "Önerileri yüklemek için Ameo ayarlarından bir MyAnimeList kullanıcı adı ekleyin.",
+    ),
+    "Ameo_All_Recommendations_Settings": MessageLookupByLibrary.simpleMessage(
+      "Tüm öneriler ve ayarlar",
+    ),
+    "Ameo_Apply_Settings": MessageLookupByLibrary.simpleMessage(
+      "Ayarları uygula",
+    ),
+    "Ameo_Configure_Username": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList kullanıcı adını belirle",
+    ),
+    "Ameo_Contribution": MessageLookupByLibrary.simpleMessage("Katkı"),
+    "Ameo_Copy_Log": MessageLookupByLibrary.simpleMessage("Günlüğü kopyala"),
+    "Ameo_Extra_Seasons": MessageLookupByLibrary.simpleMessage("Ek sezonlar"),
+    "Ameo_Filter_PTW": MessageLookupByLibrary.simpleMessage(
+      "«İzleme Listesi»ni filtrele",
+    ),
+    "Ameo_Hide_Reason": MessageLookupByLibrary.simpleMessage("Nedeni gizle"),
+    "Ameo_Legacy_Model_Note": MessageLookupByLibrary.simpleMessage(
+      "Legacy modeli Logit weight veya Niche boost kullanmaz.",
+    ),
+    "Ameo_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "Öneriler yüklenemedi.",
+    ),
+    "Ameo_Log_Copied": MessageLookupByLibrary.simpleMessage(
+      "Teknik günlük kopyalandı",
+    ),
+    "Ameo_Logit_Weight": MessageLookupByLibrary.simpleMessage("Logit weight"),
+    "Ameo_Model_Helper": MessageLookupByLibrary.simpleMessage(
+      "Modeller farklı yaklaşımlarla eğitilir ve farklı öneriler üretebilir.",
+    ),
+    "Ameo_Model_Label": MessageLookupByLibrary.simpleMessage("Öneri modeli"),
+    "Ameo_Movies": MessageLookupByLibrary.simpleMessage("Filmler"),
+    "Ameo_Music_Anime": MessageLookupByLibrary.simpleMessage("Müzik animeleri"),
+    "Ameo_Niche_Boost": MessageLookupByLibrary.simpleMessage(
+      "Niche boost factor",
+    ),
+    "Ameo_No_Displayable_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo görüntülenebilir öneri döndürmedi.",
+    ),
+    "Ameo_No_Recommendations_Yet": MessageLookupByLibrary.simpleMessage(
+      "Henüz öneri yok.",
+    ),
+    "Ameo_No_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo öneri döndürmedi.",
+    ),
+    "Ameo_ONA_OVA_Specials": MessageLookupByLibrary.simpleMessage(
+      "ONA / OVA / Special",
+    ),
+    "Ameo_Powered_By": MessageLookupByLibrary.simpleMessage(
+      "Ameobea tarafından Sprout ile çalışır",
+    ),
+    "Ameo_Powered_By_Desc": MessageLookupByLibrary.simpleMessage(
+      "Ameobea tarafından Sprout ile çalışır. Harici hizmet ve yanıt biçimi değişebilir.",
+    ),
+    "Ameo_Predicted_Score": MessageLookupByLibrary.simpleMessage(
+      "Ameo tahmini",
+    ),
+    "Ameo_Recommendations": MessageLookupByLibrary.simpleMessage(
+      "Ameo Önerileri",
+    ),
+    "Ameo_Recommended_Because": MessageLookupByLibrary.simpleMessage(
+      "Şunları izlediğiniz için öneriliyor:",
+    ),
+    "Ameo_Reload": MessageLookupByLibrary.simpleMessage("Yeniden yükle"),
+    "Ameo_Request_Failed": MessageLookupByLibrary.simpleMessage(
+      "Ameo isteği başarısız oldu. Nedeni görmek için teknik ayrıntıları açın.",
+    ),
+    "Ameo_Settings": MessageLookupByLibrary.simpleMessage("Ameo Ayarları"),
+    "Ameo_Technical_Details": MessageLookupByLibrary.simpleMessage(
+      "Teknik ayrıntılar",
+    ),
+    "Ameo_Username_Helper": MessageLookupByLibrary.simpleMessage(
+      "Mümkün olduğunda oturum açılan profilden otomatik alınır; yine de değiştirilebilir.",
+    ),
+    "Ameo_Username_Label": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList kullanıcı adı",
+    ),
+    "Ameo_Username_Missing": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList kullanıcı adı bulunamadı. Ameo ayarlarından yapılandırın.",
+    ),
+    "Ameo_Why_Recommended": MessageLookupByLibrary.simpleMessage(
+      "Bu neden öneriliyor?",
+    ),
+    "Ameo_Your_Rating": MessageLookupByLibrary.simpleMessage("Puanınız"),
     "Analysis": MessageLookupByLibrary.simpleMessage("Analiz"),
     "Animals": MessageLookupByLibrary.simpleMessage("Hayvanlar"),
     "Animation": MessageLookupByLibrary.simpleMessage("Animasyon"),
@@ -198,6 +303,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Backup_Desc": MessageLookupByLibrary.simpleMessage(
       "Bu, yer işaretlerinizi, ayarlarınızı vb. yedekleyecektir",
+    ),
+    "Backup_Include_History": MessageLookupByLibrary.simpleMessage(
+      "Arama geçmişini dahil et",
+    ),
+    "Backup_Include_History_Desc": MessageLookupByLibrary.simpleMessage(
+      "Arama geçmişinizi ve son izlenen anime ile mangaları da yedekleyin",
     ),
     "Bad": MessageLookupByLibrary.simpleMessage("Kötü"),
     "BirthDay": MessageLookupByLibrary.simpleMessage("Doğum günü"),
@@ -347,6 +458,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Cute_Girls": MessageLookupByLibrary.simpleMessage("Sevimli Kızlar"),
     "Cute_Guys": MessageLookupByLibrary.simpleMessage("Sevimli adamlar"),
+    "DAL_API_URL": MessageLookupByLibrary.simpleMessage(
+      "DAL barındırılan API URL\'si",
+    ),
+    "DAL_API_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Otomatik tamamlama, görüntü yükleme ve inceleme özetleri için kullanılır.",
+    ),
+    "DAL_Config_URL": MessageLookupByLibrary.simpleMessage(
+      "DAL sunucu yapılandırma URL\'si",
+    ),
+    "DAL_Config_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Uygulamanın DAL sunucu listesini aldığı adres.",
+    ),
     "DB_Modification_Requests": MessageLookupByLibrary.simpleMessage(
       "Veritabanı Değişiklik İstekleri",
     ),
@@ -740,6 +863,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Japan_Expo": MessageLookupByLibrary.simpleMessage("Japonya Fuarı"),
     "Japanese": MessageLookupByLibrary.simpleMessage("Japonca"),
     "Japanese_Life": MessageLookupByLibrary.simpleMessage("Japon Hayatı"),
+    "Jikan_Base_URL": MessageLookupByLibrary.simpleMessage(
+      "Jikan API temel URL\'si",
+    ),
+    "Jikan_Base_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Arama, arkadaş profilleri, karakterler ve diğer topluluk verileri için kullanılır.",
+    ),
     "Josei": MessageLookupByLibrary.simpleMessage("Josei"),
     "Jump_Festa": MessageLookupByLibrary.simpleMessage("Atlama Partisi"),
     "Just_a_sec": MessageLookupByLibrary.simpleMessage("Sadece bir saniye!"),
@@ -812,6 +941,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Local_Time": MessageLookupByLibrary.simpleMessage("Yerel zaman"),
     "Location": MessageLookupByLibrary.simpleMessage("Konum"),
+    "Log_Diagnostics": MessageLookupByLibrary.simpleMessage(
+      "Tanılama günlüği kaydet",
+    ),
+    "Log_Diagnostics_Desc": MessageLookupByLibrary.simpleMessage(
+      "Her oturum için tanılama günlüğini kaydedin. Genel depolama erişimi reddedilirse günlük uygulama klasörüne kaydedilir",
+    ),
     "Log_In": MessageLookupByLibrary.simpleMessage("Giriş yapmak"),
     "Logged_In": MessageLookupByLibrary.simpleMessage(
       "Kullanıcı giriş yaptı..",
@@ -981,6 +1116,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "No_Pictures_yet": MessageLookupByLibrary.simpleMessage(
       "Henüz Resim Yok..",
     ),
+    "No_Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Şu anda zamanlanmış bildirim yok",
+    ),
     "No_Recommendations_yet": MessageLookupByLibrary.simpleMessage(
       "Henüz Tavsiye Yok..",
     ),
@@ -1037,6 +1175,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Notification_settings_warning": MessageLookupByLibrary.simpleMessage(
       "Halihazırda sizin için planlanmış olan bildirimler için 3 güne kadar uyarı alabilirsiniz. Lütfen bu ayarların yalnızca oturum açtığınızda çalışacağını unutmayın.",
+    ),
+    "Notifications_Reset_Done": MessageLookupByLibrary.simpleMessage(
+      "Bildirimler yeniden zamanlandı",
     ),
     "OP_ED": MessageLookupByLibrary.simpleMessage("BİR D"),
     "Ok": MessageLookupByLibrary.simpleMessage("Tamam"),
@@ -1121,6 +1262,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Bu not yalnızca yereldir ve senkronize edilmeyecektir.",
     ),
     "Profile": MessageLookupByLibrary.simpleMessage("Profil"),
+    "Profile_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "Bu profil yüklenemedi. Kullanıcı adını kontrol edin veya yeniden deneyin.",
+    ),
     "Profile_Page": MessageLookupByLibrary.simpleMessage("Profil sayfası"),
     "Profile_bg_removed": MessageLookupByLibrary.simpleMessage(
       "Profil arka planı başarıyla kaldırıldı",
@@ -1135,6 +1279,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Psychological": MessageLookupByLibrary.simpleMessage("Psikolojik"),
     "Published": MessageLookupByLibrary.simpleMessage("Yayınlanan"),
     "Published_Manga": MessageLookupByLibrary.simpleMessage("Yayınlanan Manga"),
+    "Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Zamanlanmış bildirimler",
+    ),
+    "Queued_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "Uygulama tarafından şu anda zamanlanan hatırlatmalar",
+    ),
     "Quotes": MessageLookupByLibrary.simpleMessage("Alıntılar"),
     "Racing": MessageLookupByLibrary.simpleMessage("Yarışma"),
     "Random": MessageLookupByLibrary.simpleMessage("rastgele"),
@@ -1203,6 +1353,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "Reread": MessageLookupByLibrary.simpleMessage("Tekrar oku"),
     "Rereading": MessageLookupByLibrary.simpleMessage("Yeniden okuma"),
     "Reset": MessageLookupByLibrary.simpleMessage("Sıfırla"),
+    "Reset_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Zamanlanmış bildirimleri sıfırla",
+    ),
+    "Reset_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "Sırada bekleyen tüm bölüm hatırlatmalarını iptal edin ve güncel verilerle yeniden zamanlayın",
+    ),
+    "Reset_To_Defaults": MessageLookupByLibrary.simpleMessage(
+      "Varsayılanlara sıfırla",
+    ),
     "Reset_homepage": MessageLookupByLibrary.simpleMessage(
       "Ana sayfayı sıfırla",
     ),
@@ -1224,6 +1383,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Restore_fail": MessageLookupByLibrary.simpleMessage(
       "Geri yükleme başarısız oldu",
     ),
+    "Retry": MessageLookupByLibrary.simpleMessage("Yeniden dene"),
     "Reverse_Harem": MessageLookupByLibrary.simpleMessage("Reverse_Harem"),
     "Review": MessageLookupByLibrary.simpleMessage("Gözden geçirmek"),
     "Review_By": MessageLookupByLibrary.simpleMessage("Tarafından incelemek"),

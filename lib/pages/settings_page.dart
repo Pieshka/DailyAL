@@ -5,6 +5,7 @@ import 'package:dailyanimelist/generated/l10n.dart';
 import 'package:dailyanimelist/icons/dub_icons.dart';
 import 'package:dailyanimelist/pages/settings/about.dart';
 import 'package:dailyanimelist/pages/settings/anime_manga_settings.dart';
+import 'package:dailyanimelist/pages/settings/api_endpoints_settings.dart';
 import 'package:dailyanimelist/pages/settings/backup_restore.dart';
 import 'package:dailyanimelist/pages/settings/cachesettings.dart';
 import 'package:dailyanimelist/pages/settings/customsettings.dart';
@@ -150,6 +151,13 @@ class _SettingsPageState extends State<SettingsPage> {
         desc: S.current.Backup_And_Restore_desc,
         iconData: Icons.settings_backup_restore,
         contentBuilder: (context, onUiChange) => BackUpAndRestorePage(),
+      ),
+      _SettingsItem(
+        text: S.current.API_Endpoints,
+        desc: S.current.API_Endpoints_desc,
+        iconData: Icons.dns,
+        contentBuilder: (context, onUiChange) =>
+            const ApiEndpointsSettingsPage(),
       ),
       _SettingsItem(
         text: S.current.About,
@@ -468,6 +476,14 @@ class _SettingsPageState extends State<SettingsPage> {
           desc: S.current.Backup_And_Restore_desc,
           onPressed: () {
             gotoPage(context: context, newPage: BackUpAndRestorePage());
+          }),
+      OptionTile(
+          text: S.current.API_Endpoints,
+          iconData: Icons.dns,
+          desc: S.current.API_Endpoints_desc,
+          onPressed: () {
+            gotoPage(
+                context: context, newPage: const ApiEndpointsSettingsPage());
           }),
       _aboutTile,
       CFutureBuilder<Servers?>(

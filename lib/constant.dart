@@ -146,6 +146,10 @@ Widget starField(
   bool useIcon = false,
 }) {
   return Row(
+    // A score label is only as wide as its content. A max-sized Row would eat
+    // the whole width of the parent Row and push whatever comes next out of
+    // view, which is how the score in AnimeCardBar disappeared.
+    mainAxisSize: MainAxisSize.min,
     children: [
       if (useIcon)
         Icon(
@@ -160,9 +164,13 @@ Widget starField(
       const SizedBox(
         width: 5,
       ),
-      Text(
-        score,
-        style: textStyle,
+      Flexible(
+        child: Text(
+          score,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: textStyle,
+        ),
       )
     ],
   );

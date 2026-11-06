@@ -5,6 +5,11 @@ import 'package:flutter/material.dart';
 
 import '../../constant.dart';
 
+/// Smallest width the global score label (star + rating) needs inside
+/// [AnimeCardBar]; the status badge is capped so it cannot take more than the
+/// bar minus this.
+const double _minScoreFieldWidth = 55;
+
 class AnimeCardBar extends StatelessWidget {
   final NodeStatusValue? nsv;
   final double smallHeight;
@@ -43,9 +48,13 @@ class AnimeCardBar extends StatelessWidget {
       size: 16,
     );
 
-    final badgeWidget = Center(
+    // Not wrapped in Center: Center expands to the widest width it is given, so
+    // inside a Row it ate the whole card width and pushed the edit icon and the
+    // global score out of view.
+    final badgeWidget = Flexible(
       child: Text(
         nsv?.status ?? "",
+        maxLines: 1,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
         style: TextStyle(color: Colors.white, fontSize: 12),
@@ -64,16 +73,21 @@ class AnimeCardBar extends StatelessWidget {
             bottomRight: Radius.circular(radius),
           )),
       child: Row(
+        // Hug the content, otherwise the status badge claims the full card
+        // width and the global score on its left gets no space at all.
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SB.w5,
           if (showSelfScoreInsteadOfStatus &&
               (myListStatus is MyAnimeListStatus ||
                   myListStatus is MyMangaListStatus))
-            starField(
-              '${(myListStatus as dynamic)?.score?.toString() ?? '0'} · ',
-              starHeight: 14,
-              textStyle: memberCountStyle,
+            Flexible(
+              child: starField(
+                '${(myListStatus as dynamic)?.score?.toString() ?? '0'} · ',
+                starHeight: 14,
+                textStyle: memberCountStyle,
+              ),
             ),
           badgeWidget,
           SB.w5,
@@ -93,17 +107,22 @@ class AnimeCardBar extends StatelessWidget {
               child: Image.asset("assets/images/star.png"),
             ),
             SB.w5,
-            title(
-                !(detailed is AnimeDetailed || detailed is MangaDetailed)
-                    ? ('-')
-                    : (detailed.mean == null
-                        ? '-'
-                        : ratingFormat.format(detailed.mean)),
-                fontSize: (!userPrefResize ||
-                        homePageTileSize!.index == HomePageTileSize.m.index)
-                    ? 11.5
-                    : 14,
-                opacity: 1),
+            Flexible(
+              flex: 3,
+              child: title(
+                  !(detailed is AnimeDetailed || detailed is MangaDetailed)
+                      ? ('-')
+                      : (detailed.mean == null
+                          ? '-'
+                          : ratingFormat.format(detailed.mean)),
+                  fontSize: (!userPrefResize ||
+                          homePageTileSize!.index == HomePageTileSize.m.index)
+                      ? 11.5
+                      : 14,
+                  opacity: 1,
+                  maxLines: 1,
+                  textOverflow: TextOverflow.ellipsis),
+            ),
             SB.w5,
             if (showMemberCount &&
                 (detailed is AnimeDetailed || detailed is MangaDetailed) &&
@@ -114,6 +133,7 @@ class AnimeCardBar extends StatelessWidget {
                 child: title(
                   '(${userCountFormat.format(detailed.numListUsers)})',
                   textOverflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   fontSize: 9,
                   opacity: .7,
                 ),
@@ -132,17 +152,32 @@ class AnimeCardBar extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: borderRadius,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (!userPrefResize ||
-                homePageTileSize!.index >= HomePageTileSize.m.index)
-              Expanded(child: starMemberWidget(node)),
-            if (showNsv && showEdit) ...[
-              SB.w5,
-              badgeStatusWidget,
-            ]
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final showScoreField = !userPrefResize ||
+                homePageTileSize!.index >= HomePageTileSize.m.index;
+            // The badge hugs its content, which is fine until the card is
+            // narrow: it would then take everything and squeeze the global
+            // score out of the bar. Reserve just enough room for that score.
+            final badgeMaxWidth = !showScoreField || !constraints.hasBoundedWidth
+                ? double.infinity
+                : constraints.maxWidth > _minScoreFieldWidth
+                    ? constraints.maxWidth - _minScoreFieldWidth
+                    : 0.0;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (showScoreField) Expanded(child: starMemberWidget(node)),
+                if (showNsv && showEdit) ...[
+                  SB.w5,
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: badgeMaxWidth),
+                    child: badgeStatusWidget,
+                  ),
+                ]
+              ],
+            );
+          },
         ),
       ),
     );

@@ -93,24 +93,31 @@ class MalUser {
       listStatusRevision.value++;
     }
   }
-  static Future<UserProf> getUserInfo(
+  static Future<UserProf?> getUserInfo(
       {List<String>? fields,
       bool fromCache = false,
       String username = "@me"}) async {
-    if (username.notEquals('@me')) {
-      return (await _adaptFromJikan(username, fromCache: fromCache)) ??
-          UserProf();
+    final isSelf = username.equals('@me');
+    if (!isSelf) {
+      // MAL v2 does not expose other users' profiles to client-id-only
+      // requests (every lookup answers 404), so go straight to the
+      // Jikan-compatible API. Returning an empty UserProf made friend
+      // profiles render as blank shells with no way to tell "failed" from
+      // "no data", so propagate null instead.
+      return (await _adaptFromJikan(username, fromCache: fromCache));
     }
     String url = CredMal.endPoint + "users/$username";
     if (fields != null && fields.length != 0) {
       url += "?fields=" +
           fields.reduce((value, element) => (value + "," + element));
     }
-    var json = await MalConnect.getContent(url,
+    final json = await MalConnect.getContent(url,
         fromCache: fromCache,
         includeNsfw: false,
         retryOnFail: false) as Map<String, dynamic>?;
-    if (json == null) throw Error();
+    if (json == null) {
+      throw StateError('MAL did not return the authenticated user profile.');
+    }
     return UserProf.fromJson(json);
   }
 
@@ -122,17 +129,63 @@ class MalUser {
             username: username, fromCache: fromCache))
         .data);
     if (result != null) {
-      return UserProf(
-        name: result.username,
-        birthday: DateTime.tryParse(result.birthday ?? ''),
-        gender: result.gender,
-        id: result.malId,
-        joinedAt: result.joined,
-        location: result.location,
-        picture: result.images?.jpg?.imageUrl ?? result.images?.webp?.imageUrl,
-      );
+      return mapJikanUserToUserProf(result);
     }
     return null;
+  }
+
+  /// Maps a Jikan/Jikan-edge user payload onto the MAL [UserProf] the profile
+  /// screens expect. The statistics block is what fills the entry counts
+  /// (watching/completed/on-hold/...), so dropping it showed every friend as
+  /// having zero entries.
+  @visibleForTesting
+  static UserProf mapJikanUserToUserProf(UserProfileV4 result) {
+    final animeStats = result.statistics?.anime;
+    return UserProf(
+      name: result.username,
+      birthday: parseJikanDate(result.birthday),
+      gender: result.gender,
+      id: result.malId,
+      joinedAt: result.joined,
+      location: result.location,
+      picture: result.images?.jpg?.imageUrl ?? result.images?.webp?.imageUrl,
+      animeStatistics: animeStats == null
+          ? null
+          : UserAnimeStatistics(
+              numItems: animeStats.totalEntries?.toDouble(),
+              numItemsWatching: animeStats.watching?.toDouble(),
+              numItemsCompleted: animeStats.completed?.toDouble(),
+              numItemsOnHold: animeStats.onHold?.toDouble(),
+              numItemsDropped: animeStats.dropped?.toDouble(),
+              numItemsPlanToWatch: animeStats.planToWatch?.toDouble(),
+              numDaysWatched: animeStats.daysWatched,
+              numEpisodes: animeStats.episodesWatched?.toDouble(),
+              numTimesRewatched: animeStats.rewatched?.toDouble(),
+              meanScore: animeStats.meanScore,
+            ),
+    );
+  }
+
+  /// Jikan v4 answers ISO dates ("1998-04-03"), the jikan-edge replacement
+  /// answers MAL's display format ("Mar 4, 1985"). Accept both.
+  @visibleForTesting
+  static DateTime? parseJikanDate(String? raw) {
+    final value = raw?.trim() ?? '';
+    if (value.isEmpty) return null;
+    final iso = DateTime.tryParse(value);
+    if (iso != null) return iso;
+    final match =
+        RegExp(r'^([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})').firstMatch(value);
+    if (match == null) return null;
+    const months = {
+      'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
+      'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12,
+    };
+    final month = months[match.group(1)!.substring(0, 3).toLowerCase()];
+    final day = int.tryParse(match.group(2)!);
+    final year = int.tryParse(match.group(3)!);
+    if (month == null || day == null || year == null) return null;
+    return DateTime(year, month, day);
   }
 
   static Future<MyAnimeListStatus?> updateMyAnimeListStatus(int animeId,

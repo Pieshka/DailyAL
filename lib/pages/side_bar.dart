@@ -52,7 +52,14 @@ class UserProfService {
     }
   }
 
-  Future<String?> getProfileBGDownloadUrl(int id) async {
+  Future<String?> getProfileBGDownloadUrl(int? id) async {
+    // Friend profiles resolved through the Jikan-compatible API have no MAL
+    // numeric id (that endpoint no longer exposes it), so there is nothing to
+    // look up. Treat it as "no background" instead of throwing.
+    if (id == null) {
+      logDal('Profile background skipped: user id is unknown');
+      return null;
+    }
     try {
       return await DalApi.i.getSignedImageUrl('user-bgs', id.toString());
     } catch (e) {

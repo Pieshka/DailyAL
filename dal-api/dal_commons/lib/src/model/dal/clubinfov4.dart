@@ -22,14 +22,13 @@ class Club implements DataUnion {
 
   Club.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
-    name = json['name'];
+    malId = pickJson(json, ['mal_id', 'malId']);
+    name = pickJson(json, ['name', 'title']);
     url = json['url'];
-    images =
-        json['images'] != null ? Images.fromJson(json['images']) : null;
-    members = json['members'];
+    images = json['images'] != null ? Images.fromJson(json['images']) : null;
+    members = pickJson(json, ['members', 'total_members']);
     category = json['category'];
-    created = json['created'];
+    created = pickJson(json, ['created', 'created_at']);
     access = json['access'];
   }
 

@@ -14,6 +14,7 @@ import 'package:dailyanimelist/screens/plainscreen.dart';
 import 'package:dailyanimelist/user/user.dart';
 import 'package:dailyanimelist/util/insight_service.dart';
 import 'package:dailyanimelist/widgets/barchart.dart';
+import 'package:dailyanimelist/widgets/custombutton.dart';
 import 'package:dailyanimelist/widgets/customfuture.dart';
 import 'package:dailyanimelist/widgets/headerwidget.dart';
 import 'package:dailyanimelist/widgets/home/accordion.dart';
@@ -90,9 +91,15 @@ class _UserStatsScreenState extends State<UserStatsScreen> {
       logDal('[UserStats] skipped Jikan lookup because username is empty');
       return;
     }
-    jikanUser = ((await JikanHelper.getUserInfo(
-            username: username, fromCache: false))
-        .data);
+    try {
+      jikanUser =
+          ((await JikanHelper.getUserInfo(username: username, fromCache: false))
+              .data);
+    } catch (e) {
+      // Jikan rate limits and outages must not surface as unhandled async
+      // errors; MAL-provided statistics still render below.
+      logDal('[UserStats] Jikan lookup failed: $e');
+    }
     if (mounted) setState(() {});
   }
 
@@ -209,8 +216,35 @@ class _UserStatsScreenState extends State<UserStatsScreen> {
   Widget build(BuildContext context) {
     return CFutureBuilder<UserProf?>(
       future: _userProfFuture,
-      done: (sp) => _statsBuilder(sp.data),
+      done: (sp) => (sp.data == null && !widget.isSelf)
+          ? _statsError()
+          : _statsBuilder(sp.data),
       loadingChild: _loading(),
+    );
+  }
+
+  Widget _statsError() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error_outline, size: 42.0),
+            SB.h10,
+            title(S.current.Profile_Load_Failed, align: TextAlign.center),
+            SB.h20,
+            ShadowButton(
+              onPressed: () {
+                setState(() {
+                  _userProfFuture = _getUserProfileFuture();
+                });
+              },
+              child: Text(S.current.Retry),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -288,8 +322,8 @@ class _UserStatsScreenState extends State<UserStatsScreen> {
       SB.lh10,
       SliverWrapper(keyed(
           'score',
-          _scoreDistribution(
-              insights.statusScoreDistributionMap, insights.unrankedShows ?? 0))),
+          _scoreDistribution(insights.statusScoreDistributionMap,
+              insights.unrankedShows ?? 0))),
       SB.lh10,
       SliverWrapper(keyed('genre', _genreDistribution(insights))),
       SB.lh10,
@@ -364,7 +398,8 @@ class _UserStatsScreenState extends State<UserStatsScreen> {
         ),
         SB.h20,
         SizedBox(
-          height: 260.0,
+          // Poster (180 * 1.4) + score bar + title; anything less clips the bar.
+          height: 340.0,
           child: _ILikeItTheyHateItList(insights),
         ),
       ],

@@ -9,9 +9,10 @@ class AnimeVideoV4 implements DataUnion {
 
   AnimeVideoV4.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
-    if (json['promo'] != null) {
+    final promos = json['promo'] ?? json['promos'];
+    if (promos != null) {
       promo = [];
-      json['promo'].forEach((v) {
+      promos.forEach((v) {
         promo!.add(Promo.fromJson(v));
       });
     }
@@ -21,9 +22,10 @@ class AnimeVideoV4 implements DataUnion {
         episodes!.add(Episodes.fromJson(v));
       });
     }
-    if (json['music_videos'] != null) {
+    final mvs = json['music_videos'] ?? json['musicVideos'];
+    if (mvs != null) {
       musicVideos = [];
-      json['music_videos'].forEach((v) {
+      mvs.forEach((v) {
         musicVideos!.add(MusicVideos.fromJson(v));
       });
     }
@@ -54,8 +56,17 @@ class Promo {
   Promo.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     title = json['title'];
-    trailer =
-        json['trailer'] != null ? Trailer.fromJson(json['trailer']) : null;
+    if (json['trailer'] != null) {
+      trailer = Trailer.fromJson(json['trailer']);
+    } else if (json['videoUrl'] != null || json['imageUrl'] != null) {
+      // jikan-edge flattens promos: {title, videoUrl, imageUrl}
+      trailer = Trailer(
+        youtubeId: _youtubeId(json['videoUrl']),
+        url: json['videoUrl'],
+        embedUrl: json['videoUrl'],
+        images: Jpg(imageUrl: json['imageUrl']),
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -107,12 +118,14 @@ class Episodes {
 
   Episodes.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
+    malId = pickJson(json, ['mal_id', 'malId']);
     url = json['url'];
     title = json['title'];
-    episode = json['episode'];
-    images =
-        json['images'] != null ? Images.fromJson(json['images']) : null;
+    final ep = pickJson(json, ['episode', 'episode_id']);
+    episode = ep?.toString();
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl']);
   }
 
   Map<String, dynamic> toJson() {
@@ -173,4 +186,12 @@ class Meta {
     data['author'] = author;
     return data;
   }
+}
+
+/// Extracts the YouTube id from a video URL (jikan-edge only gives the URL).
+String? _youtubeId(dynamic videoUrl) {
+  if (videoUrl is! String) return null;
+  final match =
+      RegExp(r'(?:v=|youtu\.be/|/embed/)([\w-]{6,12})').firstMatch(videoUrl);
+  return match?.group(1);
 }

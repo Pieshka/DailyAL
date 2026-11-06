@@ -22,6 +22,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "AI_Review_Summary": MessageLookupByLibrary.simpleMessage("AIレビュー要約"),
+    "AI_Review_Summary_Desc": MessageLookupByLibrary.simpleMessage(
+      "AIが生成したレビュー要約をレビューページに表示します",
+    ),
+    "API_Endpoints": MessageLookupByLibrary.simpleMessage("APIエンドポイント"),
+    "API_Endpoints_Current": MessageLookupByLibrary.simpleMessage("現在の既定値"),
+    "API_Endpoints_Invalid_URL": MessageLookupByLibrary.simpleMessage(
+      "無効なURLです。http:// または https:// の完全なアドレスを使用してください。",
+    ),
+    "API_Endpoints_Saved": MessageLookupByLibrary.simpleMessage(
+      "APIエンドポイントを更新しました",
+    ),
+    "API_Endpoints_desc": MessageLookupByLibrary.simpleMessage(
+      "アプリが接続するAPIサーバーを上書きします。空欄の場合は既定値を使用します。",
+    ),
     "A_new_episode_is_out": MessageLookupByLibrary.simpleMessage(
       "新しいエピソードが出ています！",
     ),
@@ -65,6 +80,80 @@ class MessageLookup extends MessageLookupByLibrary {
     "Allow_YT_Player_Desc": MessageLookupByLibrary.simpleMessage(
       "Youtube プレーヤーがアプリ内でビデオを再生できるようにする",
     ),
+    "Ameo_Add_Username_Hint": MessageLookupByLibrary.simpleMessage(
+      "Ameo設定でMyAnimeListユーザー名を追加するとおすすめを読み込めます。",
+    ),
+    "Ameo_All_Recommendations_Settings": MessageLookupByLibrary.simpleMessage(
+      "すべてのおすすめと設定",
+    ),
+    "Ameo_Apply_Settings": MessageLookupByLibrary.simpleMessage("設定を適用"),
+    "Ameo_Configure_Username": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeListユーザー名を設定",
+    ),
+    "Ameo_Contribution": MessageLookupByLibrary.simpleMessage("寄与度"),
+    "Ameo_Copy_Log": MessageLookupByLibrary.simpleMessage("ログをコピー"),
+    "Ameo_Extra_Seasons": MessageLookupByLibrary.simpleMessage("追加クール"),
+    "Ameo_Filter_PTW": MessageLookupByLibrary.simpleMessage("「視聴予定」を除外"),
+    "Ameo_Hide_Reason": MessageLookupByLibrary.simpleMessage("理由を隠す"),
+    "Ameo_Legacy_Model_Note": MessageLookupByLibrary.simpleMessage(
+      "LegacyモデルはLogit weightとNiche boostを使用しません。",
+    ),
+    "Ameo_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "おすすめを読み込めませんでした。",
+    ),
+    "Ameo_Log_Copied": MessageLookupByLibrary.simpleMessage("技術ログをコピーしました"),
+    "Ameo_Logit_Weight": MessageLookupByLibrary.simpleMessage("Logit weight"),
+    "Ameo_Model_Helper": MessageLookupByLibrary.simpleMessage(
+      "モデルは異なる手法で学習されており、異なるおすすめを生成する場合があります。",
+    ),
+    "Ameo_Model_Label": MessageLookupByLibrary.simpleMessage("推薦モデル"),
+    "Ameo_Movies": MessageLookupByLibrary.simpleMessage("映画"),
+    "Ameo_Music_Anime": MessageLookupByLibrary.simpleMessage("音楽アニメ"),
+    "Ameo_Niche_Boost": MessageLookupByLibrary.simpleMessage(
+      "Niche boost factor",
+    ),
+    "Ameo_No_Displayable_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameoから表示できるおすすめが返されませんでした。",
+    ),
+    "Ameo_No_Recommendations_Yet": MessageLookupByLibrary.simpleMessage(
+      "まだおすすめがありません。",
+    ),
+    "Ameo_No_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameoからおすすめが返されませんでした。",
+    ),
+    "Ameo_ONA_OVA_Specials": MessageLookupByLibrary.simpleMessage(
+      "ONA / OVA / 特別編",
+    ),
+    "Ameo_Powered_By": MessageLookupByLibrary.simpleMessage(
+      "AmeobeaのSproutで動作",
+    ),
+    "Ameo_Powered_By_Desc": MessageLookupByLibrary.simpleMessage(
+      "AmeobeaのSproutで動作。外部サービスとレスポンス形式は変更される可能性があります。",
+    ),
+    "Ameo_Predicted_Score": MessageLookupByLibrary.simpleMessage("Ameo予測スコア"),
+    "Ameo_Recommendations": MessageLookupByLibrary.simpleMessage("Ameoのおすすめ"),
+    "Ameo_Recommended_Because": MessageLookupByLibrary.simpleMessage(
+      "視聴した作品に基づくおすすめ：",
+    ),
+    "Ameo_Reload": MessageLookupByLibrary.simpleMessage("再読み込み"),
+    "Ameo_Request_Failed": MessageLookupByLibrary.simpleMessage(
+      "Ameoへのリクエストが失敗しました。原因を確認するには技術詳細を開いてください。",
+    ),
+    "Ameo_Settings": MessageLookupByLibrary.simpleMessage("Ameo設定"),
+    "Ameo_Technical_Details": MessageLookupByLibrary.simpleMessage("技術詳細"),
+    "Ameo_Username_Helper": MessageLookupByLibrary.simpleMessage(
+      "利用可能な場合はログイン中のプロフィールから自動取得されます。変更も可能です。",
+    ),
+    "Ameo_Username_Label": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeListユーザー名",
+    ),
+    "Ameo_Username_Missing": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeListユーザー名が見つかりません。Ameo設定で構成してください。",
+    ),
+    "Ameo_Why_Recommended": MessageLookupByLibrary.simpleMessage(
+      "なぜおすすめされたのですか？",
+    ),
+    "Ameo_Your_Rating": MessageLookupByLibrary.simpleMessage("あなたの評価"),
     "Analysis": MessageLookupByLibrary.simpleMessage("分析"),
     "Animals": MessageLookupByLibrary.simpleMessage("動物"),
     "Animation": MessageLookupByLibrary.simpleMessage("アニメーション"),
@@ -164,6 +253,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Backup_Desc": MessageLookupByLibrary.simpleMessage(
       "これにより、ブックマークや設定などがバックアップされます",
+    ),
+    "Backup_Include_History": MessageLookupByLibrary.simpleMessage("検索履歴を含める"),
+    "Backup_Include_History_Desc": MessageLookupByLibrary.simpleMessage(
+      "検索履歴と最近見たアニメ・漫画もバックアップします",
     ),
     "Bad": MessageLookupByLibrary.simpleMessage("悪い"),
     "BirthDay": MessageLookupByLibrary.simpleMessage("誕生日"),
@@ -283,6 +376,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "Customize_tabs": MessageLookupByLibrary.simpleMessage("タブのカスタマイズ"),
     "Cute_Girls": MessageLookupByLibrary.simpleMessage("可愛い女の子達"),
     "Cute_Guys": MessageLookupByLibrary.simpleMessage("かわいい人"),
+    "DAL_API_URL": MessageLookupByLibrary.simpleMessage("DALホスト型API URL"),
+    "DAL_API_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "自動補完、画像アップロード、レビュー要約に使用されます。",
+    ),
+    "DAL_Config_URL": MessageLookupByLibrary.simpleMessage("DALサーバー設定URL"),
+    "DAL_Config_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "アプリがDALサーバー一覧を取得する場所です。",
+    ),
     "DB_Modification_Requests": MessageLookupByLibrary.simpleMessage("DB変更要求"),
     "Dark": MessageLookupByLibrary.simpleMessage("暗い"),
     "Date": MessageLookupByLibrary.simpleMessage("日にち"),
@@ -638,6 +739,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Japan_Expo": MessageLookupByLibrary.simpleMessage("日本博覧会"),
     "Japanese": MessageLookupByLibrary.simpleMessage("日本"),
     "Japanese_Life": MessageLookupByLibrary.simpleMessage("日本の人生"),
+    "Jikan_Base_URL": MessageLookupByLibrary.simpleMessage("Jikan APIベースURL"),
+    "Jikan_Base_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "検索、友達のプロフィール、キャラクターなどのコミュニティデータに使用されます。",
+    ),
     "Josei": MessageLookupByLibrary.simpleMessage("女性"),
     "Jump_Festa": MessageLookupByLibrary.simpleMessage("ジャンプフェスタ"),
     "Just_a_sec": MessageLookupByLibrary.simpleMessage("ちょっと待って！"),
@@ -700,6 +805,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Loading_clubs": MessageLookupByLibrary.simpleMessage("クラブをロードする"),
     "Local_Time": MessageLookupByLibrary.simpleMessage("現地時間"),
     "Location": MessageLookupByLibrary.simpleMessage("位置"),
+    "Log_Diagnostics": MessageLookupByLibrary.simpleMessage("診斷ログを保存"),
+    "Log_Diagnostics_Desc": MessageLookupByLibrary.simpleMessage(
+      "セッション毎の診斷ログを保存します。公開ストレージへのアクセスが拒否された場合《トレージはアプリフォルダーに保存されます",
+    ),
     "Log_In": MessageLookupByLibrary.simpleMessage("ログインする"),
     "Logged_In": MessageLookupByLibrary.simpleMessage("ユーザーがログインしました.."),
     "Logged_In_as": MessageLookupByLibrary.simpleMessage("記録された"),
@@ -839,6 +948,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "No_More_found": MessageLookupByLibrary.simpleMessage("これ以上見つかりません！"),
     "No_Pictures_yet": MessageLookupByLibrary.simpleMessage("まだ写真はありません。"),
+    "No_Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "現在登録されている通知はありません",
+    ),
     "No_Recommendations_yet": MessageLookupByLibrary.simpleMessage(
       "まだお勧めはありません。",
     ),
@@ -883,6 +995,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Notification_settings_warning": MessageLookupByLibrary.simpleMessage(
       "まだあなたのためにスケジュールされている通知のために3日までの警告を受け取るかもしれません。これらの設定はログインしたときにのみ機能します。",
+    ),
+    "Notifications_Reset_Done": MessageLookupByLibrary.simpleMessage(
+      "通知を再設定しました",
     ),
     "OP_ED": MessageLookupByLibrary.simpleMessage("EDの"),
     "Ok": MessageLookupByLibrary.simpleMessage("わかりました"),
@@ -961,6 +1076,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "このノートはローカルのみであり、同期されません。",
     ),
     "Profile": MessageLookupByLibrary.simpleMessage("プロフィール"),
+    "Profile_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "このプロフィールを読み込めませんでした。ユーザー名を確認するか再試行してください。",
+    ),
     "Profile_Page": MessageLookupByLibrary.simpleMessage("自己紹介ページ"),
     "Profile_bg_removed": MessageLookupByLibrary.simpleMessage(
       "プロフィールの背景が正常に削除されました",
@@ -975,6 +1093,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Psychological": MessageLookupByLibrary.simpleMessage("心理学"),
     "Published": MessageLookupByLibrary.simpleMessage("発行"),
     "Published_Manga": MessageLookupByLibrary.simpleMessage("公開されたマンガ"),
+    "Queued_Notifications": MessageLookupByLibrary.simpleMessage("登録済みの通知"),
+    "Queued_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "アプリが現在登録しているリマインダー",
+    ),
     "Quotes": MessageLookupByLibrary.simpleMessage("引用"),
     "Racing": MessageLookupByLibrary.simpleMessage("レーシング"),
     "Random": MessageLookupByLibrary.simpleMessage("ランダム"),
@@ -1029,6 +1151,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "Reread": MessageLookupByLibrary.simpleMessage("再登録"),
     "Rereading": MessageLookupByLibrary.simpleMessage("再読"),
     "Reset": MessageLookupByLibrary.simpleMessage("リセットする"),
+    "Reset_Notifications": MessageLookupByLibrary.simpleMessage("定期通知をリセット"),
+    "Reset_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "保留中の毎回放送リマインダーをすべてキャンセルし、現在のデータで再設定します",
+    ),
+    "Reset_To_Defaults": MessageLookupByLibrary.simpleMessage("既定値に戻す"),
     "Reset_homepage": MessageLookupByLibrary.simpleMessage("ホームページをリセットします"),
     "Reset_homepage_warning": MessageLookupByLibrary.simpleMessage(
       "これにより、ホームページのレイアウトが元の状態にリセットされ、実行不能です。",
@@ -1044,6 +1171,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "提供されたファイルから設定、ブックマークを復元します",
     ),
     "Restore_fail": MessageLookupByLibrary.simpleMessage("復元に失敗しました"),
+    "Retry": MessageLookupByLibrary.simpleMessage("再試行"),
     "Reverse_Harem": MessageLookupByLibrary.simpleMessage("リバースハーレム"),
     "Review": MessageLookupByLibrary.simpleMessage("レビュー"),
     "Review_By": MessageLookupByLibrary.simpleMessage("審査員"),

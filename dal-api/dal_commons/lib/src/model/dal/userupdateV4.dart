@@ -53,17 +53,29 @@ class UserUpdate {
 
   UserUpdate.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    user = json['user'] != null ? UserV4.fromJson(json['user']) : null;
+    if (json['user'] != null) {
+      user = UserV4.fromJson(json['user']);
+    } else if (json['username'] != null) {
+      // Jikan v4 and jikan-edge expose the updater flat in the entry.
+      user = UserV4(
+        username: json['username'],
+        url: json['user_url'] ?? json['url'],
+        images: json['images'] != null
+            ? Images.fromJson(json['images'])
+            : Images.fromUrl(json['imageUrl']),
+      );
+    }
     score = double.tryParse('${json['score']}');
     status = json['status'];
-    episodesSeen = json['episodes_seen'];
-    episodesTotal = json['episodes_total'];
+    // jikan-edge names progress/total instead of episodes_seen/episodes_total.
+    episodesSeen = pickJson(json, ['episodes_seen', 'progress']);
+    episodesTotal = pickJson(json, ['episodes_total', 'total']);
     volumesRead = json['volumes_read'];
     volumesTotal = json['volumes_total'];
     chaptersRead = json['chapters_read'];
     chaptersTotal = json['chapters_total'];
 
-    date = json['date'];
+    date = json['date'] ?? json['date_updated'];
   }
 
   Map<String, dynamic> toJson() {

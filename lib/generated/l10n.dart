@@ -5044,6 +5044,126 @@ class S {
     );
   }
 
+  /// `AI Review Summary`
+  String get AI_Review_Summary {
+    return Intl.message(
+      'AI Review Summary',
+      name: 'AI_Review_Summary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show the AI-generated summary of the reviews on the reviews page`
+  String get AI_Review_Summary_Desc {
+    return Intl.message(
+      'Show the AI-generated summary of the reviews on the reviews page',
+      name: 'AI_Review_Summary_Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log Diagnostics`
+  String get Log_Diagnostics {
+    return Intl.message(
+      'Log Diagnostics',
+      name: 'Log_Diagnostics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save the diagnostic log for each session. If access to public storage is denied, the log is saved in the app folder`
+  String get Log_Diagnostics_Desc {
+    return Intl.message(
+      'Save the diagnostic log for each session. If access to public storage is denied, the log is saved in the app folder',
+      name: 'Log_Diagnostics_Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Scheduled Notifications`
+  String get Reset_Notifications {
+    return Intl.message(
+      'Reset Scheduled Notifications',
+      name: 'Reset_Notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel every queued episode reminder and schedule them again with the current data`
+  String get Reset_Notifications_Desc {
+    return Intl.message(
+      'Cancel every queued episode reminder and schedule them again with the current data',
+      name: 'Reset_Notifications_Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Queued Notifications`
+  String get Queued_Notifications {
+    return Intl.message(
+      'Queued Notifications',
+      name: 'Queued_Notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reminders currently scheduled by the app`
+  String get Queued_Notifications_Desc {
+    return Intl.message(
+      'Reminders currently scheduled by the app',
+      name: 'Queued_Notifications_Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No notifications are currently scheduled`
+  String get No_Queued_Notifications {
+    return Intl.message(
+      'No notifications are currently scheduled',
+      name: 'No_Queued_Notifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications rescheduled`
+  String get Notifications_Reset_Done {
+    return Intl.message(
+      'Notifications rescheduled',
+      name: 'Notifications_Reset_Done',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Include search history`
+  String get Backup_Include_History {
+    return Intl.message(
+      'Include search history',
+      name: 'Backup_Include_History',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Also back up your search history and recently viewed anime and manga`
+  String get Backup_Include_History_Desc {
+    return Intl.message(
+      'Also back up your search history and recently viewed anime and manga',
+      name: 'Backup_Include_History_Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Streaming Platforms`
   String get Streaming_Platforms {
     return Intl.message(
@@ -7732,6 +7852,486 @@ class S {
   /// `Memoir`
   String get Memoir {
     return Intl.message('Memoir', name: 'Memoir', desc: '', args: []);
+  }
+
+  /// `Retry`
+  String get Retry {
+    return Intl.message('Retry', name: 'Retry', desc: '', args: []);
+  }
+
+  /// `Couldn't load this profile. Check the username or try again.`
+  String get Profile_Load_Failed {
+    return Intl.message(
+      'Couldn\'t load this profile. Check the username or try again.',
+      name: 'Profile_Load_Failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ameo Recommendations`
+  String get Ameo_Recommendations {
+    return Intl.message(
+      'Ameo Recommendations',
+      name: 'Ameo_Recommendations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All recommendations and settings`
+  String get Ameo_All_Recommendations_Settings {
+    return Intl.message(
+      'All recommendations and settings',
+      name: 'Ameo_All_Recommendations_Settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ameo returned no recommendations.`
+  String get Ameo_No_Results {
+    return Intl.message(
+      'Ameo returned no recommendations.',
+      name: 'Ameo_No_Results',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load recommendations.`
+  String get Ameo_Load_Failed {
+    return Intl.message(
+      'Failed to load recommendations.',
+      name: 'Ameo_Load_Failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set MyAnimeList username`
+  String get Ameo_Configure_Username {
+    return Intl.message(
+      'Set MyAnimeList username',
+      name: 'Ameo_Configure_Username',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No recommendations yet.`
+  String get Ameo_No_Recommendations_Yet {
+    return Intl.message(
+      'No recommendations yet.',
+      name: 'Ameo_No_Recommendations_Yet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Powered by Sprout by Ameobea`
+  String get Ameo_Powered_By {
+    return Intl.message(
+      'Powered by Sprout by Ameobea',
+      name: 'Ameo_Powered_By',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `MyAnimeList username not found. Configure it in Ameo settings.`
+  String get Ameo_Username_Missing {
+    return Intl.message(
+      'MyAnimeList username not found. Configure it in Ameo settings.',
+      name: 'Ameo_Username_Missing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ameo returned no recommendations that can be displayed.`
+  String get Ameo_No_Displayable_Results {
+    return Intl.message(
+      'Ameo returned no recommendations that can be displayed.',
+      name: 'Ameo_No_Displayable_Results',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The Ameo request failed. Open technical details to see the cause.`
+  String get Ameo_Request_Failed {
+    return Intl.message(
+      'The Ameo request failed. Open technical details to see the cause.',
+      name: 'Ameo_Request_Failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ameo Settings`
+  String get Ameo_Settings {
+    return Intl.message(
+      'Ameo Settings',
+      name: 'Ameo_Settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `MyAnimeList username`
+  String get Ameo_Username_Label {
+    return Intl.message(
+      'MyAnimeList username',
+      name: 'Ameo_Username_Label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Automatically taken from your logged-in profile when available; you can still change it.`
+  String get Ameo_Username_Helper {
+    return Intl.message(
+      'Automatically taken from your logged-in profile when available; you can still change it.',
+      name: 'Ameo_Username_Helper',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommendation model`
+  String get Ameo_Model_Label {
+    return Intl.message(
+      'Recommendation model',
+      name: 'Ameo_Model_Label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Models are trained with different approaches and can produce different recommendations.`
+  String get Ameo_Model_Helper {
+    return Intl.message(
+      'Models are trained with different approaches and can produce different recommendations.',
+      name: 'Ameo_Model_Helper',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Extra seasons`
+  String get Ameo_Extra_Seasons {
+    return Intl.message(
+      'Extra seasons',
+      name: 'Ameo_Extra_Seasons',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Movies`
+  String get Ameo_Movies {
+    return Intl.message('Movies', name: 'Ameo_Movies', desc: '', args: []);
+  }
+
+  /// `ONA / OVA / Specials`
+  String get Ameo_ONA_OVA_Specials {
+    return Intl.message(
+      'ONA / OVA / Specials',
+      name: 'Ameo_ONA_OVA_Specials',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Music anime`
+  String get Ameo_Music_Anime {
+    return Intl.message(
+      'Music anime',
+      name: 'Ameo_Music_Anime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter Plan to Watch`
+  String get Ameo_Filter_PTW {
+    return Intl.message(
+      'Filter Plan to Watch',
+      name: 'Ameo_Filter_PTW',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The Legacy model does not use Logit weight or Niche boost.`
+  String get Ameo_Legacy_Model_Note {
+    return Intl.message(
+      'The Legacy model does not use Logit weight or Niche boost.',
+      name: 'Ameo_Legacy_Model_Note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logit weight`
+  String get Ameo_Logit_Weight {
+    return Intl.message(
+      'Logit weight',
+      name: 'Ameo_Logit_Weight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Niche boost factor`
+  String get Ameo_Niche_Boost {
+    return Intl.message(
+      'Niche boost factor',
+      name: 'Ameo_Niche_Boost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply settings`
+  String get Ameo_Apply_Settings {
+    return Intl.message(
+      'Apply settings',
+      name: 'Ameo_Apply_Settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Technical log copied`
+  String get Ameo_Log_Copied {
+    return Intl.message(
+      'Technical log copied',
+      name: 'Ameo_Log_Copied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reload`
+  String get Ameo_Reload {
+    return Intl.message('Reload', name: 'Ameo_Reload', desc: '', args: []);
+  }
+
+  /// `Technical details`
+  String get Ameo_Technical_Details {
+    return Intl.message(
+      'Technical details',
+      name: 'Ameo_Technical_Details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy log`
+  String get Ameo_Copy_Log {
+    return Intl.message('Copy log', name: 'Ameo_Copy_Log', desc: '', args: []);
+  }
+
+  /// `Add a MyAnimeList username through Ameo settings to load recommendations.`
+  String get Ameo_Add_Username_Hint {
+    return Intl.message(
+      'Add a MyAnimeList username through Ameo settings to load recommendations.',
+      name: 'Ameo_Add_Username_Hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Powered by Sprout by Ameobea. The external service and response format may change.`
+  String get Ameo_Powered_By_Desc {
+    return Intl.message(
+      'Powered by Sprout by Ameobea. The external service and response format may change.',
+      name: 'Ameo_Powered_By_Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ameo prediction`
+  String get Ameo_Predicted_Score {
+    return Intl.message(
+      'Ameo prediction',
+      name: 'Ameo_Predicted_Score',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide reason`
+  String get Ameo_Hide_Reason {
+    return Intl.message(
+      'Hide reason',
+      name: 'Ameo_Hide_Reason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Why is this recommended?`
+  String get Ameo_Why_Recommended {
+    return Intl.message(
+      'Why is this recommended?',
+      name: 'Ameo_Why_Recommended',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommended because you watched:`
+  String get Ameo_Recommended_Because {
+    return Intl.message(
+      'Recommended because you watched:',
+      name: 'Ameo_Recommended_Because',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contribution`
+  String get Ameo_Contribution {
+    return Intl.message(
+      'Contribution',
+      name: 'Ameo_Contribution',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your rating`
+  String get Ameo_Your_Rating {
+    return Intl.message(
+      'Your rating',
+      name: 'Ameo_Your_Rating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `API Endpoints`
+  String get API_Endpoints {
+    return Intl.message(
+      'API Endpoints',
+      name: 'API_Endpoints',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Override the API servers the app connects to. Leave a field empty to use the default.`
+  String get API_Endpoints_desc {
+    return Intl.message(
+      'Override the API servers the app connects to. Leave a field empty to use the default.',
+      name: 'API_Endpoints_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `API endpoints updated`
+  String get API_Endpoints_Saved {
+    return Intl.message(
+      'API endpoints updated',
+      name: 'API_Endpoints_Saved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid URL. Use a full http:// or https:// address.`
+  String get API_Endpoints_Invalid_URL {
+    return Intl.message(
+      'Invalid URL. Use a full http:// or https:// address.',
+      name: 'API_Endpoints_Invalid_URL',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current default`
+  String get API_Endpoints_Current {
+    return Intl.message(
+      'Current default',
+      name: 'API_Endpoints_Current',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jikan API base URL`
+  String get Jikan_Base_URL {
+    return Intl.message(
+      'Jikan API base URL',
+      name: 'Jikan_Base_URL',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used for search, friend profiles, characters and other community data.`
+  String get Jikan_Base_URL_desc {
+    return Intl.message(
+      'Used for search, friend profiles, characters and other community data.',
+      name: 'Jikan_Base_URL_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DAL hosted API URL`
+  String get DAL_API_URL {
+    return Intl.message(
+      'DAL hosted API URL',
+      name: 'DAL_API_URL',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used for autocomplete, image uploads and review summaries.`
+  String get DAL_API_URL_desc {
+    return Intl.message(
+      'Used for autocomplete, image uploads and review summaries.',
+      name: 'DAL_API_URL_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DAL server config URL`
+  String get DAL_Config_URL {
+    return Intl.message(
+      'DAL server config URL',
+      name: 'DAL_Config_URL',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Where the app fetches its list of DAL servers.`
+  String get DAL_Config_URL_desc {
+    return Intl.message(
+      'Where the app fetches its list of DAL servers.',
+      name: 'DAL_Config_URL_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset to defaults`
+  String get Reset_To_Defaults {
+    return Intl.message(
+      'Reset to defaults',
+      name: 'Reset_To_Defaults',
+      desc: '',
+      args: [],
+    );
   }
 }
 

@@ -208,11 +208,23 @@ class JikanHelper {
       }
 
       final result = decoded;
+      // jikan v4 used pagination.next; jikan-edge reports meta.pagination.hasNextPage.
+      String? nextPage;
+      final meta = result['meta'];
+      final metaPagination = meta is Map ? meta['pagination'] : null;
+      if (metaPagination is Map && metaPagination['hasNextPage'] == false) {
+        nextPage = null;
+      } else {
+        final v4Pagination = result['pagination'];
+        nextPage = v4Pagination is Map
+            ? (v4Pagination['next']?.toString())
+            : (pageNumber + 1).toString();
+      }
       final searchResult = SearchResult(
         data: (result["data"] as List)
             .map<BaseNode>((e) => _fromMap(e, category))
             .toList(),
-        paging: Paging(next: (pageNumber + 1).toString()),
+        paging: Paging(next: nextPage),
       );
       CacheManager.instance.setCachedJson(url, searchResult);
       return searchResult;
@@ -234,14 +246,16 @@ class JikanHelper {
   }
 
   static BaseNode _fromMap(dynamic e, String category) {
-    var images = e["images"];
     String? url;
-    if (images != null) {
-      var jpg = images["jpg"];
-      if (jpg != null) {
+    final images = e["images"];
+    if (images is Map) {
+      final jpg = images["jpg"];
+      if (jpg is Map) {
         url = jpg["image_url"];
       }
+      url ??= images['large'] ?? images['medium'] ?? images['small'];
     }
+    url ??= e["imageUrl"];
     final Node node;
 
     if (e is Map<String, dynamic> && contentTypes.contains(category)) {
@@ -249,7 +263,7 @@ class JikanHelper {
       node = AnimeDetailed.fromJikanJson(jikanAnime);
     } else {
       node = Node(
-        id: e["mal_id"],
+        id: e["mal_id"] ?? e["malId"],
         title: e["title"] ?? e['name'],
         mainPicture: Picture(
           large: url,
@@ -261,6 +275,16 @@ class JikanHelper {
     return BaseNode(content: node);
   }
 
+  /// Parameters the Jikan-compatible replacement (jikan-edge) rejects with an
+  /// error instead of ignoring. MAL itself no longer honors most of these,
+  /// so dropping them keeps search working rather than failing outright.
+  static const unsupportedJikanParams = {
+    'genres_exclude',
+    'sfw',
+    'producers',
+    'magazines',
+  };
+
   static String? filterUrlBuilder(Map<String, FilterOption>? filters,
       {String category = "anime"}) {
     if (filters == null || filters.isEmpty) return null;
@@ -268,6 +292,10 @@ class JikanHelper {
     for (var entry in filters.entries) {
       String field = entry.key;
       FilterOption option = entry.value;
+      if (unsupportedJikanParams.contains(field)) {
+        logDal('Jikan search: dropping unsupported filter "$field"');
+        continue;
+      }
       switch (option.type) {
         case FilterType.multiple:
           String temp = "";
@@ -281,13 +309,18 @@ class JikanHelper {
           }
           if (option.excludedOptions != null &&
               option.excludedOptions!.isNotEmpty) {
-            String excludeTemp = "";
-            for (var element in option.excludedOptions!) {
-              excludeTemp +=
-                  getApiValue(option.apiValues, option.values, element) + ",";
+            if (unsupportedJikanParams.contains(option.excludeFieldName)) {
+              logDal('Jikan search: dropping unsupported filter '
+                  '"${option.excludeFieldName}"');
+            } else {
+              String excludeTemp = "";
+              for (var element in option.excludedOptions!) {
+                excludeTemp +=
+                    getApiValue(option.apiValues, option.values, element) + ",";
+              }
+              excludeTemp = excludeTemp.substring(0, excludeTemp.length - 1);
+              url += "&${option.excludeFieldName}=$excludeTemp";
             }
-            excludeTemp = excludeTemp.substring(0, excludeTemp.length - 1);
-            url += "&${option.excludeFieldName}=$excludeTemp";
           }
           break;
         default:
@@ -295,7 +328,12 @@ class JikanHelper {
           if (option.apiValues != null) {
             value = getApiValue(option.apiValues, option.values, option.value);
           }
-          url += "&$field=${value ?? option.value}";
+          value ??= option.value?.toString();
+          // jikan-edge rating enum has no underscore (pg13, not pg_13).
+          if (field == 'rating' && value != null) {
+            value = value.replaceAll('_', '');
+          }
+          url += "&$field=${value ?? ''}";
       }
     }
     if (["anime", "manga"].contains(category) &&

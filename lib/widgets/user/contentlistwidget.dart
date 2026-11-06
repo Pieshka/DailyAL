@@ -330,8 +330,19 @@ Widget buildBaseNodePageItem(
           children: list
               .asMap()
               .entries
-              .map((e) =>
-                  Expanded(child: fromItem(e.key, e.value, homePageTileSize)))
+              .map(
+                (e) => Expanded(
+                  // `e.key` is the column inside this chunk; onClose consumers
+                  // index into the full item list, so the chunk offset has to
+                  // be added. Without it every horizontal row (gridAxisCount 1)
+                  // reported index 0 and always removed the first entry.
+                  child: fromItem(
+                    index * gridAxisCount + e.key,
+                    e.value,
+                    homePageTileSize,
+                  ),
+                ),
+              )
               .toList(),
         ),
       ),
@@ -1479,8 +1490,10 @@ Widget? unseenUsingScheduleData({
     if (episodesAired != null) {
       episodesAired--;
     } else {
-      var contenDetailed = baseNode?.content as AnimeDetailed;
-      episodesAired ??= contenDetailed.numEpisodes;
+      // baseNode may be absent or a different content type; a hard cast used
+      // to throw a TypeError and blank the whole list row.
+      final contenDetailed = baseNode?.content as AnimeDetailed?;
+      episodesAired ??= contenDetailed?.numEpisodes;
     }
     if (episodesAired != null) {
       return onBuild(episodesAired, episodesWatched);
@@ -1514,6 +1527,9 @@ Widget usingScheduler(int id, Widget Function(ScheduleData) widget) {
       ScheduleData? data;
       if (sn.hasData && sn.data!.containsKey(id)) {
         data = sn.data![id]!;
+        // A schedule entry without a usable timestamp cannot drive a
+        // countdown; skip it instead of crashing the row.
+        if (data.timestamp == null || data.timestamp! <= 0) return SB.z;
         return widget(data);
       }
       return SB.z;

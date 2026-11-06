@@ -148,11 +148,11 @@ class PopupMenuBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (includeUserProf) {
-      return StateFullFutureWidget<UserProf>(
+      return StateFullFutureWidget<UserProf?>(
         loadingChild: SB.z,
         future: () => MalUser.getUserInfo(
             fields: ["anime_statistics", "manga_statistics"], fromCache: true),
-        done: (sht) => _buildPopupMenu(sht.data!, context),
+        done: (sht) => _buildPopupMenu(sht.data, context),
       );
     } else {
       return _buildPopupMenu(null, context);

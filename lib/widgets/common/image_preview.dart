@@ -36,7 +36,9 @@ void zoomInImage(BuildContext context, String url, [bool showButtons = true]) {
                   loadingBuilder: (context, event) => _imageLoader(event),
                 ),
                 Positioned(
-                  bottom: 30.0,
+                  // The dialog covers the whole screen, including the area
+                  // behind the Android navigation bar.
+                  bottom: 30.0 + MediaQuery.paddingOf(context).bottom,
                   left: 0.0,
                   right: 0.0,
                   child: imageButtons(url, context, showButtons),

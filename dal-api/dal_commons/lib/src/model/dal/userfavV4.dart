@@ -66,10 +66,12 @@ class JikanSubDetailed {
   JikanSubDetailed.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
     type = json['type'];
-    startYear = json['start_year'];
-    malId = json['mal_id'];
+    startYear = pickJson(json, ['start_year', 'startYear']);
+    malId = pickJson(json, ['mal_id', 'malId']);
     url = json['url'];
-    images = json['images'] != null ? Images.fromJson(json['images']) : null;
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl']);
     title = json['title'];
   }
 
@@ -98,9 +100,11 @@ class CharactersFav {
 
   CharactersFav.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
+    malId = pickJson(json, ['mal_id', 'malId']);
     url = json['url'];
-    images = json['images'] != null ? Images.fromJson(json['images']) : null;
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl']);
     name = json['name'];
     type = json['type'];
     title = json['title'];
@@ -128,9 +132,11 @@ class PeopleFav {
 
   PeopleFav.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
+    malId = pickJson(json, ['mal_id', 'malId']);
     url = json['url'];
-    images = json['images'] != null ? Images.fromJson(json['images']) : null;
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl']);
     name = json['name'];
   }
 
