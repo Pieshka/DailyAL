@@ -10,6 +10,7 @@ import 'package:dailyanimelist/pages/settings/optiontile.dart';
 import 'package:dailyanimelist/user/user.dart';
 import 'package:dailyanimelist/util/file_service.dart';
 import 'package:dailyanimelist/util/streamutils.dart';
+import 'package:dailyanimelist/widgets/togglebutton.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -24,8 +25,16 @@ class BackUpAndRestorePage extends StatefulWidget {
 class _BackUpAndRestorePageState extends State<BackUpAndRestorePage> {
   final version = 1;
   final dateFormat = DateFormat('dd_MM_yyyy_HH_mm_ss_sss');
+
+  void _changeIncludeHistory(bool value) {
+    user.pref.backupIncludeHistory = value;
+    user.setIntance();
+    if (mounted) setState(() {});
+  }
+
   Future<void> _backUp() async {
-    final data = await CacheManager.instance.getBackUpData();
+    final data = await CacheManager.instance
+        .getBackUpData(includeHistory: user.pref.backupIncludeHistory);
     final name =
         'V_${version}_DailyAL_${dateFormat.format(DateTime.now())}.json';
     final result = await showConfirmationDialog(
@@ -103,6 +112,18 @@ class _BackUpAndRestorePageState extends State<BackUpAndRestorePage> {
                 child: Icon(Icons.restore),
               ),
               onPressed: _restore,
+            ),
+            OptionTile(
+              text: S.current.Backup_Include_History,
+              desc: S.current.Backup_Include_History_Desc,
+              multiLine: true,
+              iconData: Icons.history,
+              onPressed: () => _changeIncludeHistory(
+                  !user.pref.backupIncludeHistory),
+              trailing: ToggleButton(
+                toggleValue: user.pref.backupIncludeHistory,
+                onToggled: (value) => _changeIncludeHistory(value),
+              ),
             ),
           ],
         ),

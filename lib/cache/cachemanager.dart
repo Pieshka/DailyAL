@@ -123,7 +123,7 @@ class CacheManager {
           .setValueForService("cached-user-image", username, url);
   }
 
-  Future<String> getBackUpData() async {
+  Future<String> getBackUpData({bool includeHistory = true}) async {
     final pref = await _pref;
     final allData = <String, String>{};
     
@@ -133,6 +133,9 @@ class CacheManager {
       StreamUtils.i.key(StreamType.book_marks),
       '${UserContentBuilder.serviceName} - anime-@me',
       '${UserContentBuilder.serviceName} - manga-@me',
+      // Search history plus the recently viewed anime and manga. They live in
+      // one blob, so backing up the key covers all three.
+      if (includeHistory) StreamUtils.i.key(StreamType.search_page),
     ];
     
     // Get all keys from SharedPreferences
