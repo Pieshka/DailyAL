@@ -36,6 +36,11 @@ class UserPreferences {
   String? bgPath;
   bool showAnimeMangaBg;
 
+  /// Gates the AI-generated review summary on the reviews page. The hosted
+  /// service can be unavailable or unwanted, so the user decides here as well
+  /// as through the remote feature flag.
+  bool showAiReviewSummary;
+
   /// Backups also carry the search history and the recently viewed anime and
   /// manga when this is on.
   bool backupIncludeHistory;
@@ -74,6 +79,7 @@ class UserPreferences {
     required this.isRtl,
     required this.brightness,
     required this.showAnimeMangaBg,
+    required this.showAiReviewSummary,
     required this.backupIncludeHistory,
     required this.bgPath,
     required this.hpApiPrefList,
@@ -120,6 +126,7 @@ class UserPreferences {
         _autoTranslateSynopsis = false,
         _isRtl = false,
         showAnimeMangaBg = true,
+        showAiReviewSummary = true,
         backupIncludeHistory = true,
         _showBg = true;
     String? _userLanguage, _bgPath;
@@ -211,6 +218,9 @@ class UserPreferences {
       if (json.containsKey("showAnimeMangaBg")) {
         showAnimeMangaBg = json['showAnimeMangaBg'] ?? showAnimeMangaBg;
       }
+      if (json.containsKey("showAiReviewSummary")) {
+        showAiReviewSummary =
+            json['showAiReviewSummary'] ?? showAiReviewSummary;
       }
       if (json.containsKey("backupIncludeHistory")) {
         backupIncludeHistory =
@@ -252,6 +262,7 @@ class UserPreferences {
             dubIconStyle: _dubIconStyle,
             dubMinSourceCount: _dubMinSourceCount,
             showAnimeMangaBg: showAnimeMangaBg,
+            showAiReviewSummary: showAiReviewSummary,
             backupIncludeHistory: backupIncludeHistory,
             userPageAnimeSortType:
                 json['userPageAnimeSortType'] ?? 'list_updated_at',
@@ -309,6 +320,7 @@ class UserPreferences {
             dubMinSourceCount: _dubMinSourceCount,
             defaultDisplayType: DisplayType.list_vert,
             showAnimeMangaBg: showAnimeMangaBg,
+            showAiReviewSummary: showAiReviewSummary,
             backupIncludeHistory: backupIncludeHistory,
             userPageAnimeSortType: 'list_updated_at',
             userPageMangaSortType: 'list_updated_at',
@@ -355,6 +367,7 @@ class UserPreferences {
       "autoAddStartEndDate": autoAddStartEndDate,
       "defaultDisplayType": defaultDisplayType.index,
       'showAnimeMangaBg': showAnimeMangaBg,
+      'showAiReviewSummary': showAiReviewSummary,
       'backupIncludeHistory': backupIncludeHistory,
       "firstTimePref": firstTimePref.toJson(),
       "brightness": (brightness) != Brightness.dark,
