@@ -13,7 +13,7 @@ import '../constant.dart';
 import '../main.dart';
 import '../screens/generalsearchscreen.dart';
 
-Future<UserProf> _userProfileFuture = MalUser.getUserInfo(
+Future<UserProf?> _userProfileFuture = MalUser.getUserInfo(
     fields: ["anime_statistics", "manga_statistics"], fromCache: true);
 
 void _refreshFuture() {
