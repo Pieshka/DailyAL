@@ -22,6 +22,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "AI_Review_Summary": MessageLookupByLibrary.simpleMessage("AI 리뷰 요약"),
+    "AI_Review_Summary_Desc": MessageLookupByLibrary.simpleMessage(
+      "리뷰 페이지에서 AI가 생성한 리뷰 요약을 표시합니다",
+    ),
+    "API_Endpoints": MessageLookupByLibrary.simpleMessage("API 엔드포인트"),
+    "API_Endpoints_Current": MessageLookupByLibrary.simpleMessage("현재 기본값"),
+    "API_Endpoints_Invalid_URL": MessageLookupByLibrary.simpleMessage(
+      "잘못된 URL입니다. http:// 또는 https:// 전체 주소를 사용하세요.",
+    ),
+    "API_Endpoints_Saved": MessageLookupByLibrary.simpleMessage(
+      "API 엔드포인트가 업데이트되었습니다",
+    ),
+    "API_Endpoints_desc": MessageLookupByLibrary.simpleMessage(
+      "앱이 연결할 API 서버를 지정합니다. 비워 두면 기본값을 사용합니다.",
+    ),
     "A_new_episode_is_out": MessageLookupByLibrary.simpleMessage(
       "새로운 에피소드가 나왔습니다!",
     ),
@@ -61,6 +76,76 @@ class MessageLookup extends MessageLookupByLibrary {
     "Allow_YT_Player_Desc": MessageLookupByLibrary.simpleMessage(
       "YouTube 플레이어가 앱에서 동영상을 재생하도록 허용",
     ),
+    "Ameo_Add_Username_Hint": MessageLookupByLibrary.simpleMessage(
+      "Ameo 설정에서 MyAnimeList 사용자 이름을 추가하면 추천을 불러올 수 있습니다.",
+    ),
+    "Ameo_All_Recommendations_Settings": MessageLookupByLibrary.simpleMessage(
+      "모든 추천 및 설정",
+    ),
+    "Ameo_Apply_Settings": MessageLookupByLibrary.simpleMessage("설정 적용"),
+    "Ameo_Configure_Username": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList 사용자 이름 설정",
+    ),
+    "Ameo_Contribution": MessageLookupByLibrary.simpleMessage("기여도"),
+    "Ameo_Copy_Log": MessageLookupByLibrary.simpleMessage("로그 복사"),
+    "Ameo_Extra_Seasons": MessageLookupByLibrary.simpleMessage("추가 분기"),
+    "Ameo_Filter_PTW": MessageLookupByLibrary.simpleMessage("「보고 싶은 목록」 필터"),
+    "Ameo_Hide_Reason": MessageLookupByLibrary.simpleMessage("이유 숨기기"),
+    "Ameo_Legacy_Model_Note": MessageLookupByLibrary.simpleMessage(
+      "Legacy 모델은 Logit weight 또는 Niche boost를 사용하지 않습니다.",
+    ),
+    "Ameo_Load_Failed": MessageLookupByLibrary.simpleMessage("추천을 불러오지 못했습니다."),
+    "Ameo_Log_Copied": MessageLookupByLibrary.simpleMessage("기술 로그 복사됨"),
+    "Ameo_Logit_Weight": MessageLookupByLibrary.simpleMessage("Logit weight"),
+    "Ameo_Model_Helper": MessageLookupByLibrary.simpleMessage(
+      "모델은 서로 다른 방식으로 학습되어 다른 추천을 생성할 수 있습니다.",
+    ),
+    "Ameo_Model_Label": MessageLookupByLibrary.simpleMessage("추천 모델"),
+    "Ameo_Movies": MessageLookupByLibrary.simpleMessage("영화"),
+    "Ameo_Music_Anime": MessageLookupByLibrary.simpleMessage("음악 애니메이션"),
+    "Ameo_Niche_Boost": MessageLookupByLibrary.simpleMessage(
+      "Niche boost factor",
+    ),
+    "Ameo_No_Displayable_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo가 표시할 수 있는 추천을 반환하지 않았습니다.",
+    ),
+    "Ameo_No_Recommendations_Yet": MessageLookupByLibrary.simpleMessage(
+      "아직 추천이 없습니다.",
+    ),
+    "Ameo_No_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo가 추천을 반환하지 않았습니다.",
+    ),
+    "Ameo_ONA_OVA_Specials": MessageLookupByLibrary.simpleMessage(
+      "ONA / OVA / 스페셜",
+    ),
+    "Ameo_Powered_By": MessageLookupByLibrary.simpleMessage(
+      "Ameobea의 Sprout로 동작",
+    ),
+    "Ameo_Powered_By_Desc": MessageLookupByLibrary.simpleMessage(
+      "Ameobea의 Sprout로 동작합니다. 외부 서비스와 응답 형식은 변경될 수 있습니다.",
+    ),
+    "Ameo_Predicted_Score": MessageLookupByLibrary.simpleMessage("Ameo 예측 점수"),
+    "Ameo_Recommendations": MessageLookupByLibrary.simpleMessage("Ameo 추천"),
+    "Ameo_Recommended_Because": MessageLookupByLibrary.simpleMessage(
+      "시청한 작품 기반 추천:",
+    ),
+    "Ameo_Reload": MessageLookupByLibrary.simpleMessage("다시 불러오기"),
+    "Ameo_Request_Failed": MessageLookupByLibrary.simpleMessage(
+      "Ameo 요청에 실패했습니다. 원인을 확인하려면 기술 세부 정보를 여세요.",
+    ),
+    "Ameo_Settings": MessageLookupByLibrary.simpleMessage("Ameo 설정"),
+    "Ameo_Technical_Details": MessageLookupByLibrary.simpleMessage("기술 세부 정보"),
+    "Ameo_Username_Helper": MessageLookupByLibrary.simpleMessage(
+      "가능하면 로그인한 프로필에서 자동으로 가져오며, 계속 변경할 수 있습니다.",
+    ),
+    "Ameo_Username_Label": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList 사용자 이름",
+    ),
+    "Ameo_Username_Missing": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList 사용자 이름을 찾을 수 없습니다. Ameo 설정에서 지정하세요.",
+    ),
+    "Ameo_Why_Recommended": MessageLookupByLibrary.simpleMessage("왜 추천되었나요?"),
+    "Ameo_Your_Rating": MessageLookupByLibrary.simpleMessage("사용자 평가"),
     "Analysis": MessageLookupByLibrary.simpleMessage("분석"),
     "Animals": MessageLookupByLibrary.simpleMessage("동물"),
     "Animation": MessageLookupByLibrary.simpleMessage("생기"),
@@ -157,6 +242,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "다운로드 폴더에 백업 파일이 저장됩니다. 이 파일을 사용하여 프로필을 복원하세요.",
     ),
     "Backup_Desc": MessageLookupByLibrary.simpleMessage("북마크, 설정 등이 백업됩니다."),
+    "Backup_Include_History": MessageLookupByLibrary.simpleMessage("검색 기록 포함"),
+    "Backup_Include_History_Desc": MessageLookupByLibrary.simpleMessage(
+      "검색 기록과 최근에 본 애니메이션 및 만화도 백업합니다",
+    ),
     "Bad": MessageLookupByLibrary.simpleMessage("나쁜"),
     "BirthDay": MessageLookupByLibrary.simpleMessage("생일"),
     "Bleach": MessageLookupByLibrary.simpleMessage("표백제"),
@@ -275,6 +364,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "Customize_tabs": MessageLookupByLibrary.simpleMessage("탭 사용자 정의"),
     "Cute_Girls": MessageLookupByLibrary.simpleMessage("귀여운 소녀들"),
     "Cute_Guys": MessageLookupByLibrary.simpleMessage("귀여운 남자들"),
+    "DAL_API_URL": MessageLookupByLibrary.simpleMessage("DAL 호스팅 API URL"),
+    "DAL_API_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "자동 완성, 이미지 업로드, 리뷰 요약에 사용됩니다.",
+    ),
+    "DAL_Config_URL": MessageLookupByLibrary.simpleMessage("DAL 서버 설정 URL"),
+    "DAL_Config_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "앱이 DAL 서버 목록을 가져오는 위치입니다.",
+    ),
     "DB_Modification_Requests": MessageLookupByLibrary.simpleMessage(
       "DB 수정 요청",
     ),
@@ -620,6 +717,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Japan_Expo": MessageLookupByLibrary.simpleMessage("일본 박람회"),
     "Japanese": MessageLookupByLibrary.simpleMessage("일본어"),
     "Japanese_Life": MessageLookupByLibrary.simpleMessage("일본의 삶"),
+    "Jikan_Base_URL": MessageLookupByLibrary.simpleMessage("Jikan API 기본 URL"),
+    "Jikan_Base_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "검색, 친구 프로필, 캐릭터 등 커뮤니티 데이터에 사용됩니다.",
+    ),
     "Josei": MessageLookupByLibrary.simpleMessage("여성"),
     "Jump_Festa": MessageLookupByLibrary.simpleMessage("점프 페스토카"),
     "Just_a_sec": MessageLookupByLibrary.simpleMessage("잠깐만!"),
@@ -680,6 +781,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Loading_clubs": MessageLookupByLibrary.simpleMessage("클럽 적재"),
     "Local_Time": MessageLookupByLibrary.simpleMessage("현지 시각"),
     "Location": MessageLookupByLibrary.simpleMessage("위치"),
+    "Log_Diagnostics": MessageLookupByLibrary.simpleMessage("진단 로그 저장"),
+    "Log_Diagnostics_Desc": MessageLookupByLibrary.simpleMessage(
+      "세션별 진단 로그를 저장합니다. 공개 저장소 접근이 거부되면 앱 폴더에 로그가 저장됩니다",
+    ),
     "Log_In": MessageLookupByLibrary.simpleMessage("로그인"),
     "Logged_In": MessageLookupByLibrary.simpleMessage("사용자가 로그인 한 .."),
     "Logged_In_as": MessageLookupByLibrary.simpleMessage("로그인 한대로 로그인했습니다"),
@@ -815,6 +920,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "No_More_found": MessageLookupByLibrary.simpleMessage("더 이상 발견되지 않습니다!"),
     "No_Pictures_yet": MessageLookupByLibrary.simpleMessage("아직 사진 없음 .."),
+    "No_Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "현재 예약된 알림이 없습니다",
+    ),
     "No_Recommendations_yet": MessageLookupByLibrary.simpleMessage(
       "아직 권장 사항 없음 ..",
     ),
@@ -857,6 +965,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Notification_settings_warning": MessageLookupByLibrary.simpleMessage(
       "이미 예정된 알림을 위해 최대 3 일 동안 경고를받을 수 있습니다.이 설정은 로그인했을 때만 작동합니다.",
+    ),
+    "Notifications_Reset_Done": MessageLookupByLibrary.simpleMessage(
+      "알림이 다시 예약되었습니다",
     ),
     "OP_ED": MessageLookupByLibrary.simpleMessage("에드에서"),
     "Ok": MessageLookupByLibrary.simpleMessage("좋아요"),
@@ -939,6 +1050,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "이 메모는 로컬 전용이며 동기화되지 않습니다.",
     ),
     "Profile": MessageLookupByLibrary.simpleMessage("프로필"),
+    "Profile_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "이 프로필을 불러올 수 없습니다. 사용자 이름을 확인하거나 다시 시도하세요.",
+    ),
     "Profile_Page": MessageLookupByLibrary.simpleMessage("프로필 페이지"),
     "Profile_bg_removed": MessageLookupByLibrary.simpleMessage(
       "프로필 배경이 성공적으로 제거되었습니다.",
@@ -951,6 +1065,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Psychological": MessageLookupByLibrary.simpleMessage("심리학"),
     "Published": MessageLookupByLibrary.simpleMessage("게시"),
     "Published_Manga": MessageLookupByLibrary.simpleMessage("게시 된 만화"),
+    "Queued_Notifications": MessageLookupByLibrary.simpleMessage("예약된 알림"),
+    "Queued_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "현재 앱이 예약한 리마인더",
+    ),
     "Quotes": MessageLookupByLibrary.simpleMessage("인용 부호"),
     "Racing": MessageLookupByLibrary.simpleMessage("경마"),
     "Random": MessageLookupByLibrary.simpleMessage("무작위의"),
@@ -1007,6 +1125,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "Reread": MessageLookupByLibrary.simpleMessage("재명"),
     "Rereading": MessageLookupByLibrary.simpleMessage("reReading"),
     "Reset": MessageLookupByLibrary.simpleMessage("초기화"),
+    "Reset_Notifications": MessageLookupByLibrary.simpleMessage("예약된 알림 초기화"),
+    "Reset_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "대기 중인 모든 에피소드 리마인더를 취소하고 현재 데이터로 다시 예약합니다",
+    ),
+    "Reset_To_Defaults": MessageLookupByLibrary.simpleMessage("기본값으로 초기화"),
     "Reset_homepage": MessageLookupByLibrary.simpleMessage("홈페이지를 재설정하십시오"),
     "Reset_homepage_warning": MessageLookupByLibrary.simpleMessage(
       "이렇게하면 홈페이지 레이아웃이 원래 상태로 재설정되며 사용할 수 없습니다.",
@@ -1020,6 +1143,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Restore_Sucess": MessageLookupByLibrary.simpleMessage("복원 성공"),
     "Restore_desc": MessageLookupByLibrary.simpleMessage("제공된 파일에서 설정, 북마크 복원"),
     "Restore_fail": MessageLookupByLibrary.simpleMessage("복원 실패"),
+    "Retry": MessageLookupByLibrary.simpleMessage("재시도"),
     "Reverse_Harem": MessageLookupByLibrary.simpleMessage("리버스 하렘"),
     "Review": MessageLookupByLibrary.simpleMessage("검토"),
     "Review_By": MessageLookupByLibrary.simpleMessage("리뷰 작성자"),

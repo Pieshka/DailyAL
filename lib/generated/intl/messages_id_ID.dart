@@ -22,6 +22,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "AI_Review_Summary": MessageLookupByLibrary.simpleMessage(
+      "Ringkasan Ulasan AI",
+    ),
+    "AI_Review_Summary_Desc": MessageLookupByLibrary.simpleMessage(
+      "Tampilkan ringkasan ulasan yang dihasilkan AI di halaman ulasan",
+    ),
+    "API_Endpoints": MessageLookupByLibrary.simpleMessage("Endpoint API"),
+    "API_Endpoints_Current": MessageLookupByLibrary.simpleMessage(
+      "Bawaan saat ini",
+    ),
+    "API_Endpoints_Invalid_URL": MessageLookupByLibrary.simpleMessage(
+      "URL tidak valid. Gunakan alamat lengkap http:// atau https://.",
+    ),
+    "API_Endpoints_Saved": MessageLookupByLibrary.simpleMessage(
+      "Endpoint API diperbarui",
+    ),
+    "API_Endpoints_desc": MessageLookupByLibrary.simpleMessage(
+      "Ganti server API yang dihubungi aplikasi. Kosongkan kolom untuk memakai nilai bawaan.",
+    ),
     "A_new_episode_is_out": MessageLookupByLibrary.simpleMessage(
       "Episode baru keluar!",
     ),
@@ -69,6 +88,98 @@ class MessageLookup extends MessageLookupByLibrary {
     "Allow_YT_Player_Desc": MessageLookupByLibrary.simpleMessage(
       "Izinkan pemutar Youtube memutar video di aplikasi",
     ),
+    "Ameo_Add_Username_Hint": MessageLookupByLibrary.simpleMessage(
+      "Tambahkan username MyAnimeList melalui Pengaturan Ameo untuk memuat rekomendasi.",
+    ),
+    "Ameo_All_Recommendations_Settings": MessageLookupByLibrary.simpleMessage(
+      "Semua rekomendasi dan pengaturan",
+    ),
+    "Ameo_Apply_Settings": MessageLookupByLibrary.simpleMessage(
+      "Terapkan pengaturan",
+    ),
+    "Ameo_Configure_Username": MessageLookupByLibrary.simpleMessage(
+      "Atur username MyAnimeList",
+    ),
+    "Ameo_Contribution": MessageLookupByLibrary.simpleMessage("Kontribusi"),
+    "Ameo_Copy_Log": MessageLookupByLibrary.simpleMessage("Salin log"),
+    "Ameo_Extra_Seasons": MessageLookupByLibrary.simpleMessage(
+      "Season tambahan",
+    ),
+    "Ameo_Filter_PTW": MessageLookupByLibrary.simpleMessage(
+      "Filter Plan to Watch",
+    ),
+    "Ameo_Hide_Reason": MessageLookupByLibrary.simpleMessage(
+      "Sembunyikan alasan",
+    ),
+    "Ameo_Legacy_Model_Note": MessageLookupByLibrary.simpleMessage(
+      "Model Legacy tidak menggunakan Logit weight atau Niche boost.",
+    ),
+    "Ameo_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "Rekomendasi gagal dimuat.",
+    ),
+    "Ameo_Log_Copied": MessageLookupByLibrary.simpleMessage(
+      "Log teknis disalin",
+    ),
+    "Ameo_Logit_Weight": MessageLookupByLibrary.simpleMessage("Logit weight"),
+    "Ameo_Model_Helper": MessageLookupByLibrary.simpleMessage(
+      "Model dilatih dengan pendekatan berbeda dan dapat menghasilkan rekomendasi berbeda.",
+    ),
+    "Ameo_Model_Label": MessageLookupByLibrary.simpleMessage(
+      "Model rekomendasi",
+    ),
+    "Ameo_Movies": MessageLookupByLibrary.simpleMessage("Film"),
+    "Ameo_Music_Anime": MessageLookupByLibrary.simpleMessage("Anime musik"),
+    "Ameo_Niche_Boost": MessageLookupByLibrary.simpleMessage(
+      "Niche boost factor",
+    ),
+    "Ameo_No_Displayable_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo tidak mengembalikan rekomendasi yang dapat ditampilkan.",
+    ),
+    "Ameo_No_Recommendations_Yet": MessageLookupByLibrary.simpleMessage(
+      "Belum ada rekomendasi.",
+    ),
+    "Ameo_No_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo tidak mengembalikan rekomendasi.",
+    ),
+    "Ameo_ONA_OVA_Specials": MessageLookupByLibrary.simpleMessage(
+      "ONA / OVA / Specials",
+    ),
+    "Ameo_Powered_By": MessageLookupByLibrary.simpleMessage(
+      "Ditenagai Sprout oleh Ameobea",
+    ),
+    "Ameo_Powered_By_Desc": MessageLookupByLibrary.simpleMessage(
+      "Ditenagai Sprout oleh Ameobea. Layanan eksternal dan format respons dapat berubah.",
+    ),
+    "Ameo_Predicted_Score": MessageLookupByLibrary.simpleMessage(
+      "Prediksi Ameo",
+    ),
+    "Ameo_Recommendations": MessageLookupByLibrary.simpleMessage(
+      "Rekomendasi Ameo",
+    ),
+    "Ameo_Recommended_Because": MessageLookupByLibrary.simpleMessage(
+      "Direkomendasikan karena Anda menonton:",
+    ),
+    "Ameo_Reload": MessageLookupByLibrary.simpleMessage("Muat ulang"),
+    "Ameo_Request_Failed": MessageLookupByLibrary.simpleMessage(
+      "Permintaan Ameo gagal. Buka detail teknis untuk melihat penyebabnya.",
+    ),
+    "Ameo_Settings": MessageLookupByLibrary.simpleMessage("Pengaturan Ameo"),
+    "Ameo_Technical_Details": MessageLookupByLibrary.simpleMessage(
+      "Detail teknis",
+    ),
+    "Ameo_Username_Helper": MessageLookupByLibrary.simpleMessage(
+      "Otomatis dari profil login jika tersedia; tetap bisa diubah.",
+    ),
+    "Ameo_Username_Label": MessageLookupByLibrary.simpleMessage(
+      "Username MyAnimeList",
+    ),
+    "Ameo_Username_Missing": MessageLookupByLibrary.simpleMessage(
+      "Username MyAnimeList tidak ditemukan. Atur melalui Pengaturan Ameo.",
+    ),
+    "Ameo_Why_Recommended": MessageLookupByLibrary.simpleMessage(
+      "Mengapa direkomendasikan?",
+    ),
+    "Ameo_Your_Rating": MessageLookupByLibrary.simpleMessage("Rating Anda"),
     "Analysis": MessageLookupByLibrary.simpleMessage("Analisis"),
     "Animals": MessageLookupByLibrary.simpleMessage("Hewan"),
     "Animation": MessageLookupByLibrary.simpleMessage("Animasi"),
@@ -192,6 +303,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Backup_Desc": MessageLookupByLibrary.simpleMessage(
       "Ini akan membuat cadangan bookmark, pengaturan, dll",
+    ),
+    "Backup_Include_History": MessageLookupByLibrary.simpleMessage(
+      "Sertakan riwayat pencarian",
+    ),
+    "Backup_Include_History_Desc": MessageLookupByLibrary.simpleMessage(
+      "Sertakan riwayat pencarian serta anime dan manga yang baru dilihat dalam cadangan",
     ),
     "Bad": MessageLookupByLibrary.simpleMessage("Buruk"),
     "BirthDay": MessageLookupByLibrary.simpleMessage("Hari ulang tahun"),
@@ -345,6 +462,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "Customize_tabs": MessageLookupByLibrary.simpleMessage("Sesuaikan Tab"),
     "Cute_Girls": MessageLookupByLibrary.simpleMessage("Gadis-gadis imut."),
     "Cute_Guys": MessageLookupByLibrary.simpleMessage("Pria lucu"),
+    "DAL_API_URL": MessageLookupByLibrary.simpleMessage("URL API DAL"),
+    "DAL_API_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Dipakai untuk autocomplete, unggah gambar, dan ringkasan ulasan.",
+    ),
+    "DAL_Config_URL": MessageLookupByLibrary.simpleMessage(
+      "URL konfigurasi server DAL",
+    ),
+    "DAL_Config_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Tempat aplikasi mengambil daftar server DAL.",
+    ),
     "DB_Modification_Requests": MessageLookupByLibrary.simpleMessage(
       "Permintaan modifikasi db.",
     ),
@@ -750,6 +877,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Japan_Expo": MessageLookupByLibrary.simpleMessage("Japan Expo."),
     "Japanese": MessageLookupByLibrary.simpleMessage("Jepang"),
     "Japanese_Life": MessageLookupByLibrary.simpleMessage("Kehidupan Jepang"),
+    "Jikan_Base_URL": MessageLookupByLibrary.simpleMessage(
+      "URL dasar API Jikan",
+    ),
+    "Jikan_Base_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Dipakai untuk pencarian, profil teman, karakter, dan data komunitas lainnya.",
+    ),
     "Josei": MessageLookupByLibrary.simpleMessage("wanita"),
     "Jump_Festa": MessageLookupByLibrary.simpleMessage("Jump Festa."),
     "Just_a_sec": MessageLookupByLibrary.simpleMessage("Tunggu sebentar!"),
@@ -820,6 +953,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Loading_clubs": MessageLookupByLibrary.simpleMessage("Memuat klub"),
     "Local_Time": MessageLookupByLibrary.simpleMessage("Waktu lokal"),
     "Location": MessageLookupByLibrary.simpleMessage("Lokasi"),
+    "Log_Diagnostics": MessageLookupByLibrary.simpleMessage(
+      "Simpan Log Diagnostik",
+    ),
+    "Log_Diagnostics_Desc": MessageLookupByLibrary.simpleMessage(
+      "Simpan log diagnostik per sesi. Jika akses penyimpanan umum ditolak, log disimpan di folder aplikasi",
+    ),
     "Log_In": MessageLookupByLibrary.simpleMessage("Gabung"),
     "Logged_In": MessageLookupByLibrary.simpleMessage("Pengguna masuk .."),
     "Logged_In_as": MessageLookupByLibrary.simpleMessage("masuk sebagai"),
@@ -983,6 +1122,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "No_Pictures_yet": MessageLookupByLibrary.simpleMessage(
       "Belum ada gambar ..",
     ),
+    "No_Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada notifikasi yang dijadwalkan",
+    ),
     "No_Recommendations_yet": MessageLookupByLibrary.simpleMessage(
       "Belum ada rekomendasi ..",
     ),
@@ -1041,6 +1183,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Notification_settings_warning": MessageLookupByLibrary.simpleMessage(
       "Anda mungkin masih mendapat peringatan untuk hingga 3 hari untuk notifikasi yang sudah dijadwalkan untuk Anda.Harap dicatat bahwa pengaturan ini hanya akan berfungsi ketika Anda telah masuk.",
+    ),
+    "Notifications_Reset_Done": MessageLookupByLibrary.simpleMessage(
+      "Notifikasi dijadwalkan ulang",
     ),
     "OP_ED": MessageLookupByLibrary.simpleMessage("Satu d"),
     "Ok": MessageLookupByLibrary.simpleMessage("Oke"),
@@ -1133,6 +1278,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Catatan ini hanya bersifat lokal dan tidak akan disinkronkan.",
     ),
     "Profile": MessageLookupByLibrary.simpleMessage("Profil"),
+    "Profile_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "Profil tidak dapat dimuat. Periksa username atau coba lagi.",
+    ),
     "Profile_Page": MessageLookupByLibrary.simpleMessage("Halaman profil"),
     "Profile_bg_removed": MessageLookupByLibrary.simpleMessage(
       "Latar belakang profil berhasil dihapus",
@@ -1148,6 +1296,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Published": MessageLookupByLibrary.simpleMessage("Diterbitkan"),
     "Published_Manga": MessageLookupByLibrary.simpleMessage(
       "Manga yang diterbitkan",
+    ),
+    "Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Notifikasi Terjadwal",
+    ),
+    "Queued_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "Pengingat yang saat ini dijadwalkan aplikasi",
     ),
     "Quotes": MessageLookupByLibrary.simpleMessage("Kutipan"),
     "Racing": MessageLookupByLibrary.simpleMessage("Balap"),
@@ -1219,6 +1373,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "Reread": MessageLookupByLibrary.simpleMessage("Membaca kembali"),
     "Rereading": MessageLookupByLibrary.simpleMessage("Readeade."),
     "Reset": MessageLookupByLibrary.simpleMessage("Mengatur ulang"),
+    "Reset_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Atur Ulang Notifikasi",
+    ),
+    "Reset_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "Batalkan semua pengingat episode yang antre dan jadwalkan ulang dengan data saat ini",
+    ),
+    "Reset_To_Defaults": MessageLookupByLibrary.simpleMessage(
+      "Kembalikan ke bawaan",
+    ),
     "Reset_homepage": MessageLookupByLibrary.simpleMessage(
       "Atur Ulang Homepage",
     ),
@@ -1238,6 +1401,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pulihkan pengaturan, bookmark dari file yang disediakan",
     ),
     "Restore_fail": MessageLookupByLibrary.simpleMessage("Pemulihan gagal"),
+    "Retry": MessageLookupByLibrary.simpleMessage("Coba lagi"),
     "Reverse_Harem": MessageLookupByLibrary.simpleMessage("Membalikkan Harem"),
     "Review": MessageLookupByLibrary.simpleMessage("Review"),
     "Review_By": MessageLookupByLibrary.simpleMessage("Tinjau oleh"),

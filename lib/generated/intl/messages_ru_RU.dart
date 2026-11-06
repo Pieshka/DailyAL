@@ -22,6 +22,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "AI_Review_Summary": MessageLookupByLibrary.simpleMessage(
+      "ИИ-резюме отзывов",
+    ),
+    "AI_Review_Summary_Desc": MessageLookupByLibrary.simpleMessage(
+      "Показывать сгенерированное ИИ краткое содержание отзывов на странице отзывов",
+    ),
+    "API_Endpoints": MessageLookupByLibrary.simpleMessage("Конечные точки API"),
+    "API_Endpoints_Current": MessageLookupByLibrary.simpleMessage(
+      "Текущее значение по умолчанию",
+    ),
+    "API_Endpoints_Invalid_URL": MessageLookupByLibrary.simpleMessage(
+      "Неверный URL. Используйте полный адрес http:// или https://.",
+    ),
+    "API_Endpoints_Saved": MessageLookupByLibrary.simpleMessage(
+      "Конечные точки API обновлены",
+    ),
+    "API_Endpoints_desc": MessageLookupByLibrary.simpleMessage(
+      "Укажите другие API-серверы, к которым подключается приложение. Оставьте поле пустым, чтобы использовать значение по умолчанию.",
+    ),
     "A_new_episode_is_out": MessageLookupByLibrary.simpleMessage(
       "Вышел новый эпизод!",
     ),
@@ -73,6 +92,98 @@ class MessageLookup extends MessageLookupByLibrary {
     "Allow_YT_Player_Desc": MessageLookupByLibrary.simpleMessage(
       "Разрешить проигрывателю Youtube воспроизводить видео в приложении",
     ),
+    "Ameo_Add_Username_Hint": MessageLookupByLibrary.simpleMessage(
+      "Добавьте имя пользователя MyAnimeList в настройках Ameo, чтобы загрузить рекомендации.",
+    ),
+    "Ameo_All_Recommendations_Settings": MessageLookupByLibrary.simpleMessage(
+      "Все рекомендации и настройки",
+    ),
+    "Ameo_Apply_Settings": MessageLookupByLibrary.simpleMessage(
+      "Применить настройки",
+    ),
+    "Ameo_Configure_Username": MessageLookupByLibrary.simpleMessage(
+      "Указать имя пользователя MyAnimeList",
+    ),
+    "Ameo_Contribution": MessageLookupByLibrary.simpleMessage("Вклад"),
+    "Ameo_Copy_Log": MessageLookupByLibrary.simpleMessage("Копировать журнал"),
+    "Ameo_Extra_Seasons": MessageLookupByLibrary.simpleMessage(
+      "Дополнительные сезоны",
+    ),
+    "Ameo_Filter_PTW": MessageLookupByLibrary.simpleMessage(
+      "Фильтровать «Буду смотреть»",
+    ),
+    "Ameo_Hide_Reason": MessageLookupByLibrary.simpleMessage("Скрыть причину"),
+    "Ameo_Legacy_Model_Note": MessageLookupByLibrary.simpleMessage(
+      "Модель Legacy не использует Logit weight и Niche boost.",
+    ),
+    "Ameo_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить рекомендации.",
+    ),
+    "Ameo_Log_Copied": MessageLookupByLibrary.simpleMessage(
+      "Технический журнал скопирован",
+    ),
+    "Ameo_Logit_Weight": MessageLookupByLibrary.simpleMessage("Logit weight"),
+    "Ameo_Model_Helper": MessageLookupByLibrary.simpleMessage(
+      "Модели обучены разными методами и могут давать разные рекомендации.",
+    ),
+    "Ameo_Model_Label": MessageLookupByLibrary.simpleMessage(
+      "Модель рекомендаций",
+    ),
+    "Ameo_Movies": MessageLookupByLibrary.simpleMessage("Фильмы"),
+    "Ameo_Music_Anime": MessageLookupByLibrary.simpleMessage(
+      "Музыкальные аниме",
+    ),
+    "Ameo_Niche_Boost": MessageLookupByLibrary.simpleMessage(
+      "Niche boost factor",
+    ),
+    "Ameo_No_Displayable_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo не вернул рекомендаций, которые можно отобразить.",
+    ),
+    "Ameo_No_Recommendations_Yet": MessageLookupByLibrary.simpleMessage(
+      "Рекомендаций пока нет.",
+    ),
+    "Ameo_No_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo не вернул рекомендаций.",
+    ),
+    "Ameo_ONA_OVA_Specials": MessageLookupByLibrary.simpleMessage(
+      "ONA / OVA / спецвыпуски",
+    ),
+    "Ameo_Powered_By": MessageLookupByLibrary.simpleMessage(
+      "На основе Sprout от Ameobea",
+    ),
+    "Ameo_Powered_By_Desc": MessageLookupByLibrary.simpleMessage(
+      "На основе Sprout от Ameobea. Внешний сервис и формат ответа могут измениться.",
+    ),
+    "Ameo_Predicted_Score": MessageLookupByLibrary.simpleMessage(
+      "Прогноз Ameo",
+    ),
+    "Ameo_Recommendations": MessageLookupByLibrary.simpleMessage(
+      "Рекомендации Ameo",
+    ),
+    "Ameo_Recommended_Because": MessageLookupByLibrary.simpleMessage(
+      "Рекомендовано, потому что вы смотрели:",
+    ),
+    "Ameo_Reload": MessageLookupByLibrary.simpleMessage("Обновить"),
+    "Ameo_Request_Failed": MessageLookupByLibrary.simpleMessage(
+      "Запрос к Ameo завершился ошибкой. Откройте технические подробности, чтобы узнать причину.",
+    ),
+    "Ameo_Settings": MessageLookupByLibrary.simpleMessage("Настройки Ameo"),
+    "Ameo_Technical_Details": MessageLookupByLibrary.simpleMessage(
+      "Технические подробности",
+    ),
+    "Ameo_Username_Helper": MessageLookupByLibrary.simpleMessage(
+      "При возможности берётся автоматически из вашего профиля; его всё равно можно изменить.",
+    ),
+    "Ameo_Username_Label": MessageLookupByLibrary.simpleMessage(
+      "Имя пользователя MyAnimeList",
+    ),
+    "Ameo_Username_Missing": MessageLookupByLibrary.simpleMessage(
+      "Имя пользователя MyAnimeList не найдено. Укажите его в настройках Ameo.",
+    ),
+    "Ameo_Why_Recommended": MessageLookupByLibrary.simpleMessage(
+      "Почему это рекомендовано?",
+    ),
+    "Ameo_Your_Rating": MessageLookupByLibrary.simpleMessage("Ваша оценка"),
     "Analysis": MessageLookupByLibrary.simpleMessage("Анализ"),
     "Animals": MessageLookupByLibrary.simpleMessage("Животные"),
     "Animation": MessageLookupByLibrary.simpleMessage("Анимация"),
@@ -198,6 +309,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Backup_Desc": MessageLookupByLibrary.simpleMessage(
       "Это создаст резервную копию ваших закладок, настроек и т. д.",
+    ),
+    "Backup_Include_History": MessageLookupByLibrary.simpleMessage(
+      "Включить историю поиска",
+    ),
+    "Backup_Include_History_Desc": MessageLookupByLibrary.simpleMessage(
+      "Также сохранять историю поиска и недавно просмотренные аниме и мангу",
     ),
     "Bad": MessageLookupByLibrary.simpleMessage("Плохой"),
     "BirthDay": MessageLookupByLibrary.simpleMessage("День рождения"),
@@ -353,6 +470,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "Customize_tabs": MessageLookupByLibrary.simpleMessage("Настройка вкладок"),
     "Cute_Girls": MessageLookupByLibrary.simpleMessage("Милые девушки"),
     "Cute_Guys": MessageLookupByLibrary.simpleMessage("Милые Ребята"),
+    "DAL_API_URL": MessageLookupByLibrary.simpleMessage("URL API DAL"),
+    "DAL_API_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Используется для автодополнения, загрузки изображений и сводок отзывов.",
+    ),
+    "DAL_Config_URL": MessageLookupByLibrary.simpleMessage(
+      "URL конфигурации сервера DAL",
+    ),
+    "DAL_Config_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Откуда приложение получает список серверов DAL.",
+    ),
     "DB_Modification_Requests": MessageLookupByLibrary.simpleMessage(
       "Запросы на изменение БД",
     ),
@@ -762,6 +889,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Japan_Expo": MessageLookupByLibrary.simpleMessage("Япония Экспо"),
     "Japanese": MessageLookupByLibrary.simpleMessage("Японский"),
     "Japanese_Life": MessageLookupByLibrary.simpleMessage("Японская жизнь"),
+    "Jikan_Base_URL": MessageLookupByLibrary.simpleMessage(
+      "Базовый URL API Jikan",
+    ),
+    "Jikan_Base_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Используется для поиска, профилей друзей, персонажей и других данных сообщества.",
+    ),
     "Josei": MessageLookupByLibrary.simpleMessage("Джосей"),
     "Jump_Festa": MessageLookupByLibrary.simpleMessage("Прыжковая вечеринка"),
     "Just_a_sec": MessageLookupByLibrary.simpleMessage("Секундочку!"),
@@ -832,6 +965,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Loading_clubs": MessageLookupByLibrary.simpleMessage("Загрузка клубов"),
     "Local_Time": MessageLookupByLibrary.simpleMessage("Местное время"),
     "Location": MessageLookupByLibrary.simpleMessage("Расположение"),
+    "Log_Diagnostics": MessageLookupByLibrary.simpleMessage(
+      "Журнал диагностики",
+    ),
+    "Log_Diagnostics_Desc": MessageLookupByLibrary.simpleMessage(
+      "Сохранять журнал диагностики для каждой сессии. Если доступ к общему хранилищу запрещён, журнал сохраняется в папке приложения",
+    ),
     "Log_In": MessageLookupByLibrary.simpleMessage("Авторизоваться"),
     "Logged_In": MessageLookupByLibrary.simpleMessage(
       "Пользователь вошел в систему..",
@@ -1003,6 +1142,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "No_More_found": MessageLookupByLibrary.simpleMessage("Больше не найдено!"),
     "No_Pictures_yet": MessageLookupByLibrary.simpleMessage("Фото пока нет.."),
+    "No_Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Сейчас отложенных уведомлений нет",
+    ),
     "No_Recommendations_yet": MessageLookupByLibrary.simpleMessage(
       "Рекомендаций пока нет..",
     ),
@@ -1061,6 +1203,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Notification_settings_warning": MessageLookupByLibrary.simpleMessage(
       "Вы по-прежнему можете получать оповещения в течение трех дней об уведомлениях, которые уже запланированы для вас. Обратите внимание, что эти настройки будут работать только после входа в систему.",
+    ),
+    "Notifications_Reset_Done": MessageLookupByLibrary.simpleMessage(
+      "Уведомления созданы заново",
     ),
     "OP_ED": MessageLookupByLibrary.simpleMessage("ОДИН D"),
     "Ok": MessageLookupByLibrary.simpleMessage("хорошо"),
@@ -1153,6 +1298,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Эта заметка только локальная и не будет синхронизирована.",
     ),
     "Profile": MessageLookupByLibrary.simpleMessage("Профиль"),
+    "Profile_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить этот профиль. Проверьте имя пользователя или попробуйте снова.",
+    ),
     "Profile_Page": MessageLookupByLibrary.simpleMessage("Страница профиля"),
     "Profile_bg_removed": MessageLookupByLibrary.simpleMessage(
       "Фон профиля успешно удален",
@@ -1168,6 +1316,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Published": MessageLookupByLibrary.simpleMessage("Опубликовано"),
     "Published_Manga": MessageLookupByLibrary.simpleMessage(
       "Опубликованная манга",
+    ),
+    "Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Отложенные уведомления",
+    ),
+    "Queued_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "Напоминания, которые сейчас отложены приложением",
     ),
     "Quotes": MessageLookupByLibrary.simpleMessage("Кавычки"),
     "Racing": MessageLookupByLibrary.simpleMessage("Гонки"),
@@ -1243,6 +1397,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "Reread": MessageLookupByLibrary.simpleMessage("Перечитать"),
     "Rereading": MessageLookupByLibrary.simpleMessage("Перечитывание"),
     "Reset": MessageLookupByLibrary.simpleMessage("Перезагрузить"),
+    "Reset_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Сброс отложенных уведомлений",
+    ),
+    "Reset_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "Отменить все отложенные напоминания об эпизодах и создать их заново по текущим данным",
+    ),
+    "Reset_To_Defaults": MessageLookupByLibrary.simpleMessage(
+      "Сбросить значения по умолчанию",
+    ),
     "Reset_homepage": MessageLookupByLibrary.simpleMessage(
       "Сбросить домашнюю страницу",
     ),
@@ -1264,6 +1427,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Restore_fail": MessageLookupByLibrary.simpleMessage(
       "Восстановление не удалось",
     ),
+    "Retry": MessageLookupByLibrary.simpleMessage("Повторить"),
     "Reverse_Harem": MessageLookupByLibrary.simpleMessage("Обратный гарем"),
     "Review": MessageLookupByLibrary.simpleMessage("Обзор"),
     "Review_By": MessageLookupByLibrary.simpleMessage("Отзыв от"),
