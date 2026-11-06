@@ -646,9 +646,18 @@ class DalApi {
     }
   }
 
-  Future<String> getSignedImageUrl(String type, String id) async {
+  Future<String?> getSignedImageUrl(String type, String id) async {
     final response = await _apiGET('types/$type/images/$id');
-    return response['signedURL'];
+    // The hosted API can answer with an error payload or a renamed field;
+    // returning null lets callers fall back to "no image" instead of throwing.
+    if (response is Map) {
+      final url = response['signedURL'] ??
+          response['signedUrl'] ??
+          response['url'];
+      if (url is String && url.isNotEmpty) return url;
+    }
+    logDal('No signed image URL returned for "$type/$id": $response');
+    return null;
   }
 
   Future<void> saveImage(
