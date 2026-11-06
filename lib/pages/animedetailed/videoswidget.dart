@@ -346,7 +346,8 @@ Future<void> showYouTubeVideo({
                   else
                     Positioned(
                       right: 10,
-                      bottom: 60,
+                      // Clear of the Android navigation bar.
+                      bottom: 60 + MediaQuery.paddingOf(context).bottom,
                       child: closeButton,
                     ),
                 ],

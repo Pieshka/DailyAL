@@ -21,6 +21,9 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../api/malapi.dart';
+import '../../api/maluser.dart';
+import '../../main.dart';
+import '../../user/user.dart';
 
 class SchduledNode {
   final int dayofWeek;
@@ -71,6 +74,7 @@ class AnimeCalendarWidget extends StatefulWidget {
 
 class _AnimeCalendarWidgetState extends State<AnimeCalendarWidget> {
   late Future<SearchResult> _seasonResult;
+  late Future<List<BaseNode>> _userListResult;
 
   void onClose() => Navigator.pop(context);
 
@@ -86,16 +90,55 @@ class _AnimeCalendarWidgetState extends State<AnimeCalendarWidget> {
       fromCache: fromCache,
       limit: 500,
     );
+    _userListResult = _loadUserScheduleNodes(fromCache);
     DalApi.i.resetScheduleForMalIds();
+  }
+
+  /// Notifications are scheduled from the user's watching/plan-to-watch
+  /// lists, but the calendar previously only matched the current season.
+  /// Anime airing across seasons therefore produced reminders while the
+  /// schedule screen stayed empty. Load the same lists here so both views
+  /// use consistent episode data.
+  Future<List<BaseNode>> _loadUserScheduleNodes(bool fromCache) async {
+    if (user.status != AuthStatus.AUTHENTICATED) return const [];
+    try {
+      final results = await Future.wait([
+        MalUser.getAllUserList(
+          '@me',
+          'anime',
+          status: 'watching',
+          fromCache: fromCache,
+          fields: 'my_list_status,num_episodes',
+        ),
+        MalUser.getAllUserList(
+          '@me',
+          'anime',
+          status: 'plan_to_watch',
+          fromCache: fromCache,
+          fields: 'my_list_status,num_episodes',
+        ),
+      ]);
+      return <BaseNode>[
+        ...?results[0].data,
+        ...?results[1].data,
+      ];
+    } catch (e) {
+      logDal('Calendar could not load the user anime lists: $e');
+      return const [];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return CFutureBuilder<SearchResult>(
       future: _seasonResult,
-      done: (e) => CFutureBuilder<Map<int, ScheduleData>>(
-        future: DalApi.i.scheduleForMalIds,
-        done: (f) => _buildScheduleTree(e.data, f.data),
+      done: (e) => CFutureBuilder<List<BaseNode>>(
+        future: _userListResult,
+        done: (u) => CFutureBuilder<Map<int, ScheduleData>>(
+          future: DalApi.i.scheduleForMalIds,
+          done: (f) => _buildScheduleTree(e.data, f.data, u.data),
+          loadingChild: loading,
+        ),
         loadingChild: loading,
       ),
       loadingChild: loading,
@@ -115,13 +158,14 @@ class _AnimeCalendarWidgetState extends State<AnimeCalendarWidget> {
     );
   }
 
-  Widget _buildScheduleTree(SearchResult? result, Map<int, ScheduleData>? map) {
-    // Include all anime from the season, filtering is done in the child widget
-    Map<int, Node> nodes = HashMap.fromEntries(result?.data
-            ?.map((e) => e.content)
-            .where((e) => e != null && e.id != null)
-            .map((e) => MapEntry(e!.id!, e)) ??
-        []);
+  Widget _buildScheduleTree(SearchResult? result, Map<int, ScheduleData>? map,
+      List<BaseNode>? userList) {
+    // Include all anime from the season and from the user's lists; filtering
+    // is done in the child widget.
+    Map<int, Node> nodes = HashMap.fromEntries([
+      ...?result?.data?.map((e) => e.content),
+      ...?userList?.map((e) => e.content),
+    ].where((e) => e != null && e.id != null).map((e) => MapEntry(e!.id!, e)));
     final schedulesList = map?.entries
             .where((e) => _onlyWithSchedule(e, nodes))
             .map((e) => _mapToScheduledNode(e, nodes))
@@ -144,7 +188,10 @@ class _AnimeCalendarWidgetState extends State<AnimeCalendarWidget> {
   }
 
   bool _onlyWithSchedule(MapEntry<int, ScheduleData> e, Map<int, Node> nodes) {
-    return nodes.containsKey(e.key);
+    // Entries without a valid release timestamp cannot be placed on the
+    // calendar; skip them instead of crashing on the null assertion.
+    final timestamp = e.value.timestamp;
+    return timestamp != null && timestamp > 0 && nodes.containsKey(e.key);
   }
 
   Widget _buildCustomScrollView(Map<int, List<SchduledNode>> map) {

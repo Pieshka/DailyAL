@@ -14,7 +14,13 @@
 
 </div>
 
-> **About this repository:** This is a community fork of [JICA98/DailyAL](https://github.com/JICA98/DailyAL). It retains DailyAL's core MAL client functionality and adds fork-specific features and fixes. The upstream release and download links below refer to the original project, not a separate release published by this fork.
+> **WARNING!!!** This fork was fixed using artificial intelligence tools. A self-hosted Qwen model and the open-source OpenCode agent were used for the fix. 
+> No Frontier model was used in the process. I do not condone or approve of the thoughtless use of AI for vibecoding. Every change, as well as the 
+> agent'so peration itself, was continuously supervised by a human. This fork was created primarily for personal use, as I was frustrated by bugs in the fork 
+> I had created (and thus also in the upstream version); I am sharing it so that no one else has to go through the same process I did.
+
+
+> **About this repository:** This is a community fork of [onemind66/DailyAL](https://github.com/onemind66/DailyAL). It retains DailyAL's core MAL client functionality and adds fork-specific features and fixes. The upstream release and download links below refer to the original project, not a separate release published by this fork.
 
 ## Contents
 
@@ -32,7 +38,7 @@
 
 DailyAL is a Flutter-based client for exploring anime and manga from MyAnimeList. It brings catalog discovery, search, personal-list management, community content, and user customization into one application.
 
-This fork also includes **Ameo**, an optional anime recommendation integration, along with reliability and usability improvements in notifications, search results, MAL list-status synchronization, and character/person detail loading.
+This fork also includes **Ameo**, an optional anime recommendation integration, a replacement for the offline public Jikan API, and reliability and usability improvements in notifications, search results, MAL list-status synchronization, and character/person detail loading.
 
 ## Features
 
@@ -105,8 +111,23 @@ In addition to Ameo, this fork contains maintenance and reliability work across 
 | Profile and statistics | Improve list/profile data parsing and handling of chart data used by profile insights. |
 | Logging | Add opt-in timestamped file logging and more structured diagnostics for investigating API and detail-loading failures. |
 | Build workflow | Keep a manually triggered GitHub Actions workflow for producing an Android release APK artifact. |
+| Jikan-compatible data service | Replace the offline public Jikan API with a configurable Jikan-compatible service (jikan-edge by default). Requests, models, and parsers accept both Jikan v4 (`snake_case`, bare payloads) and jikan-edge (`camelCase`, `{ data, meta }`) responses, and query parameters the replacement rejects are dropped instead of failing the request. |
+| API endpoint settings | Add a settings screen for overriding the Jikan, DAL API, and app-config URLs at runtime, with URL validation, persistence across restarts, and a reset to the bundled defaults. |
+| Magazines and user history | Select the magazines block by the links it contains rather than its position on the page, and request anime and manga history together so the history page shows both media types. |
+| Airing schedule and countdown | Scope schedule parsing to the schedule table, accept the date formats MyAnimeList currently outputs, and fall back to the data service's airing fields. The schedule screen also loads the same lists used for notification scheduling and refreshes when that data changes, so titles that already produce reminders appear there. |
+| Notification management | Add a reset action and a list of queued reminders in the notification settings, so scheduled reminders and their artwork can be inspected and rebuilt without reinstalling the app. |
+| Android insets in full-screen views | Keep fixed-position controls — the anime graph toolbar, profile statistics search field, image preview, video seek bar, clubs search field, and intro skip button — above the system navigation bar. |
+| Profile statistics cards | Stop score values and status badges from being clipped in the "I liked it, they hated it" cards, and give the section enough height for the taller cards. |
+| Friend profiles and profile backgrounds | Show a retry state when a friend lookup fails, keep the drag pill centered on both own and friend profiles, and treat a missing numeric MAL id as "no background" instead of throwing. |
+| List pages and recent items | Let the system back button close an active search field before leaving the page, remove the intended entry when clearing recent anime or manga, and optionally include search history and recent items in backups. |
+| Review summaries | Gate the AI-generated review summary behind a local preference in addition to the remote feature flag, so the request can be turned off when the hosted service is unavailable or unwanted. |
+| Failure handling | Keep failed futures from leaving loading widgets stuck on the spinner, and skip unusable entries (missing dates, mismatched content types, unavailable profile data) instead of blanking an entire list row. |
+| Localization | Add the missing strings across the bundled locales and keep their key sets aligned, including strings that were previously hardcoded in Indonesian, such as the Ameo section title and the diagnostic-log save button. |
+| Tests | Add regression tests for HTML and API parsing, endpoint configuration, notification scheduling, recent-item handling, localization parity, and widget layout. |
 
 These are code-level improvements; they do not imply that every external API or platform has been tested in every environment. See [Notes and limitations](#notes-and-limitations).
+
+> **Jikan-compatible service:** The default replacement for `api.jikan.moe` is a third-party deployment, not an official MyAnimeList or Jikan endpoint. Its base URL can be changed from **Settings → API Endpoints** or with the `JIKAN_BASE_URL` environment variable, and the bundled DAL handlers use the same base URL.
 
 ## Screenshots
 
@@ -185,6 +206,17 @@ python3 python/init.py
 
 These commands are for regeneration/development workflows, not required for every normal app launch. Check the VS Code tasks and source scripts before running them; translation processing may have additional requirements.
 
+### Tests
+
+The repository contains Flutter tests under `test/` and Dart tests for the shared API package under `dal-api/dal_commons/test/`:
+
+```bash
+flutter test
+cd dal-api/dal_commons && dart test
+```
+
+The Flutter tests run without a device or network access; widgets that would otherwise call the network are exercised against stubbed responses. Behavior that depends on the platform — system-navigation insets, notification delivery, and Android's back button — still has to be confirmed on a real device.
+
 ### Optional diagnostics
 
 The fork includes timestamped file logging intended to help investigate issues. Logging and diagnostic output can contain technical request context, so review it before sharing publicly and never include access tokens, credentials, or other secrets in issue reports.
@@ -196,18 +228,22 @@ The fork includes timestamped file logging intended to help investigate issues. 
 | `lib/` | Main Flutter application, screens, widgets, preferences, and services |
 | `lib/features/ameo/` | Ameo recommendation integration and UI |
 | `lib/api/` | MyAnimeList and DailyAL API clients, authentication, and data handling |
+| `lib/api/api_endpoint_settings.dart` | Runtime overrides for the Jikan, DAL API, and app-config URLs |
 | `lib/notifservice.dart` | Anime release notification scheduling and reconciliation |
 | `lib/util/file_logger.dart` | Optional timestamped diagnostic file logging |
 | `dal-api/` | Dart API package and shared data models |
+| `dal-api/dal_commons/test/` | Dart tests for the shared models and MyAnimeList HTML parsers |
 | `dal-rust-api/` | Rust API/service component included in the repository |
 | `assets/` | Application images, fonts, and other bundled assets |
 | `metadata/` | Store metadata and screenshots |
-| `test/` | Flutter test sources, where present |
+| `test/` | Flutter tests for widgets, services, and localization |
 | `.github/workflows/` | GitHub Actions workflows, including the manual Android APK build |
 
 ## Notes and limitations
 
 - **MyAnimeList and third-party services:** Search, list updates, schedule data, character/person details, and Ameo recommendations depend on external services and network availability.
+- **Jikan-compatible service:** The replacement for `api.jikan.moe` is a third-party deployment. It is not an official MyAnimeList or Jikan endpoint, its availability is not controlled by this repository, and it does not expose every field the original service provided — notably the numeric MyAnimeList id of a user. Point **Settings → API Endpoints** or `JIKAN_BASE_URL` at another deployment if needed.
+- **Hosted features that are currently unavailable upstream:** Profile background images depend on a hosted storage service that currently returns server errors, and the replacement data service does not provide the numeric user id those backgrounds are matched with. The AI-generated review summary depends on a hosted summary service that currently fails; it is disabled by a local preference until that service is replaced.
 - **Notifications:** Delivery depends on OS permissions, battery/background restrictions, alarm behavior, and the availability of valid schedule data. Use the in-app test notification when diagnosing setup issues.
 - **Ameo:** It is a fork-specific integration, not a built-in MyAnimeList feature. Its results, models, prediction metadata, and explanations are controlled by the external service.
 - **Build verification:** The existence of a build workflow documents the configured build path; it is not a guarantee that every commit has passed a full device test on every supported platform.

@@ -22,6 +22,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "AI_Review_Summary": MessageLookupByLibrary.simpleMessage(
+      "AI-Bewertungszusammenfassung",
+    ),
+    "AI_Review_Summary_Desc": MessageLookupByLibrary.simpleMessage(
+      "Die KI-generierte Zusammenfassung der Bewertungen auf der Bewertungsseite anzeigen",
+    ),
+    "API_Endpoints": MessageLookupByLibrary.simpleMessage("API-Endpunkte"),
+    "API_Endpoints_Current": MessageLookupByLibrary.simpleMessage(
+      "Aktueller Standardwert",
+    ),
+    "API_Endpoints_Invalid_URL": MessageLookupByLibrary.simpleMessage(
+      "Ungültige URL. Verwende eine vollständige http://- oder https://-Adresse.",
+    ),
+    "API_Endpoints_Saved": MessageLookupByLibrary.simpleMessage(
+      "API-Endpunkte aktualisiert",
+    ),
+    "API_Endpoints_desc": MessageLookupByLibrary.simpleMessage(
+      "Überschreibe die API-Server, mit denen sich die App verbindet. Leer lassen, um die Standardwerte zu nutzen.",
+    ),
     "A_new_episode_is_out": MessageLookupByLibrary.simpleMessage(
       "Eine neue Episode ist raus!",
     ),
@@ -75,6 +94,98 @@ class MessageLookup extends MessageLookupByLibrary {
     "Allow_YT_Player_Desc": MessageLookupByLibrary.simpleMessage(
       "Erlauben Sie dem YouTube-Player, Videos in der App abzuspielen",
     ),
+    "Ameo_Add_Username_Hint": MessageLookupByLibrary.simpleMessage(
+      "Füge in den Ameo-Einstellungen einen MyAnimeList-Benutzernamen hinzu, um Empfehlungen zu laden.",
+    ),
+    "Ameo_All_Recommendations_Settings": MessageLookupByLibrary.simpleMessage(
+      "Alle Empfehlungen und Einstellungen",
+    ),
+    "Ameo_Apply_Settings": MessageLookupByLibrary.simpleMessage(
+      "Einstellungen anwenden",
+    ),
+    "Ameo_Configure_Username": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList-Benutzernamen festlegen",
+    ),
+    "Ameo_Contribution": MessageLookupByLibrary.simpleMessage("Beitrag"),
+    "Ameo_Copy_Log": MessageLookupByLibrary.simpleMessage("Protokoll kopieren"),
+    "Ameo_Extra_Seasons": MessageLookupByLibrary.simpleMessage(
+      "Zusätzliche Staffeln",
+    ),
+    "Ameo_Filter_PTW": MessageLookupByLibrary.simpleMessage(
+      "»Beobachten« filtern",
+    ),
+    "Ameo_Hide_Reason": MessageLookupByLibrary.simpleMessage(
+      "Grund ausblenden",
+    ),
+    "Ameo_Legacy_Model_Note": MessageLookupByLibrary.simpleMessage(
+      "Das Legacy-Modell verwendet weder Logit weight noch Niche boost.",
+    ),
+    "Ameo_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "Empfehlungen konnten nicht geladen werden.",
+    ),
+    "Ameo_Log_Copied": MessageLookupByLibrary.simpleMessage(
+      "Technisches Protokoll kopiert",
+    ),
+    "Ameo_Logit_Weight": MessageLookupByLibrary.simpleMessage("Logit weight"),
+    "Ameo_Model_Helper": MessageLookupByLibrary.simpleMessage(
+      "Modelle werden mit unterschiedlichen Ansätzen trainiert und können unterschiedliche Empfehlungen liefern.",
+    ),
+    "Ameo_Model_Label": MessageLookupByLibrary.simpleMessage(
+      "Empfehlungsmodell",
+    ),
+    "Ameo_Movies": MessageLookupByLibrary.simpleMessage("Filme"),
+    "Ameo_Music_Anime": MessageLookupByLibrary.simpleMessage("Musik-Anime"),
+    "Ameo_Niche_Boost": MessageLookupByLibrary.simpleMessage(
+      "Niche boost factor",
+    ),
+    "Ameo_No_Displayable_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo hat keine anzeigbaren Empfehlungen zurückgegeben.",
+    ),
+    "Ameo_No_Recommendations_Yet": MessageLookupByLibrary.simpleMessage(
+      "Noch keine Empfehlungen.",
+    ),
+    "Ameo_No_Results": MessageLookupByLibrary.simpleMessage(
+      "Ameo hat keine Empfehlungen zurückgegeben.",
+    ),
+    "Ameo_ONA_OVA_Specials": MessageLookupByLibrary.simpleMessage(
+      "ONA / OVA / Specials",
+    ),
+    "Ameo_Powered_By": MessageLookupByLibrary.simpleMessage(
+      "Bereitgestellt von Sprout von Ameobea",
+    ),
+    "Ameo_Powered_By_Desc": MessageLookupByLibrary.simpleMessage(
+      "Bereitgestellt von Sprout von Ameobea. Externer Dienst und Antwortformat können sich ändern.",
+    ),
+    "Ameo_Predicted_Score": MessageLookupByLibrary.simpleMessage(
+      "Ameo-Vorhersage",
+    ),
+    "Ameo_Recommendations": MessageLookupByLibrary.simpleMessage(
+      "Ameo-Empfehlungen",
+    ),
+    "Ameo_Recommended_Because": MessageLookupByLibrary.simpleMessage(
+      "Empfohlen, weil du geschaut hast:",
+    ),
+    "Ameo_Reload": MessageLookupByLibrary.simpleMessage("Neu laden"),
+    "Ameo_Request_Failed": MessageLookupByLibrary.simpleMessage(
+      "Die Ameo-Anfrage ist fehlgeschlagen. Öffne die technischen Details, um die Ursache zu sehen.",
+    ),
+    "Ameo_Settings": MessageLookupByLibrary.simpleMessage("Ameo-Einstellungen"),
+    "Ameo_Technical_Details": MessageLookupByLibrary.simpleMessage(
+      "Technische Details",
+    ),
+    "Ameo_Username_Helper": MessageLookupByLibrary.simpleMessage(
+      "Wird automatisch vom angemeldeten Profil übernommen, wenn verfügbar; kann weiterhin geändert werden.",
+    ),
+    "Ameo_Username_Label": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList-Benutzername",
+    ),
+    "Ameo_Username_Missing": MessageLookupByLibrary.simpleMessage(
+      "MyAnimeList-Benutzername nicht gefunden. In den Ameo-Einstellungen festlegen.",
+    ),
+    "Ameo_Why_Recommended": MessageLookupByLibrary.simpleMessage(
+      "Warum wird das empfohlen?",
+    ),
+    "Ameo_Your_Rating": MessageLookupByLibrary.simpleMessage("Deine Bewertung"),
     "Analysis": MessageLookupByLibrary.simpleMessage("Analyse"),
     "Animals": MessageLookupByLibrary.simpleMessage("Tiere"),
     "Animation": MessageLookupByLibrary.simpleMessage("Animation"),
@@ -200,6 +311,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Backup_Desc": MessageLookupByLibrary.simpleMessage(
       "Dadurch werden Ihre Lesezeichen, Einstellungen usw. gesichert",
+    ),
+    "Backup_Include_History": MessageLookupByLibrary.simpleMessage(
+      "Suchverlauf einbeziehen",
+    ),
+    "Backup_Include_History_Desc": MessageLookupByLibrary.simpleMessage(
+      "Suchverlauf und zuletzt angesehene Anime und Manga ebenfalls sichern",
     ),
     "Bad": MessageLookupByLibrary.simpleMessage("Schlecht"),
     "BirthDay": MessageLookupByLibrary.simpleMessage("Geburtstag"),
@@ -361,6 +478,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Cute_Girls": MessageLookupByLibrary.simpleMessage("Süße Mädchen"),
     "Cute_Guys": MessageLookupByLibrary.simpleMessage("Süße Jungs"),
+    "DAL_API_URL": MessageLookupByLibrary.simpleMessage("DAL-API-URL"),
+    "DAL_API_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Wird für Autovervollständigung, Bild-Uploads und Bewertungsübersichten genutzt.",
+    ),
+    "DAL_Config_URL": MessageLookupByLibrary.simpleMessage(
+      "DAL-Server-Konfigurations-URL",
+    ),
+    "DAL_Config_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Hier holt sich die App die Liste der DAL-Server.",
+    ),
     "DB_Modification_Requests": MessageLookupByLibrary.simpleMessage(
       "DB-Modifikationsanfragen.",
     ),
@@ -762,6 +889,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Japan_Expo": MessageLookupByLibrary.simpleMessage("Japan EXPO."),
     "Japanese": MessageLookupByLibrary.simpleMessage("japanisch"),
     "Japanese_Life": MessageLookupByLibrary.simpleMessage("Japanisches Leben"),
+    "Jikan_Base_URL": MessageLookupByLibrary.simpleMessage(
+      "Jikan-API-Basis-URL",
+    ),
+    "Jikan_Base_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "Wird für Suche, Freundesprofile, Charaktere und andere Community-Daten genutzt.",
+    ),
     "Josei": MessageLookupByLibrary.simpleMessage("Frau"),
     "Jump_Festa": MessageLookupByLibrary.simpleMessage("Jump Festa."),
     "Just_a_sec": MessageLookupByLibrary.simpleMessage("Nur eine Sekunde!"),
@@ -832,6 +965,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Loading_clubs": MessageLookupByLibrary.simpleMessage("Laden von Clubs."),
     "Local_Time": MessageLookupByLibrary.simpleMessage("Ortszeit"),
     "Location": MessageLookupByLibrary.simpleMessage("Standort"),
+    "Log_Diagnostics": MessageLookupByLibrary.simpleMessage(
+      "Diagnoseprotokoll aufzeichnen",
+    ),
+    "Log_Diagnostics_Desc": MessageLookupByLibrary.simpleMessage(
+      "Das Diagnoseprotokoll jeder Sitzung aufzeichnen. Wenn der Zugriff auf den öffentlichen Speicher verweigert wird, wird das Protokoll im App-Ordner gespeichert",
+    ),
     "Log_In": MessageLookupByLibrary.simpleMessage("Anmeldung"),
     "Logged_In": MessageLookupByLibrary.simpleMessage("Benutzer angemeldet .."),
     "Logged_In_as": MessageLookupByLibrary.simpleMessage("Angemeldet als"),
@@ -1003,6 +1142,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "No_Pictures_yet": MessageLookupByLibrary.simpleMessage(
       "Noch keine Bilder ..",
     ),
+    "No_Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Derzeit sind keine Benachrichtigungen eingeplant",
+    ),
     "No_Recommendations_yet": MessageLookupByLibrary.simpleMessage(
       "Noch keine Empfehlungen...",
     ),
@@ -1061,6 +1203,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Notification_settings_warning": MessageLookupByLibrary.simpleMessage(
       "Möglicherweise erhalten Sie immer noch Benachrichtigungen für bis zu 3 Tage für die bereits geplanten Benachrichtigungen.Bitte beachten Sie, dass diese Einstellungen nur funktionieren, wenn Sie sich angemeldet haben.",
+    ),
+    "Notifications_Reset_Done": MessageLookupByLibrary.simpleMessage(
+      "Benachrichtigungen neu eingeplant",
     ),
     "OP_ED": MessageLookupByLibrary.simpleMessage("Auf ed."),
     "Ok": MessageLookupByLibrary.simpleMessage("OK"),
@@ -1153,6 +1298,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Diese Notiz ist nur lokal und wird nicht synchronisiert.",
     ),
     "Profile": MessageLookupByLibrary.simpleMessage("Profil"),
+    "Profile_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "Dieses Profil konnte nicht geladen werden. Prüfe den Benutzernamen oder versuche es erneut.",
+    ),
     "Profile_Page": MessageLookupByLibrary.simpleMessage("Profilseite"),
     "Profile_bg_removed": MessageLookupByLibrary.simpleMessage(
       "Der Profilhintergrund wurde erfolgreich entfernt",
@@ -1168,6 +1316,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Published": MessageLookupByLibrary.simpleMessage("Veröffentlicht"),
     "Published_Manga": MessageLookupByLibrary.simpleMessage(
       "Veröffentlicht Manga.",
+    ),
+    "Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Eingeplante Benachrichtigungen",
+    ),
+    "Queued_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "Derzeit von der App eingeplante Erinnerungen",
     ),
     "Quotes": MessageLookupByLibrary.simpleMessage("Zitate"),
     "Racing": MessageLookupByLibrary.simpleMessage("Rennen"),
@@ -1241,6 +1395,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "Reread": MessageLookupByLibrary.simpleMessage("Wiedereinsetzen"),
     "Rereading": MessageLookupByLibrary.simpleMessage("Wiedererlangen."),
     "Reset": MessageLookupByLibrary.simpleMessage("Zurücksetzen"),
+    "Reset_Notifications": MessageLookupByLibrary.simpleMessage(
+      "Geplante Benachrichtigungen zurücksetzen",
+    ),
+    "Reset_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "Alle eingeplanten Episoden-Erinnerungen löschen und mit aktuellen Daten neu planen",
+    ),
+    "Reset_To_Defaults": MessageLookupByLibrary.simpleMessage(
+      "Auf Standard zurücksetzen",
+    ),
     "Reset_homepage": MessageLookupByLibrary.simpleMessage(
       "Homepage zurücksetzen.",
     ),
@@ -1262,6 +1425,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Restore_fail": MessageLookupByLibrary.simpleMessage(
       "Wiederherstellung fehlgeschlagen",
     ),
+    "Retry": MessageLookupByLibrary.simpleMessage("Erneut versuchen"),
     "Reverse_Harem": MessageLookupByLibrary.simpleMessage("Umgekehrter Harem"),
     "Review": MessageLookupByLibrary.simpleMessage("Rezension"),
     "Review_By": MessageLookupByLibrary.simpleMessage("Überprüfung durch"),

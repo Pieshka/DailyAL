@@ -19,37 +19,65 @@ enum FeatureFlag { aireviews }
 class DalApi {
   static DalApi _internal = DalApi._();
   static DalApi i = _internal;
+
+  /// Set once the singleton has actually been constructed. Endpoint changes
+  /// use this so they can refresh the server pool without forcing the
+  /// (network-touching) constructor to run during startup or in tests.
+  static DalApi? initialized;
   late Future<Servers?> _dalConfigFuture;
   late Future<String> _preferredServer;
-  late Future<Map<int, ScheduleData>> _scheduleForMalIds;
+  Future<Map<int, ScheduleData>>? _scheduleForMalIds;
   late Future<List<AnimeAutoComplete>?> _autoCompleteFuture;
   final StreamListener<bool> autoCompleteCacheLoaded = StreamListener(false);
   Map<int, ScheduleData> _scheduleForMalIdsSync = {};
   bool _debugMode = kDebugMode;
 
+  /// Bumped whenever [_scheduleForMalIdsSync] receives new data so widgets
+  /// that read the synchronous map (list countdowns) rebuild after a delayed
+  /// schedule retry succeeds.
+  final ValueNotifier<int> scheduleRevision = ValueNotifier<int>(0);
+
   Future<Servers?> get dalConfigFuture async {
     return _dalConfigFuture;
   }
 
-  Future<Map<int, ScheduleData>> get scheduleForMalIds async {
-    return await _scheduleForMalIds.then((value) {
-      _scheduleForMalIdsSync = value;
+  /// Returns the shared schedule future. Returning the same instance keeps
+  /// FutureBuilder-based countdown widgets stable across rebuilds; creating a
+  /// new future on every call made countdowns flicker or disappear.
+  Future<Map<int, ScheduleData>> get scheduleForMalIds {
+    final existing = _scheduleForMalIds;
+    if (existing != null) return existing;
+    late final Future<Map<int, ScheduleData>> future;
+    future = _loadSchedule(fromCache: true).then((value) {
+      // Keep failed/empty results uncached so the next access retries
+      // instead of permanently breaking every countdown in the app.
+      if (identical(_scheduleForMalIds, future) && value.isEmpty) {
+        _scheduleForMalIds = null;
+      }
       return value;
     });
+    _scheduleForMalIds = future;
+    return future;
   }
 
   Map<int, ScheduleData> get scheduleForMalIdsSync => _scheduleForMalIdsSync;
 
+  @visibleForTesting
+  set scheduleForMalIdsSync(Map<int, ScheduleData> value) {
+    _scheduleForMalIdsSync = value;
+  }
+
   void onScheduleLoaded(void Function() callback) {
-    _scheduleForMalIds.then((value) {
+    scheduleForMalIds.then((value) {
       callback();
     });
   }
 
   DalApi._() {
+    initialized = this;
     _dalConfigFuture = _getDalConfigFuture();
     _preferredServer = _getPreferredServer();
-    _scheduleForMalIds = _getScheduleForMalIds();
+    _scheduleForMalIds = _loadSchedule(fromCache: true);
     _autoCompleteFuture = _getAutoCompleteFuture();
     _autoCompleteFuture.then((_) {
       logDal('autocomplete cache loaded');
@@ -58,7 +86,41 @@ class DalApi {
   }
 
   void resetScheduleForMalIds() {
-    _scheduleForMalIds = _getScheduleForMalIds(fromCache: false);
+    _scheduleForMalIds = _loadSchedule(fromCache: false);
+  }
+
+  /// Re-resolves the DAL server pool / hosted API base after the user edits
+  /// the API endpoint overrides in settings.
+  void resetDalConfig() {
+    _dalConfigFuture = _getDalConfigFuture();
+    _preferredServer = _getPreferredServer();
+    _autoCompleteFuture = _getAutoCompleteFuture();
+  }
+
+  /// Fetches the schedule without ever completing with an error. A failed
+  /// request keeps the last known schedule data instead of replacing it with
+  /// an empty map, which previously made every countdown disappear until the
+  /// app was restarted.
+  Future<Map<int, ScheduleData>> _loadSchedule({required bool fromCache}) async {
+    try {
+      final fresh = await _getScheduleForMalIds(fromCache: fromCache);
+      if (fresh.isEmpty && _scheduleForMalIdsSync.isNotEmpty) {
+        // A successful but empty response after a non-empty one is almost
+        // always a transient upstream glitch; keep the previous schedule.
+        logDal('Schedule refresh returned no entries; keeping previous schedule data.');
+        return _scheduleForMalIdsSync;
+      }
+      _scheduleForMalIdsSync = fresh;
+      scheduleRevision.value++;
+      return fresh;
+    } catch (e) {
+      logDal('Schedule fetch failed: $e');
+      if (_scheduleForMalIdsSync.isNotEmpty) {
+        logDal('Keeping last known schedule data after failure.');
+        return _scheduleForMalIdsSync;
+      }
+      return const {};
+    }
   }
 
   Future<Servers> _getDalConfigFuture() async {
@@ -245,17 +307,20 @@ class DalApi {
 
   Future<int?> getRandom(String category) async {
     final result = await MalConnect.getContent(
-      '${CredMal.jikanV4}random/$category?sfw=false',
+      // jikan-edge rejects the sfw switch (MAL has no server-side equivalent).
+      '${CredMal.jikanV4}random/$category',
       withNoHeaders: true,
       fromCache: false,
       retryOnFail: false,
     );
 
     if (result != null && result is Map && result.containsKey('data')) {
-      return result['data']['mal_id'];
-    } else {
-      return null;
+      final data = result['data'];
+      if (data is Map) {
+        return (data['mal_id'] ?? data['malId']) as int?;
+      }
     }
+    return null;
   }
 
   Future<int?> getRandomFromList(String category, String status) async {
@@ -331,11 +396,53 @@ class DalApi {
     int? year,
     bool fromCache = true,
   }) async {
-    return HashMap.fromEntries((await getSchedules(
-            season: season, type: type, year: year, fromCache: fromCache))
-        .map((e) => MapEntry(PathUtils.getIdUrl(e.relatedLinks?.mal), e))
+    final raw = await httpGet(
+      'schedules?${buildQueryParams({
+            'type': type,
+            'season': season?.name,
+            'year': year
+          })}',
+      fromCache,
+    );
+    // A null response means the request failed (network/server error). It is
+    // not proof that nothing is airing; callers must be able to tell the two
+    // apart so a failure never wipes existing countdowns.
+    if (raw == null) {
+      throw StateError('DAL schedule endpoint returned no data.');
+    }
+    if (raw is! Map<String, dynamic>) {
+      throw FormatException(
+          'Unexpected schedule response type: ${raw.runtimeType}');
+    }
+    return parseScheduleResponse(raw);
+  }
+
+  /// Builds the malId -> schedule map from a decoded DAL response. Entries
+  /// without a usable MAL link are skipped rather than breaking the map.
+  @visibleForTesting
+  static Map<int, ScheduleData> parseScheduleResponse(Map<String, dynamic> raw) {
+    final listData = ListData<ScheduleData>.fromJson(
+      raw,
+      (p0) => ScheduleData.fromJson(p0),
+    );
+    return HashMap.fromEntries((listData.data ?? [])
+        .map((e) => MapEntry(scheduleMalId(e), e))
         .where((e) => e.key != null)
         .map((e) => MapEntry(e.key!, e.value)));
+  }
+
+  /// Extracts the MAL id from a schedule entry. Entries without a usable MAL
+  /// link are skipped instead of crashing the whole schedule map (Uri.parse
+  /// used to throw on a missing/null relatedLinks.mal value).
+  @visibleForTesting
+  static int? scheduleMalId(ScheduleData data) {
+    final link = data.relatedLinks?.mal;
+    if (link == null || link.trim().isEmpty) return null;
+    try {
+      return PathUtils.getIdUrl(link);
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<SearchResult> searchInterestStacks({
@@ -553,9 +660,18 @@ class DalApi {
     }
   }
 
-  Future<String> getSignedImageUrl(String type, String id) async {
+  Future<String?> getSignedImageUrl(String type, String id) async {
     final response = await _apiGET('types/$type/images/$id');
-    return response['signedURL'];
+    // The hosted API can answer with an error payload or a renamed field;
+    // returning null lets callers fall back to "no image" instead of throwing.
+    if (response is Map) {
+      final url = response['signedURL'] ??
+          response['signedUrl'] ??
+          response['url'];
+      if (url is String && url.isNotEmpty) return url;
+    }
+    logDal('No signed image URL returned for "$type/$id": $response');
+    return null;
   }
 
   Future<void> saveImage(

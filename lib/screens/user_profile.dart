@@ -138,17 +138,26 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _pageController = PageController(initialPage: 0);
     _pageListner = StreamListener(0);
     _userProfFuture = _getUserProfileFuture();
+    user.addListener(_onUserChanged);
+  }
+
+  void _onUserChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _retryProfileLoad() {
+    setState(() {
+      _userProfFuture = _getUserProfileFuture();
+    });
   }
 
   @override
   void dispose() {
-    super.dispose();
+    user.removeListener(_onUserChanged);
     _pageListner.dispose();
     _pageController.dispose();
     _controller.dispose();
-    user.addListener(() {
-      if (mounted) setState(() {});
-    });
+    super.dispose();
   }
 
   @override
@@ -178,6 +187,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
         done: (snapshot) {
           final userProf = snapshot.data;
           String? username = userProf?.name;
+          if (username == null) {
+            // A failed profile lookup must not look like an endless loader.
+            return widget.isSelf
+                ? _profileError()
+                : _otherUserPage(_profileError(), userProf);
+          }
           return conditional(
             on: !widget.isSelf,
             parent: (child) => _otherUserPage(child, userProf),
@@ -221,6 +236,27 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ? loadingBelowText()
             : TitlebarScreen(loadingBelowText(), appbarTitle: widget.username),
         future: () => _userProfFuture,
+      ),
+    );
+  }
+
+  Widget _profileError() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error_outline, size: 42.0),
+            SB.h10,
+            title(S.current.Profile_Load_Failed, align: TextAlign.center),
+            SB.h20,
+            ShadowButton(
+              onPressed: _retryProfileLoad,
+              child: Text(S.current.Retry),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -449,7 +485,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   StateFullFutureWidget<String?> _profileBackground(UserProf prof) {
     return StateFullFutureWidget<String?>(
-      future: () => UserProfService.i.getProfileBGDownloadUrl(prof.id!),
+      future: () => UserProfService.i.getProfileBGDownloadUrl(prof.id),
       loadingChild: SB.z,
       done: (snapshot) {
         final url = snapshot.data;

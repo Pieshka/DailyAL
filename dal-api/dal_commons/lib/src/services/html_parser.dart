@@ -18,23 +18,20 @@ class HtmlParsers {
   static Map<String, String> parseMagazines(Document? d, ContentType type) {
     if (d == null) return {};
     try {
-      final toReplace =
-          type == ContentType.anime ? "/anime/producer/" : "/manga/magazine/";
-      final gLink = d.querySelectorAll('.genre-link')[4];
-      final gList = gLink.querySelectorAll('.genre-list a') ?? [];
+      // The producers block on anime.php and the magazines block on manga.php
+      // are not at the same position (index 4 only happened to work for
+      // anime.php), so entries are matched by the link they point at instead.
+      final pattern = RegExp(type == ContentType.anime
+          ? r'/anime/producer/(\d+)/([^/?#]+)'
+          : r'/manga/magazine/(\d+)/([^/?#]+)');
       final prodMap = <String, String>{};
-      for (var e in gList) {
-        String? href = e.attributes['href'] ?? '';
-        if (href.isNotBlank) {
-          href = href.replaceAll(toReplace, '');
-          final split = href.split('/');
-          if (split.isNotEmpty) {
-            final id = int.tryParse(split[0]);
-            final name = split[1].replaceAll('_', ' ');
-            if (id != null && name.isNotBlank) {
-              prodMap['$id'] = name;
-            }
-          }
+      for (final entry in d.querySelectorAll('.genre-list a')) {
+        final match = pattern.firstMatch(entry.attributes['href'] ?? '');
+        if (match == null) continue;
+        final id = int.tryParse(match.group(1) ?? '');
+        final name = (match.group(2) ?? '').replaceAll('_', ' ').trim();
+        if (id != null && name.isNotBlank) {
+          prodMap['$id'] = name;
         }
       }
       return prodMap;
@@ -1266,24 +1263,38 @@ class HtmlParsers {
 
   static parseLiveChartSchedule(Document? doc) {
     if (doc == null) return null;
-    final cards = doc.querySelectorAll('.anime-card') ?? [];
+    // LiveChart redesigned its anime grid: the old `.anime-card` markup is
+    // now `article.lc-anime-details-card`, the countdown moved from
+    // `.episode-countdown time` to `time.lc-text-countdown[data-timestamp]`,
+    // the episode label from `.release-schedule-info` to the poster overlay
+    // (`EP6 · TV (JP)`), and the related links from `.related-links a` to
+    // footer icon links (`a.mal.logo` ...). Match both layouts so a site
+    // redesign can never blank out the whole airing schedule again.
+    final cards = doc.querySelectorAll('.anime-card, .lc-anime-details-card');
     return cards
         .map((e) {
-          final countDownEle = e.querySelector('.episode-countdown time');
+          final countDownEle = e.querySelector('.episode-countdown time') ??
+              e.querySelector('time[data-timestamp]');
           if (countDownEle != null) {
             final timestamp =
                 int.tryParse(countDownEle.attributes['data-timestamp'] ?? '');
+            final scheduleInfo = e.querySelector('.release-schedule-info') ??
+                e.querySelector(
+                    'a.lc-anime-details-card__poster-overlays__release-state div');
             final episode = _getBeforeInt(
-                e.querySelector('.release-schedule-info')?.text.trim() ?? '',
+                scheduleInfo?.text.trim() ?? '',
                 startPattern: 'EP',
                 endPattern: '·');
             if (timestamp != null && episode != null) {
               final relatedLinksMap = {};
-              e.querySelectorAll('.related-links a').forEach((rl) {
-                final className = rl.className;
+              e
+                  .querySelectorAll(
+                      '.related-links a, .lc-anime-details-card__footer a')
+                  .forEach((rl) {
                 final href = rl.attributes['href'];
-                if (href != null) {
-                  relatedLinksMap[className.replaceAll("-icon", '')] = href;
+                final key = _liveChartLinkKey(rl.className);
+                if (href != null && key != null) {
+                  relatedLinksMap[key] = href;
                 }
               });
 
@@ -1299,6 +1310,27 @@ class HtmlParsers {
         })
         .where((e) => e != null)
         .toList();
+  }
+
+  /// Maps a LiveChart related-link anchor class to the RelatedLinks key
+  /// ('mal', 'anilist', 'crunchyroll', ...). Old markup used e.g.
+  /// `mal-icon`; the redesign uses `mal logo lc-anime-details-card__footer__icon
+  /// shrink-0 ...`, so the first short, non-utility class token is the key.
+  static String? _liveChartLinkKey(String className) {
+    for (final raw in className.split(RegExp(r'\s+'))) {
+      final token = raw.replaceAll('-icon', '').trim();
+      if (token.isEmpty || token == 'logo') continue;
+      if (token.startsWith('lc-') ||
+          token.startsWith('lcm3') ||
+          token.contains('__') ||
+          token == 'shrink-0' ||
+          token == 'rounded-full' ||
+          token == 'inline-block') {
+        continue;
+      }
+      return token;
+    }
+    return null;
   }
 
   static parseUserAboutPage(Document? p0) {
@@ -1686,46 +1718,69 @@ class HtmlParsers {
     return data;
   }
 
-  static parseUserHistory(Document? p0, String? type) {
+  static List<Map<String, dynamic>> parseUserHistory(
+      Document? p0, String? type) {
     final content = p0?.body?.querySelector('.history_content_wrapper');
-    if (content != null) {
-      final history = content
-          .querySelectorAll('tr')
-          .where((e) => e.querySelector('.normal_header') == null)
-          .map((e) {
-            final a = e.querySelector('a');
-            final url = a?.attributes.tryAt('href') ?? '';
-            final id = queryParamsUri(Uri.tryParse(url), 'id');
-            final category = url.isBlank
-                ? null
-                : (url.contains('anime') ? 'anime' : 'manga');
-            final title = a?.text.trim();
-            e.querySelector('td.borderClass a')?.remove();
-            final splits = e
-                .querySelector('td.borderClass')
-                ?.text
-                .trim()
-                .replaceAll('\n', '')
-                .split(' ');
-            final history = splits
-                ?.map((e) => e.trim())
-                .where((e) => e.isNotBlank)
-                .join(' ');
-            final time = unescape.convert(
-                e.querySelectorAll('td.borderClass').tryAt(1)?.text.trim() ??
-                    '');
-            return {
-              'id': id,
-              'title': title,
-              'history': history,
-              'category': category,
-              'time': time,
-            };
-          })
-          .where((e) => e['id'] != null)
-          .toList();
-      return history;
+    if (content == null) return const [];
+    // The page that was fetched knows which category it holds; the combined
+    // (no type) history page fetches both, so the type is authoritative.
+    final requestedType = (type ?? '').trim().toLowerCase();
+    final history = content
+        .querySelectorAll('tr')
+        .where((e) => e.querySelector('.normal_header') == null)
+        .map((e) {
+          final a = e.querySelector('a');
+          final url = a?.attributes.tryAt('href') ?? '';
+          final id = historyEntryId(url);
+          final category = historyEntryCategory(url, requestedType);
+          final title = a?.text.trim();
+          e.querySelector('td.borderClass a')?.remove();
+          final splits = e
+              .querySelector('td.borderClass')
+              ?.text
+              .trim()
+              .replaceAll('\n', '')
+              .split(' ');
+          final history = splits
+              ?.map((e) => e.trim())
+              .where((e) => e.isNotBlank)
+              .join(' ');
+          final time = unescape.convert(
+              e.querySelectorAll('td.borderClass').tryAt(1)?.text.trim() ?? '');
+          return {
+            'id': id,
+            'title': title,
+            'history': history,
+            'category': category,
+            'time': time,
+          };
+        })
+        .where((e) => e['id'] != null)
+        .toList();
+    return history;
+  }
+
+  /// MAL has linked history entries as `/anime.php?id=123` and as
+  /// `/anime/123/Title`; both shapes are accepted.
+  static String? historyEntryId(String url) {
+    if (url.isBlank) return null;
+    final fromQuery = queryParamsUri(Uri.tryParse(url), 'id');
+    if (fromQuery != null && fromQuery.toString().isNotBlank) {
+      return fromQuery.toString();
     }
+    final pathMatch = RegExp(r'/(?:anime|manga)/(\d+)').firstMatch(url);
+    return pathMatch?.group(1);
+  }
+
+  /// Falls back to the link when no category was requested, which is the case
+  /// for MAL's own combined history page.
+  static String? historyEntryCategory(String url, String requestedType) {
+    if (requestedType == 'anime' || requestedType == 'manga') {
+      return requestedType;
+    }
+    if (url.contains('manga')) return 'manga';
+    if (url.contains('anime')) return 'anime';
+    return null;
   }
 
   static parseGenres(Document document, String category) {

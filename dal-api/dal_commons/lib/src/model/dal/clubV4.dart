@@ -40,7 +40,7 @@ class ClubV4 {
 
   ClubV4.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
+    malId = pickJson(json, ['mal_id', 'malId']);
     name = json['name'];
     url = json['url'];
   }

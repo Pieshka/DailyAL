@@ -34,15 +34,17 @@ class PeopleV4Data implements DataUnion {
 
   PeopleV4Data.fromJson(Map<String, dynamic>? json) {
     if (json == null) return;
-    malId = json['mal_id'];
+    malId = pickJson(json, ['mal_id', 'malId']);
     url = json['url'];
-    websiteUrl = json['website_url'];
-    images =
-        json['images'] != null ? Images.fromJson(json['images']) : null;
+    websiteUrl = pickJson(json, ['website_url', 'website']);
+    images = json['images'] != null
+        ? Images.fromJson(json['images'])
+        : Images.fromUrl(json['imageUrl']);
     name = json['name'];
-    givenName = json['given_name'];
-    familyName = json['family_name'];
-    final rawAlternateNames = json['alternate_names'];
+    givenName = pickJson(json, ['given_name', 'givenName']);
+    familyName = pickJson(json, ['family_name', 'familyName']);
+    final rawAlternateNames =
+        pickJson(json, ['alternate_names', 'alternateNames']);
     alternateNames = rawAlternateNames is List
         ? rawAlternateNames.whereType<String>().toList()
         : <String>[];

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dailyanimelist/api/dalapi.dart';
 import 'package:dailyanimelist/notifservice.dart';
 import 'package:dailyanimelist/pages/settings/customsettings.dart';
@@ -11,6 +12,7 @@ import 'package:dailyanimelist/widgets/togglebutton.dart';
 import 'package:dailyanimelist/widgets/user/contentlistwidget.dart';
 import 'package:dal_commons/dal_commons.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:dailyanimelist/generated/l10n.dart';
 
 import '../../constant.dart';
@@ -28,6 +30,124 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   List<Node> nodes = List.from(jsonDecode(sampleNodesList))
       .map((e) => AnimeDetailed.fromJson(e['node']))
       .toList();
+
+  bool _resetting = false;
+
+  /// Bumped to re-run the pending-reminder future after a reset.
+  int _previewTick = 0;
+
+  Future<void> _resetNotifications() async {
+    if (_resetting) return;
+    setState(() => _resetting = true);
+    final count = await NotificationService().resetScheduledReminders();
+    if (!mounted) return;
+    setState(() {
+      _resetting = false;
+      _previewTick++;
+    });
+    showToast(S.current.Notifications_Reset_Done);
+    logDal('Scheduled notifications reset; $count reminders queued.');
+  }
+
+  Widget _queuedRemindersPreview() {
+    return FutureBuilder<List<ScheduledReminder>>(
+      key: ValueKey(_previewTick),
+      future: NotificationService().pendingReminders(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+        final reminders = snapshot.data ?? const <ScheduledReminder>[];
+        if (reminders.isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 6),
+            child: Text(
+              S.current.No_Queued_Notifications,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: reminders.map(_reminderTile).toList(growable: false),
+        );
+      },
+    );
+  }
+
+  Widget _reminderTile(ScheduledReminder reminder) {
+    final time = reminder.scheduledFor;
+    final subtitle = [
+      if (time != null) DateFormat('yyyy-MM-dd HH:mm').format(time),
+      if (reminder.malId > 0) 'MAL #${reminder.malId}',
+    ].join('  •  ');
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 24.0),
+      leading: _reminderPoster(reminder),
+      title: Text(
+        reminder.title.replaceAll(RegExp(r'</?[bi]>'), ''),
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      subtitle: Text(
+        subtitle,
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
+  }
+
+  /// Poster of the queued entry. A reminder whose payload carries no artwork
+  /// (one queued by an older app run) gets a warning badge: that reminder will
+  /// show no cover when it fires.
+  Widget _reminderPoster(ScheduledReminder reminder) {
+    const width = 44.0;
+    const height = 62.0;
+    final poster = reminder.posterUrl;
+    final image = poster == null
+        ? Container(
+            width: width,
+            height: height,
+            color: Colors.grey.shade600,
+            child: const Icon(Icons.image_not_supported, size: 20),
+          )
+        : CachedNetworkImage(
+            imageUrl: poster,
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Container(
+              width: width,
+              height: height,
+              color: Colors.grey.shade600,
+            ),
+            errorWidget: (context, url, error) => Container(
+              width: width,
+              height: height,
+              color: Colors.grey.shade600,
+              child: const Icon(Icons.broken_image, size: 20),
+            ),
+          );
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: image,
+          ),
+          if (!reminder.hasArtwork)
+            const Positioned(
+              right: 0,
+              top: 0,
+              child: Icon(Icons.error, color: Colors.orange, size: 16),
+            ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +237,41 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
             padding: EdgeInsets.only(top: 40, left: 30, right: 30),
             child: title(S.current.Notification_settings_warning, fontSize: 14),
           )
+        ]),
+        SliverListWrapper([
+          Padding(
+            padding: const EdgeInsets.only(top: 30, left: 30, right: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: title(S.current.Queued_Notifications, fontSize: 20),
+                ),
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () => setState(() => _previewTick++),
+                ),
+              ],
+            ),
+          ),
+          SB.h10,
+          OptionTile(
+            iconData: Icons.notifications_active_outlined,
+            text: S.current.Reset_Notifications,
+            desc: S.current.Reset_Notifications_Desc,
+            multiLine: true,
+            onPressed: _resetting ? null : _resetNotifications,
+            trailing: _resetting
+                ? const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : null,
+          ),
+          SB.h10,
+          _queuedRemindersPreview(),
+          SB.h20,
         ]),
       ],
     );

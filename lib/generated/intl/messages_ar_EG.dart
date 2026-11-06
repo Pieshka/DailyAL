@@ -22,6 +22,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "AI_Review_Summary": MessageLookupByLibrary.simpleMessage(
+      "ملخص المراجعات بالذكاء الاصطناعي",
+    ),
+    "AI_Review_Summary_Desc": MessageLookupByLibrary.simpleMessage(
+      "يعرض الملخص الناتج عن الذكاء الاصطناعي للمراجعات في صفحة المراجعات",
+    ),
+    "API_Endpoints": MessageLookupByLibrary.simpleMessage("عناوين API"),
+    "API_Endpoints_Current": MessageLookupByLibrary.simpleMessage(
+      "الافتراضي الحالي",
+    ),
+    "API_Endpoints_Invalid_URL": MessageLookupByLibrary.simpleMessage(
+      "عنوان غير صالح. استخدم عنوانًا كاملًا http:// أو https://.",
+    ),
+    "API_Endpoints_Saved": MessageLookupByLibrary.simpleMessage(
+      "تم تحديث عناوين API",
+    ),
+    "API_Endpoints_desc": MessageLookupByLibrary.simpleMessage(
+      "استبدل خوادم API التي يتصل بها التطبيق. اترك الحقل فارغًا لاستخدام الافتراضي.",
+    ),
     "A_new_episode_is_out": MessageLookupByLibrary.simpleMessage(
       "حلقة جديدة خارج!",
     ),
@@ -69,6 +88,88 @@ class MessageLookup extends MessageLookupByLibrary {
     "Allow_YT_Player_Desc": MessageLookupByLibrary.simpleMessage(
       "السماح لمشغل Youtube بتشغيل مقاطع الفيديو في التطبيق",
     ),
+    "Ameo_Add_Username_Hint": MessageLookupByLibrary.simpleMessage(
+      "أضف اسم مستخدم MyAnimeList عبر إعدادات Ameo لتحميل التوصيات.",
+    ),
+    "Ameo_All_Recommendations_Settings": MessageLookupByLibrary.simpleMessage(
+      "جميع التوصيات والإعدادات",
+    ),
+    "Ameo_Apply_Settings": MessageLookupByLibrary.simpleMessage(
+      "تطبيق الإعدادات",
+    ),
+    "Ameo_Configure_Username": MessageLookupByLibrary.simpleMessage(
+      "تعيين اسم مستخدم MyAnimeList",
+    ),
+    "Ameo_Contribution": MessageLookupByLibrary.simpleMessage("المساهمة"),
+    "Ameo_Copy_Log": MessageLookupByLibrary.simpleMessage("نسخ السجل"),
+    "Ameo_Extra_Seasons": MessageLookupByLibrary.simpleMessage("مواسم إضافية"),
+    "Ameo_Filter_PTW": MessageLookupByLibrary.simpleMessage(
+      "تصفية «قائمة المشاهدة لاحقاً»",
+    ),
+    "Ameo_Hide_Reason": MessageLookupByLibrary.simpleMessage("إخفاء السبب"),
+    "Ameo_Legacy_Model_Note": MessageLookupByLibrary.simpleMessage(
+      "نموذج Legacy لا يستخدم Logit weight أو Niche boost.",
+    ),
+    "Ameo_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "فشل تحميل التوصيات.",
+    ),
+    "Ameo_Log_Copied": MessageLookupByLibrary.simpleMessage(
+      "تم نسخ السجل التقني",
+    ),
+    "Ameo_Logit_Weight": MessageLookupByLibrary.simpleMessage("Logit weight"),
+    "Ameo_Model_Helper": MessageLookupByLibrary.simpleMessage(
+      "النماذج مدربة بأساليب مختلفة وقد تنتج توصيات مختلفة.",
+    ),
+    "Ameo_Model_Label": MessageLookupByLibrary.simpleMessage("نموذج التوصية"),
+    "Ameo_Movies": MessageLookupByLibrary.simpleMessage("أفلام"),
+    "Ameo_Music_Anime": MessageLookupByLibrary.simpleMessage("أنمي موسيقي"),
+    "Ameo_Niche_Boost": MessageLookupByLibrary.simpleMessage(
+      "Niche boost factor",
+    ),
+    "Ameo_No_Displayable_Results": MessageLookupByLibrary.simpleMessage(
+      "لم يُرجع Ameo أي توصيات قابلة للعرض.",
+    ),
+    "Ameo_No_Recommendations_Yet": MessageLookupByLibrary.simpleMessage(
+      "لا توجد توصيات بعد.",
+    ),
+    "Ameo_No_Results": MessageLookupByLibrary.simpleMessage(
+      "لم يُرجع Ameo أي توصيات.",
+    ),
+    "Ameo_ONA_OVA_Specials": MessageLookupByLibrary.simpleMessage(
+      "ONA / OVA / خاصة",
+    ),
+    "Ameo_Powered_By": MessageLookupByLibrary.simpleMessage(
+      "مدعوم من Sprout بواسطة Ameobea",
+    ),
+    "Ameo_Powered_By_Desc": MessageLookupByLibrary.simpleMessage(
+      "مدعوم من Sprout بواسطة Ameobea. قد تتغير الخدمة الخارجية وصيغة الاستجابة.",
+    ),
+    "Ameo_Predicted_Score": MessageLookupByLibrary.simpleMessage("توقع Ameo"),
+    "Ameo_Recommendations": MessageLookupByLibrary.simpleMessage("توصيات Ameo"),
+    "Ameo_Recommended_Because": MessageLookupByLibrary.simpleMessage(
+      "موصى به لأنك شاهدت:",
+    ),
+    "Ameo_Reload": MessageLookupByLibrary.simpleMessage("إعادة تحميل"),
+    "Ameo_Request_Failed": MessageLookupByLibrary.simpleMessage(
+      "فشل الطلب إلى Ameo. افتح التفاصيل التقنية لمعرفة السبب.",
+    ),
+    "Ameo_Settings": MessageLookupByLibrary.simpleMessage("إعدادات Ameo"),
+    "Ameo_Technical_Details": MessageLookupByLibrary.simpleMessage(
+      "التفاصيل التقنية",
+    ),
+    "Ameo_Username_Helper": MessageLookupByLibrary.simpleMessage(
+      "يؤخذ تلقائياً من الملف الشخصي عند توفره؛ يمكنك تغييره دائماً.",
+    ),
+    "Ameo_Username_Label": MessageLookupByLibrary.simpleMessage(
+      "اسم مستخدم MyAnimeList",
+    ),
+    "Ameo_Username_Missing": MessageLookupByLibrary.simpleMessage(
+      "لم يتم العثور على اسم مستخدم MyAnimeList. قم بإعداده في إعدادات Ameo.",
+    ),
+    "Ameo_Why_Recommended": MessageLookupByLibrary.simpleMessage(
+      "لماذا يُوصى بهذا؟",
+    ),
+    "Ameo_Your_Rating": MessageLookupByLibrary.simpleMessage("تقييمك"),
     "Analysis": MessageLookupByLibrary.simpleMessage("التحليلات"),
     "Animals": MessageLookupByLibrary.simpleMessage("الحيوانات"),
     "Animation": MessageLookupByLibrary.simpleMessage("حيوية"),
@@ -184,6 +285,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Backup_Desc": MessageLookupByLibrary.simpleMessage(
       "سيؤدي هذا إلى إجراء نسخ احتياطي للإشارات المرجعية والإعدادات وما إلى ذلك",
+    ),
+    "Backup_Include_History": MessageLookupByLibrary.simpleMessage(
+      "تضمين سجل البحث",
+    ),
+    "Backup_Include_History_Desc": MessageLookupByLibrary.simpleMessage(
+      "يشمل النسخ الاحتياطي سجل البحث والأنمي والمانغا اللذين تمت مشاهدتهما مؤخرًا",
     ),
     "Bad": MessageLookupByLibrary.simpleMessage("سيء"),
     "BirthDay": MessageLookupByLibrary.simpleMessage("عيد ميلاد"),
@@ -325,6 +432,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Cute_Girls": MessageLookupByLibrary.simpleMessage("فتيات لطيفات"),
     "Cute_Guys": MessageLookupByLibrary.simpleMessage("شباب لطفاء"),
+    "DAL_API_URL": MessageLookupByLibrary.simpleMessage(
+      "عنوان API الخاص بـ DAL",
+    ),
+    "DAL_API_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "يُستخدم للإكمال التلقائي ورفع الصور وملخصات المراجعات.",
+    ),
+    "DAL_Config_URL": MessageLookupByLibrary.simpleMessage(
+      "عنوان إعداد خادم DAL",
+    ),
+    "DAL_Config_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "منه يجلب التطبيق قائمة خوادم DAL.",
+    ),
     "DB_Modification_Requests": MessageLookupByLibrary.simpleMessage(
       "طلب تعديل DB",
     ),
@@ -704,6 +823,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Japan_Expo": MessageLookupByLibrary.simpleMessage("معرض اليابان"),
     "Japanese": MessageLookupByLibrary.simpleMessage("اليابانية"),
     "Japanese_Life": MessageLookupByLibrary.simpleMessage("الحياة اليابانية"),
+    "Jikan_Base_URL": MessageLookupByLibrary.simpleMessage(
+      "عنوان API Jikan الأساسي",
+    ),
+    "Jikan_Base_URL_desc": MessageLookupByLibrary.simpleMessage(
+      "يُستخدم للبحث وملفات الأصدقاء والشخصيات وبيانات المجتمع الأخرى.",
+    ),
     "Josei": MessageLookupByLibrary.simpleMessage("النساء"),
     "Jump_Festa": MessageLookupByLibrary.simpleMessage("القفز فيستا"),
     "Just_a_sec": MessageLookupByLibrary.simpleMessage("ثانيةواحدة!"),
@@ -770,6 +895,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Loading_clubs": MessageLookupByLibrary.simpleMessage("تحميل الأندية"),
     "Local_Time": MessageLookupByLibrary.simpleMessage("الوقت المحلي"),
     "Location": MessageLookupByLibrary.simpleMessage("موقع"),
+    "Log_Diagnostics": MessageLookupByLibrary.simpleMessage("تسجيل التشخيص"),
+    "Log_Diagnostics_Desc": MessageLookupByLibrary.simpleMessage(
+      "يحفظ سجل التشخيص لكل جلسة. إذا رفض الوصول إلى التخزين العام فيتم حفظ السجل في مجلد التطبيق",
+    ),
     "Log_In": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
     "Logged_In": MessageLookupByLibrary.simpleMessage(
       "تسجيل الدخول المستخدم ..",
@@ -935,6 +1064,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "No_Pictures_yet": MessageLookupByLibrary.simpleMessage(
       "لا توجد صور بعد ..",
     ),
+    "No_Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "لا توجد إشعارات مجدولة حاليًا",
+    ),
     "No_Recommendations_yet": MessageLookupByLibrary.simpleMessage(
       "لا توصيات حتى الآن ..",
     ),
@@ -993,6 +1125,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Notification_settings_warning": MessageLookupByLibrary.simpleMessage(
       "لا يزال بإمكانك الحصول على تنبيهات لمدة تصل إلى 3 أيام للإخطارات التي تم جدولة بالفعل لك.يرجى ملاحظة أن هذه الإعدادات ستعمل فقط عند تسجيل الدخول.",
+    ),
+    "Notifications_Reset_Done": MessageLookupByLibrary.simpleMessage(
+      "تمت إعادة جدولة الإشعارات",
     ),
     "OP_ED": MessageLookupByLibrary.simpleMessage("واحد د"),
     "Ok": MessageLookupByLibrary.simpleMessage("نعم"),
@@ -1077,6 +1212,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "هذه الملاحظة محلية فقط ولن يتمت مزامنتها.",
     ),
     "Profile": MessageLookupByLibrary.simpleMessage("الملف الشخصي"),
+    "Profile_Load_Failed": MessageLookupByLibrary.simpleMessage(
+      "تعذر تحميل هذا الملف الشخصي. تحقق من اسم المستخدم أو حاول مرة أخرى.",
+    ),
     "Profile_Page": MessageLookupByLibrary.simpleMessage("الصفحة الشخصية"),
     "Profile_bg_removed": MessageLookupByLibrary.simpleMessage(
       "تمت إزالة خلفية الملف الشخصي بنجاح",
@@ -1093,6 +1231,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Psychological": MessageLookupByLibrary.simpleMessage("نفسي"),
     "Published": MessageLookupByLibrary.simpleMessage("نشرت"),
     "Published_Manga": MessageLookupByLibrary.simpleMessage("منشور المانجا"),
+    "Queued_Notifications": MessageLookupByLibrary.simpleMessage(
+      "الإشعارات المجدولة",
+    ),
+    "Queued_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "التذكيرات المجدولة حاليًا بواسطة التطبيق",
+    ),
     "Quotes": MessageLookupByLibrary.simpleMessage("يقتبس"),
     "Racing": MessageLookupByLibrary.simpleMessage("سباق"),
     "Random": MessageLookupByLibrary.simpleMessage("عشوائي"),
@@ -1163,6 +1307,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "Reread": MessageLookupByLibrary.simpleMessage("إعادة قراءة"),
     "Rereading": MessageLookupByLibrary.simpleMessage("إعادة الإقرار"),
     "Reset": MessageLookupByLibrary.simpleMessage("إعادة ضبط"),
+    "Reset_Notifications": MessageLookupByLibrary.simpleMessage(
+      "إعادة ضبط الإشعارات المجدولة",
+    ),
+    "Reset_Notifications_Desc": MessageLookupByLibrary.simpleMessage(
+      "إلغاء كل تذكيرات الحلقات في قائمة الانتظار وجدولتها مجددًا بالبيانات الحالية",
+    ),
+    "Reset_To_Defaults": MessageLookupByLibrary.simpleMessage(
+      "إعادة إلى الافتراضي",
+    ),
     "Reset_homepage": MessageLookupByLibrary.simpleMessage(
       "إعادة تعيين الصفحة الرئيسية",
     ),
@@ -1182,6 +1335,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Restore_fail": MessageLookupByLibrary.simpleMessage(
       "فشلت عملية الاستعادة",
     ),
+    "Retry": MessageLookupByLibrary.simpleMessage("إعادة المحاولة"),
     "Reverse_Harem": MessageLookupByLibrary.simpleMessage("عكس الحريم"),
     "Review": MessageLookupByLibrary.simpleMessage("إعادة النظر"),
     "Review_By": MessageLookupByLibrary.simpleMessage("روجع من قبل"),

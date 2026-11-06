@@ -377,13 +377,17 @@ class CountDownWidget extends StatefulWidget {
   @override
   State<CountDownWidget> createState() => _CountDownWidgetState();
 
-  static CountDownWidget expandedCountdownWidget(
+  static Widget expandedCountdownWidget(
     ScheduleData scheduleData, {
     EdgeInsetsGeometry? padding,
     required BuildContext context,
   }) {
+    final timestamp = scheduleData.timestamp;
+    // Missing or invalid release timestamps must degrade gracefully: the
+    // countdown is simply hidden instead of throwing during build.
+    if (timestamp == null || timestamp <= 0) return SB.z;
     return CountDownWidget(
-      timestamp: scheduleData.timestamp!,
+      timestamp: timestamp,
       customTimer: (t) {
         var hasDays = t.days > 0;
         var hasHours = t.hours > 0;
@@ -485,8 +489,8 @@ class _CountDownWidgetState extends State<CountDownWidget> {
 
   @override
   void dispose() {
-    super.dispose();
     timer?.cancel();
+    super.dispose();
   }
 
   @override

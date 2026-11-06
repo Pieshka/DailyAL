@@ -72,7 +72,8 @@ class _ClubsPageState extends State<ClubsPage> {
           child: _buildClubPage(),
         ),
         Positioned(
-          bottom: fabBottomPosition,
+          // Keep the FAB above the Android navigation bar.
+          bottom: fabBottomPosition + MediaQuery.paddingOf(context).bottom,
           right: fabRightPosition,
           child: FloatingActionButton(
             onPressed: () => launchURLWithConfirmation(

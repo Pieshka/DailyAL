@@ -98,6 +98,13 @@ class _UserPopSlideOpenPageState extends State<UserPopSlideOpenPage> {
     }
   }
 
+  void _retryUserProf() {
+    setState(() {
+      _userProfFuture =
+          _getUserProfileFuture().then((value) => userProfSync = value);
+    });
+  }
+
   Future<String?> _getProfileImageUrlFuture(int? id) async {
     if (id == null) {
       return Future.value(null);
@@ -187,6 +194,10 @@ class _UserPopSlideOpenPageState extends State<UserPopSlideOpenPage> {
     return StateFullFutureWidget<UserProf?>(
       done: (snapshot) {
         final userProf = snapshot.data;
+        if (userProf == null && !isSelf) {
+          // Failed friend lookup: show a retry instead of a blank header.
+          return _buildHeaderError();
+        }
         return StateFullFutureWidget<String?>(
           refKey: _bgImageRefKey,
           future: () => _getProfileImageUrlFuture(userProf?.id),
@@ -196,6 +207,24 @@ class _UserPopSlideOpenPageState extends State<UserPopSlideOpenPage> {
       },
       loadingChild: _buildHeaderShimmer(),
       future: () => _userProfFuture,
+    );
+  }
+
+  Widget _buildHeaderError() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: Row(
+        children: [
+          Icon(Icons.error_outline, size: 35),
+          SB.w20,
+          Expanded(child: title(S.current.Profile_Load_Failed)),
+          SB.w10,
+          ShadowButton(
+            onPressed: _retryUserProf,
+            child: Text(S.current.Retry),
+          ),
+        ],
+      ),
     );
   }
 
@@ -364,7 +393,10 @@ class _UserPopSlideOpenPageState extends State<UserPopSlideOpenPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (!isTablet)
+              // The drag pill has to stay in the middle, so the leading slot is
+              // always filled: the settings button on the own profile, an
+              // equally sized placeholder on a friend's profile.
+              if (!isTablet && isSelf)
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: () {
@@ -376,23 +408,27 @@ class _UserPopSlideOpenPageState extends State<UserPopSlideOpenPage> {
                           },
                         ));
                   },
-                ),
+                )
+              else if (!isTablet && !_isFullScreen)
+                const SizedBox(width: 48.0),
               if (!_isFullScreen && !isTablet)
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withValues(alpha: 0.5),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withValues(alpha: 0.5),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )

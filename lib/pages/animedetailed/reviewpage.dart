@@ -7,6 +7,7 @@ import 'package:dailyanimelist/api/dalapi.dart';
 import 'package:dailyanimelist/cache/cachemanager.dart';
 import 'package:dailyanimelist/constant.dart';
 import 'package:dailyanimelist/generated/l10n.dart';
+import 'package:dailyanimelist/main.dart';
 import 'package:dailyanimelist/screens/contentdetailedscreen.dart';
 import 'package:dailyanimelist/screens/plainscreen.dart';
 import 'package:dailyanimelist/util/pathutils.dart';
@@ -763,6 +764,10 @@ class _ReviewGeneratedSummaryState extends State<ReviewGeneratedSummary> {
   }
 
   void _handlePostFrameCallback() {
+    // The remote feature flag alone used to enable this: when the hosted
+    // summary service is broken or simply not wanted there was no way to turn
+    // the request off, so the local preference gates it as well.
+    if (!user.pref.showAiReviewSummary) return;
     DalApi.i.isFeatureEnabled(FeatureFlag.aireviews).then((value) {
       if (value) {
         _hasReviewSummary = true;
