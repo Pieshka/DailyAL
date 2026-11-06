@@ -240,7 +240,7 @@ class HomePageUtils {
         title = ss.News;
         break;
       case HomePageType.ameo_recommendation:
-        title = 'Rekomendasi Ameo';
+        title = ss.Ameo_Recommendations;
         break;
       default:
     }
