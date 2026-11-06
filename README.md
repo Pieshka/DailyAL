@@ -16,8 +16,10 @@
 
 > **WARNING!!!** This fork was fixed using artificial intelligence tools. A self-hosted Qwen model and the open-source OpenCode agent were used for the fix. 
 > No Frontier model was used in the process. I do not condone or approve of the thoughtless use of AI for vibecoding. Every change, as well as the 
-> agent'so peration itself, was continuously supervised by a human. This fork was created primarily for personal use, as I was frustrated by bugs in the fork 
-> I had created (and thus also in the upstream version); I am sharing it so that no one else has to go through the same process I did.
+> agent's operation itself, was continuously supervised by a human. This fork was created primarily for personal use, as I was frustrated by bugs in the fork 
+> I had forked this from (and thus also in the upstream version); I am sharing it so that no one else has to go through the same process I did.
+> If you ever take your time to manually implement all the fixes necessary to bring DailyAL to life or the original author would ressurect the project,
+> please tell me in the issues and I'll take this down.
 
 
 > **About this repository:** This is a community fork of [onemind66/DailyAL](https://github.com/onemind66/DailyAL). It retains DailyAL's core MAL client functionality and adds fork-specific features and fixes. The upstream release and download links below refer to the original project, not a separate release published by this fork.
