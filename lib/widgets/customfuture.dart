@@ -25,9 +25,14 @@ class CFutureBuilder<T> extends StatelessWidget {
     return FutureBuilder<T>(
         future: future,
         builder: (_, snapshot) {
-          if (snapshot.hasError && onError != null) {
-            onError!(snapshot.error);
-            return done(AsyncSnapshot.nothing());
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasError) {
+            // A failed future must never leave the widget stuck on the
+            // loading child forever. Report the error, then hand an empty
+            // snapshot to done() so callers render their empty/error state.
+            logDal('CFutureBuilder future failed: ${snapshot.error}');
+            if (onError != null) onError!(snapshot.error);
+            return done(AsyncSnapshot<T>.nothing());
           }
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
