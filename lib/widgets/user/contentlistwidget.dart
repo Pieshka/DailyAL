@@ -330,8 +330,19 @@ Widget buildBaseNodePageItem(
           children: list
               .asMap()
               .entries
-              .map((e) =>
-                  Expanded(child: fromItem(e.key, e.value, homePageTileSize)))
+              .map(
+                (e) => Expanded(
+                  // `e.key` is the column inside this chunk; onClose consumers
+                  // index into the full item list, so the chunk offset has to
+                  // be added. Without it every horizontal row (gridAxisCount 1)
+                  // reported index 0 and always removed the first entry.
+                  child: fromItem(
+                    index * gridAxisCount + e.key,
+                    e.value,
+                    homePageTileSize,
+                  ),
+                ),
+              )
               .toList(),
         ),
       ),

@@ -194,55 +194,65 @@ class _UserContentBuilderState extends State<UserContentBuilder>
   @override
   Widget build(BuildContext context) {
     if (_sortFilterDisplay == null) return loadingCenterColored;
-    return RefreshIndicator(
-      onRefresh: _refresh,
-      child: Stack(
-        children: [
-          Padding(
-            padding: widget.listPadding ?? const EdgeInsets.only(top: 25.0),
-            child: InfinitePagination(
-              scrollController: widget.controller,
-              refKey: _sortFilterDisplay?.refKey(refKey),
-              future: (offset) => getContentList(offset: offset),
-              pageSize: widget.pageSize,
-              displayType: _sortFilterDisplay!.displayOption.displayType,
-              countChange: widget.countChange,
-              customFilterKey: '${_sortFilterDisplay!.filterOutputs.isEmpty}',
-              enableCustomFilter:
-                  _enableSearch && _searchController.text.isNotBlank,
-              customFilterBuilder: (items) {
-                var list = items.expand((e) => e).toList();
-                if (_enableSearch && _searchController.text.isNotBlank) {
-                  list = searchBaseNodes(list, _searchController.text);
-                }
-                return list;
-              },
-              gridChildCount:
-                  _sortFilterDisplay!.displayOption.gridCrossAxisCount,
-              itemBuilder: (_, item, index) {
-                return buildBaseNodePageItem(
-                  widget.category,
-                  item,
-                  index,
-                  _sortFilterDisplay!.displayOption.displayType,
-                  showEdit: widget.username.equals("@me"),
-                  displaySubType:
-                      _sortFilterDisplay!.displayOption.displaySubType,
-                  gridAxisCount:
-                      _sortFilterDisplay!.displayOption.gridCrossAxisCount,
-                  gridHeight: _sortFilterDisplay!.displayOption.gridHeight,
-                  id: _sortFilterDisplay!.displayOption.id,
-                );
-              },
+    // The inline search keeps a text field focused. Without this the system
+    // back button popped the list page itself, which closed the app instead of
+    // closing the search box and hiding the keyboard.
+    return PopScope(
+      canPop: !_enableSearch,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _onEndSearch();
+      },
+      child: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Stack(
+          children: [
+            Padding(
+              padding: widget.listPadding ?? const EdgeInsets.only(top: 25.0),
+              child: InfinitePagination(
+                scrollController: widget.controller,
+                refKey: _sortFilterDisplay?.refKey(refKey),
+                future: (offset) => getContentList(offset: offset),
+                pageSize: widget.pageSize,
+                displayType: _sortFilterDisplay!.displayOption.displayType,
+                countChange: widget.countChange,
+                customFilterKey: '${_sortFilterDisplay!.filterOutputs.isEmpty}',
+                enableCustomFilter:
+                    _enableSearch && _searchController.text.isNotBlank,
+                customFilterBuilder: (items) {
+                  var list = items.expand((e) => e).toList();
+                  if (_enableSearch && _searchController.text.isNotBlank) {
+                    list = searchBaseNodes(list, _searchController.text);
+                  }
+                  return list;
+                },
+                gridChildCount:
+                    _sortFilterDisplay!.displayOption.gridCrossAxisCount,
+                itemBuilder: (_, item, index) {
+                  return buildBaseNodePageItem(
+                    widget.category,
+                    item,
+                    index,
+                    _sortFilterDisplay!.displayOption.displayType,
+                    showEdit: widget.username.equals("@me"),
+                    displaySubType:
+                        _sortFilterDisplay!.displayOption.displaySubType,
+                    gridAxisCount:
+                        _sortFilterDisplay!.displayOption.gridCrossAxisCount,
+                    gridHeight: _sortFilterDisplay!.displayOption.gridHeight,
+                    id: _sortFilterDisplay!.displayOption.id,
+                  );
+                },
+              ),
             ),
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Material(
-              child: _listSubHeaderWidget(),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Material(
+                child: _listSubHeaderWidget(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -316,13 +326,7 @@ class _UserContentBuilderState extends State<UserContentBuilder>
             axis: Axis.horizontal,
             expand: _enableSearch,
             child: IconButton(
-              onPressed: () {
-                _searchNode.unfocus();
-                if (mounted)
-                  setState(() {
-                    _enableSearch = false;
-                  });
-              },
+              onPressed: _onEndSearch,
               icon: Icon(Icons.clear, size: 16.0),
             ),
           )
@@ -339,6 +343,16 @@ class _UserContentBuilderState extends State<UserContentBuilder>
           _enableSearch = true;
         });
     }
+  }
+
+  /// Closes the inline search box: drops the keyboard focus and collapses the
+  /// field. Used by both the clear button and the system back button.
+  void _onEndSearch() {
+    _searchNode.unfocus();
+    if (mounted)
+      setState(() {
+        _enableSearch = false;
+      });
   }
 
   Widget _sortDisplayRefresh() {
