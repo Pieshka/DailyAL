@@ -234,7 +234,9 @@ class _AnimeGraphWidgetState extends State<AnimeGraphWidget> {
 
   Widget _bottomBar() {
     return Positioned(
-      bottom: 20,
+      // The graph is drawn edge to edge, so the plain 20 px offset would put
+      // these buttons under the Android navigation bar.
+      bottom: 20 + MediaQuery.paddingOf(context).bottom,
       left: 20,
       right: 20,
       child: Row(

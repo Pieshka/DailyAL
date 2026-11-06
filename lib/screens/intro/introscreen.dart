@@ -179,7 +179,13 @@ class _IntroScreenState extends State<IntroScreen> {
   Widget _pageNavigator() {
     return Container(
       alignment: Alignment.bottomCenter,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      // The Next/Skip bar must stay clear of the Android navigation bar.
+      padding: EdgeInsets.only(
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10 + MediaQuery.paddingOf(context).bottom,
+      ),
       child: Material(
         borderRadius: BorderRadius.circular(32),
         child: Row(
