@@ -628,10 +628,23 @@ class _ContentAllWidgetState extends State<ContentAllWidget>
   dynamic myListStatus;
   bool modifyListStatus = false;
 
+  /// Episode count MAL has confirmed, used to roll back an optimistic update.
+  int? _confirmedEpisodes;
+  String? _confirmedStatus;
+
+  /// Set while a write is in flight; further taps only update the target.
+  bool _episodeWriteInFlight = false;
+  int? _pendingEpisodeTarget;
+
   @override
   void initState() {
     super.initState();
     myListStatus = widget.myListStatus;
+    if (myListStatus is MyAnimeListStatus) {
+      _confirmedEpisodes =
+          (myListStatus as MyAnimeListStatus).numEpisodesWatched;
+      _confirmedStatus = (myListStatus as MyAnimeListStatus).status;
+    }
   }
 
   get id => widget.dynContent?.content?.id;
@@ -1266,7 +1279,8 @@ class _ContentAllWidgetState extends State<ContentAllWidget>
                     widget.dynContent, myListStatus?.numEpisodesWatched,
                     add: 1),
                 IBType.left,
-                Icons.add),
+                Icons.add,
+                true),
           iconButton(context, index, () => showEditSheet(context),
               modifyListStatus ? IBType.loading : IBType.middle, Icons.edit),
           if (_validShowStatus)
@@ -1277,7 +1291,8 @@ class _ContentAllWidgetState extends State<ContentAllWidget>
                     widget.dynContent, myListStatus?.numEpisodesWatched,
                     add: -1),
                 IBType.right,
-                Icons.remove),
+                Icons.remove,
+                true),
         ],
       );
 
@@ -1310,6 +1325,10 @@ class _ContentAllWidgetState extends State<ContentAllWidget>
       if (mounted && status != null)
         setState(() {
           myListStatus = status;
+          if (status is MyAnimeListStatus) {
+            _confirmedEpisodes = status.numEpisodesWatched;
+            _confirmedStatus = status.status;
+          }
         });
     }, onDelete: () {
       onStatisticsUpdate();
@@ -1320,25 +1339,91 @@ class _ContentAllWidgetState extends State<ContentAllWidget>
     });
   }
 
-  updateEpisode(content, int episodes, {int add = 1}) async {
-    showToast(S.current.Updating);
+  /// Applies the new episode count immediately, then writes it to MAL.
+  ///
+  /// A tap used to leave the old count on screen until the PUT and the list
+  /// cache rewrite had finished. The row now updates right away, and taps
+  /// that arrive while a write is in flight are coalesced into one follow-up
+  /// request with the latest value instead of being ignored.
+  updateEpisode(content, int? episodes, {int add = 1}) async {
+    final target = (episodes ?? 0) + add;
+    if (target < 0) return;
+
+    final unwrapped = content is BaseNode ? content.content : content;
+    final int? maxEpisodes =
+        unwrapped is AnimeDetailed ? unwrapped.numEpisodes : null;
+    if (maxEpisodes != null && maxEpisodes > 0 && target > maxEpisodes) {
+      showToast(S.current.Maximum_reached);
+      return;
+    }
+
+    final status = myListStatus is MyAnimeListStatus
+        ? myListStatus as MyAnimeListStatus
+        : null;
+    final completes =
+        maxEpisodes != null && maxEpisodes > 0 && target == maxEpisodes;
+
+    if (status != null) {
+      status.numEpisodesWatched = target;
+      if (completes) status.status = "completed";
+    }
+    if (mounted) setState(() {});
+    if (status == null) return;
+
+    _pendingEpisodeTarget = target;
+    if (_episodeWriteInFlight) return;
+    _episodeWriteInFlight = true;
     if (mounted)
       setState(() {
         modifyListStatus = true;
       });
-    var status =
-        await MalUser.updateEpisodeCount(content, episodes: episodes, add: add);
-    if (mounted)
-      setState(() {
-        modifyListStatus = false;
-        if (status != null) {
-          myListStatus = status;
+
+    try {
+      while (_pendingEpisodeTarget != null) {
+        final wanted = _pendingEpisodeTarget!;
+        _pendingEpisodeTarget = null;
+        final updated =
+            await MalUser.updateEpisodeCount(content, episodes: wanted);
+        if (updated == null) {
+          _pendingEpisodeTarget = null;
+          // Roll back whichever object the row is currently showing.
+          final current = myListStatus is MyAnimeListStatus
+              ? myListStatus as MyAnimeListStatus
+              : status;
+          current.numEpisodesWatched = _confirmedEpisodes;
+          current.status = _confirmedStatus;
+          if (mounted) setState(() {});
+          break;
         }
-      });
+        _confirmedEpisodes = updated.numEpisodesWatched;
+        _confirmedStatus = updated.status;
+        myListStatus = updated;
+        // Keep the optimistic value if the user tapped while this request was
+        // in flight; the loop sends it next.
+        final pending = _pendingEpisodeTarget;
+        if (pending != null) {
+          updated.numEpisodesWatched = pending;
+          if (maxEpisodes != null &&
+              maxEpisodes > 0 &&
+              pending >= maxEpisodes) {
+            updated.status = "completed";
+          }
+        }
+        if (mounted) setState(() {});
+      }
+    } finally {
+      _episodeWriteInFlight = false;
+      if (mounted)
+        setState(() {
+          modifyListStatus = false;
+        });
+    }
   }
 
   Widget iconButton(context, index, onPressed,
-          [IBType type = IBType.middle, IconData iconData = Icons.edit]) =>
+          [IBType type = IBType.middle,
+          IconData iconData = Icons.edit,
+          bool allowDuringUpdate = false]) =>
       Container(
         width: 30,
         height: 35,
@@ -1365,7 +1450,7 @@ class _ContentAllWidgetState extends State<ContentAllWidget>
                       : RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
           onPressed: () {
-            if (!modifyListStatus) onPressed();
+            if (allowDuringUpdate || !modifyListStatus) onPressed();
           },
         ),
       );

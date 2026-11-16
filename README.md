@@ -106,6 +106,7 @@ In addition to Ameo, this fork contains maintenance and reliability work across 
 |---|---|
 | MAL authentication and requests | Improved token-refresh handling and request behavior, including retry/error paths. |
 | List-status synchronization | Preserve successful list edits as per-title snapshots and merge fresh status information into supported search and recommendation results. |
+| List editing | Apply episode, chapter and volume changes immediately, merge rapid taps into one MAL write, and keep the connection alive between list writes so the row no longer waits on the network. |
 | Search | Improved pagination and result-field handling, producer filtering, retry behavior for Jikan requests, and error messages for failed searches. |
 | Character and person details | Validate detail responses, retry unusable cached data, and provide an error state with selectable/copyable diagnostic information when loading fails. |
 | Notifications | Use one-shot release reminders, reconcile against the user's relevant MAL lists, refresh when appropriate, and preserve existing reminders when list or schedule data is incomplete. |

@@ -11,6 +11,7 @@ import 'package:dailyanimelist/user/user.dart';
 import 'package:dal_api/handlers/handler_core.dart';
 import 'package:dal_commons/dal_commons.dart';
 import 'package:dal_commons/dal_commons.dart' as commons;
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
@@ -42,6 +43,68 @@ class MalConnect {
 
   static const _options = RetryOptions(maxAttempts: 8);
   static const _retryDuration = const Duration(seconds: 10);
+  static const _writeTimeout = Duration(seconds: 20);
+
+  static http.Client? _client;
+  static HttpOverrides? _clientOverrides;
+
+  /// Replaces the shared client. Only tests set this, so they can answer
+  /// requests without a network.
+  @visibleForTesting
+  static http.Client? testHttpClient;
+
+  /// All requests share one client so consecutive calls reuse the TLS
+  /// connection. Creating a client per request paid for a new handshake on
+  /// every list edit, which was most of the wait between tapping an episode
+  /// button and the row updating. The client is rebuilt when the active
+  /// [HttpOverrides] changes, so test stubs stay isolated.
+  static http.Client get _httpClient {
+    final testClient = testHttpClient;
+    if (testClient != null) return testClient;
+    final overrides = HttpOverrides.current;
+    if (_client == null || !identical(_clientOverrides, overrides)) {
+      _client?.close();
+      _client = http.Client();
+      _clientOverrides = overrides;
+    }
+    return _client!;
+  }
+
+  /// Drops the shared client; the next request builds a new one.
+  static void resetHttpClient() {
+    _client?.close();
+    _client = null;
+    _clientOverrides = null;
+  }
+
+  /// Sends a write request, retrying once when the connection is interrupted.
+  /// Writes are absolute values (an episode count, a status), so a retry
+  /// cannot apply the change twice.
+  static Future<http.Response> _sendWrite(
+    String url,
+    Map<String, String> headers,
+    Future<http.Response> Function() send,
+  ) {
+    return _sendWithAuthRefresh(url, headers, () async {
+      var attempt = 0;
+      while (true) {
+        attempt++;
+        try {
+          return await send().timeout(_writeTimeout);
+        } on SocketException catch (e) {
+          if (attempt >= 2) rethrow;
+          logDal('Retrying write after ${e.runtimeType}');
+        } on TimeoutException catch (e) {
+          if (attempt >= 2) rethrow;
+          logDal('Retrying write after ${e.runtimeType}');
+        } on http.ClientException catch (e) {
+          if (attempt >= 2) rethrow;
+          logDal('Retrying write after ${e.runtimeType}');
+        }
+        await Future.delayed(const Duration(milliseconds: 250));
+      }
+    });
+  }
 
   static Future<http.Response> retryGet(
     String url,
@@ -72,7 +135,7 @@ class MalConnect {
         return _sendWithAuthRefresh(
           url,
           headers,
-          () => http
+          () => _httpClient
               .get(Uri.parse(url), headers: headers)
               .timeout(_retryDuration),
         );
@@ -269,7 +332,7 @@ class MalConnect {
       return _sendWithAuthRefresh(
         url,
         headers,
-        () => http
+        () => _httpClient
             .get(Uri.parse(url), headers: headers)
             .timeout(timeoutDuration!, onTimeout: () {
           onTimeout();
@@ -278,7 +341,7 @@ class MalConnect {
       );
     } else {
       return _sendWithAuthRefresh(
-          url, headers, () => http.get(Uri.parse(url), headers: headers));
+          url, headers, () => _httpClient.get(Uri.parse(url), headers: headers));
     }
   }
 
@@ -307,42 +370,27 @@ class MalConnect {
   /// Standard Http Put Request with Auth Header
   static Future<http.Response> httpPutAsync(String url,
       {Map<String, String>? headers, Map<String, dynamic>? body}) async {
-    if (headers == null) {
-      headers = new Map();
-    }
-    if (body == null) {
-      body = new Map();
-    }
-    headers["X-MAL-Client-ID"] = CredMal.clientId;
-    headers["Accept"] = "application/json";
-    if (user.status == AuthStatus.AUTHENTICATED) {
-      try {
-        if (MalAuth.checkIfTokenExpired(user.authResponse!)) {
-          await MalAuth.refreshToken();
-        }
-      } catch (e) {
-        logDal(e);
-      }
-      final authResponse = user.authResponse;
-        if (authResponse?.tokenType != null &&
-          authResponse?.accessToken != null) {
-        headers["Authorization"] =
-            '${authResponse!.tokenType} ${authResponse.accessToken}';
-      }
-    }
-    return _sendWithAuthRefresh(
+    final requestHeaders = <String, String>{
+      ...?headers,
+      ...await _headers,
+    };
+    return _sendWrite(
       url,
-      headers,
-      () => http.put(Uri.parse(url), body: body, headers: headers),
+      requestHeaders,
+      () => _httpClient.put(
+        Uri.parse(url),
+        body: body ?? const <String, dynamic>{},
+        headers: requestHeaders,
+      ),
     );
   }
 
   static Future<http.Response> delete(String url) async {
     final headers = await _headers;
-    return _sendWithAuthRefresh(
+    return _sendWrite(
       url,
       headers,
-      () => http.delete(Uri.parse(url), headers: headers),
+      () => _httpClient.delete(Uri.parse(url), headers: headers),
     );
   }
 

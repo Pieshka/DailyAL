@@ -42,6 +42,10 @@ class MalUser {
       try {
         final raw = prefs.getString(key);
         if (raw == null) continue;
+        // Cheap pre-filter: decoding every cached list page made each edit
+        // wait on work that almost never applies. A page without this id in
+        // compact JSON cannot contain the node.
+        if (!raw.contains('"id":$id') && !raw.contains('"id": $id')) continue;
         final cached = jsonDecode(raw);
         if (cached is! Map<String, dynamic> || cached['data'] is! List) {
           continue;
