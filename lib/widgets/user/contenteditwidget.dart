@@ -281,9 +281,14 @@ class _ContentEditWidgetState extends State<ContentEditWidget> {
       }
     } catch (e) {}
 
+    // Show the new count immediately; the request follows in the background.
+    final previousEpisodes = episodeController.text;
+    final previousStatus = statusValue;
     if (mounted)
       setState(() {
         modifyEpisodes = true;
+        episodeController.text = _episodes.toString();
+        if (watchStatus != null) statusValue = watchStatus;
       });
     var status = await MalUser.updateMyAnimeListStatus(content.id,
         numEpisodesWatched: _episodes, status: watchStatus);
@@ -301,6 +306,8 @@ class _ContentEditWidgetState extends State<ContentEditWidget> {
       if (mounted)
         setState(() {
           modifyEpisodes = false;
+          episodeController.text = previousEpisodes;
+          statusValue = previousStatus;
         });
     }
     updateParent(result);
@@ -323,9 +330,12 @@ class _ContentEditWidgetState extends State<ContentEditWidget> {
       return;
     }
 
+    // Show the new count immediately; the request follows in the background.
+    final previousVolumes = volumesController.text;
     if (mounted)
       setState(() {
         modifyVolumes = true;
+        volumesController.text = _volumes.toString();
       });
     var content = contentDetailed;
     if (contentDetailed is BaseNode) {
@@ -346,6 +356,7 @@ class _ContentEditWidgetState extends State<ContentEditWidget> {
       if (mounted)
         setState(() {
           modifyVolumes = false;
+          volumesController.text = previousVolumes;
         });
     }
     updateParent(result);
@@ -368,9 +379,12 @@ class _ContentEditWidgetState extends State<ContentEditWidget> {
       return;
     }
 
+    // Show the new count immediately; the request follows in the background.
+    final previousChapters = chapterController.text;
     if (mounted)
       setState(() {
         modifyChapters = true;
+        chapterController.text = _chapters.toString();
       });
     var content = contentDetailed;
     if (contentDetailed is BaseNode) {
@@ -391,6 +405,7 @@ class _ContentEditWidgetState extends State<ContentEditWidget> {
       if (mounted)
         setState(() {
           modifyChapters = false;
+          chapterController.text = previousChapters;
         });
     }
     updateParent(result);
