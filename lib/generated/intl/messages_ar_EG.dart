@@ -772,6 +772,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Horizontal_List": MessageLookupByLibrary.simpleMessage("القائمة الأفقية"),
     "Horrible": MessageLookupByLibrary.simpleMessage("فظيع"),
     "Horror": MessageLookupByLibrary.simpleMessage("رعب"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "مخطط related واقتراحات البحث عبر DAL المضيف",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "معطّل افتراضيًا: DAL المدمجة تولّد هذه الميزات داخل التطبيق. فعّله لتفويضها إلى واجهة برمجة DAL المضيف.",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("حار"),
     "Hours": MessageLookupByLibrary.simpleMessage("ساعات"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage("صياد ضد صياد"),

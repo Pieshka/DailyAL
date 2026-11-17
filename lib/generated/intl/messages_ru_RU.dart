@@ -832,6 +832,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Horrible": MessageLookupByLibrary.simpleMessage("Ужасный"),
     "Horror": MessageLookupByLibrary.simpleMessage("Ужастик"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "Граф related и подсказки поиска через хостингованный DAL",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "По умолчанию выкл.: встроенный DAL генерирует их в приложении. Включите, чтобы передать их хостингованному API DAL.",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("Горячий"),
     "Hours": MessageLookupByLibrary.simpleMessage("Часы"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage(

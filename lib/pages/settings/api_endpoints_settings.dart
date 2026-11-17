@@ -21,6 +21,7 @@ class _ApiEndpointsSettingsPageState extends State<ApiEndpointsSettingsPage> {
   final _jikanController = TextEditingController();
   final _dalApiController = TextEditingController();
   final _dalConfigController = TextEditingController();
+  bool _useExternalDal = false;
   bool _loading = true;
   bool _saving = false;
 
@@ -32,6 +33,8 @@ class _ApiEndpointsSettingsPageState extends State<ApiEndpointsSettingsPage> {
 
   Future<void> _load() async {
     final stored = await ApiEndpointSettings.stored();
+    final useExternalDal =
+        await ApiEndpointSettings.useExternalDalFeaturesStored();
     if (!mounted) return;
     setState(() {
       _jikanController.text =
@@ -40,6 +43,7 @@ class _ApiEndpointsSettingsPageState extends State<ApiEndpointsSettingsPage> {
           stored[ApiEndpointSettings.keyDalApiUrl] ?? '';
       _dalConfigController.text =
           stored[ApiEndpointSettings.keyDalConfigUrl] ?? '';
+      _useExternalDal = useExternalDal;
       _loading = false;
     });
   }
@@ -57,6 +61,13 @@ class _ApiEndpointsSettingsPageState extends State<ApiEndpointsSettingsPage> {
       error = await ApiEndpointSettings.saveOverride(entry.key, entry.value);
       if (error != null) break;
     }
+    if (error == null) {
+      try {
+        await ApiEndpointSettings.saveUseExternalDalFeatures(_useExternalDal);
+      } catch (e) {
+        error = e.toString();
+      }
+    }
     if (!mounted) return;
     setState(() => _saving = false);
     showToast(error == null
@@ -71,6 +82,7 @@ class _ApiEndpointsSettingsPageState extends State<ApiEndpointsSettingsPage> {
       _jikanController.text = '';
       _dalApiController.text = '';
       _dalConfigController.text = '';
+      _useExternalDal = false;
     });
     showToast(S.current.API_Endpoints_Saved);
   }
@@ -134,6 +146,16 @@ class _ApiEndpointsSettingsPageState extends State<ApiEndpointsSettingsPage> {
                     children: [
                       Text(S.current.API_Endpoints_desc),
                       SB.h20,
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.zero,
+                        value: _useExternalDal,
+                        onChanged: _saving
+                            ? null
+                            : (value) =>
+                                setState(() => _useExternalDal = value),
+                        title: Text(S.current.Hosted_DAL_Features),
+                        subtitle: Text(S.current.Hosted_DAL_Features_desc),
+                      ),
                       _field(
                         controller: _jikanController,
                         label: S.current.Jikan_Base_URL,

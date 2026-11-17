@@ -852,6 +852,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Horizontal_List": MessageLookupByLibrary.simpleMessage("Lista horizontal"),
     "Horrible": MessageLookupByLibrary.simpleMessage("Horrível"),
     "Horror": MessageLookupByLibrary.simpleMessage("Horror"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "Grafo de related e sugestões de busca via DAL hospedada",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "Desativado por padrão: a DAL embutida gera esses dados no app. Ative para delegá-los à API de DAL hospedada.",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("Quente"),
     "Hours": MessageLookupByLibrary.simpleMessage("Horas"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage(

@@ -12,6 +12,13 @@ class ApiEndpointSettings {
   static const String keyJikanBaseUrl = 'api_override_jikan_base_url';
   static const String keyDalApiUrl = 'api_override_dal_api_url';
   static const String keyDalConfigUrl = 'api_override_dal_config_url';
+  static const String keyUseExternalDalFeatures = 'api_use_external_dal';
+
+  /// Whether the related-graph and search-autocomplete features are
+  /// delegated to the hosted Rust DAL. Off by default: the built-in DAL
+  /// handler serves both in-app.
+  static bool _useExternalDalFeatures = false;
+  static bool get useExternalDalFeatures => _useExternalDalFeatures;
 
   /// Applies stored overrides at startup. Must run after dotenv.load so the
   /// defaults are already available.
@@ -21,9 +28,18 @@ class ApiEndpointSettings {
       CredMal.setJikanBaseUrlOverride(prefs.getString(keyJikanBaseUrl));
       CredMal.setApiURLOverride(prefs.getString(keyDalApiUrl));
       CredMal.setAppConfigUrlOverride(prefs.getString(keyDalConfigUrl));
+      _useExternalDalFeatures = prefs.getBool(keyUseExternalDalFeatures) ?? false;
     } catch (e) {
       logDal('Failed to load API endpoint overrides: $e');
     }
+  }
+
+  /// Persists the hosted-DAL toggle and re-resolves the cached lists.
+  static Future<void> saveUseExternalDalFeatures(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(keyUseExternalDalFeatures, value);
+    _useExternalDalFeatures = value;
+    DalApi.initialized?.resetDalConfig();
   }
 
   /// Validates and stores one override; empty string clears it.
@@ -70,10 +86,23 @@ class ApiEndpointSettings {
   /// Clears every override and restores the compiled defaults.
   static Future<void> resetAll() async {
     final prefs = await SharedPreferences.getInstance();
-    for (final key in [keyJikanBaseUrl, keyDalApiUrl, keyDalConfigUrl]) {
+    for (final key in [
+      keyJikanBaseUrl,
+      keyDalApiUrl,
+      keyDalConfigUrl,
+      keyUseExternalDalFeatures,
+    ]) {
       await prefs.remove(key);
-      applyInMemory(key, null);
     }
+    _useExternalDalFeatures = false;
+    applyInMemory(keyJikanBaseUrl, null);
+    applyInMemory(keyDalApiUrl, null);
+    applyInMemory(keyDalConfigUrl, null);
+  }
+
+  static Future<bool> useExternalDalFeaturesStored() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(keyUseExternalDalFeatures) ?? false;
   }
 
   static Future<Map<String, String?>> stored() async {

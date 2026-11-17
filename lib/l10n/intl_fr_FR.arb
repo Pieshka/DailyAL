@@ -1096,5 +1096,7 @@
     "DAL_API_URL_desc": "Utilis\u00e9 pour l'auto-compl\u00e9tion, les envois d'images et les r\u00e9sum\u00e9s d'avis.",
     "DAL_Config_URL": "URL de configuration du serveur DAL",
     "DAL_Config_URL_desc": "L\u00e0 o\u00f9 l'application r\u00e9cup\u00e8re la liste des serveurs DAL.",
+    "Hosted_DAL_Features": "Graphe de related et suggestions de recherche via la DAL h\u00e9berg\u00e9e",
+    "Hosted_DAL_Features_desc": "D\u00e9sactiv\u00e9 par d\u00e9faut : la DAL int\u00e9gr\u00e9e g\u00e9n\u00e8re ces \u00e9l\u00e9ments dans l'app. Activez pour les d\u00e9l\u00e9guer \u00e0 l'API DAL h\u00e9berg\u00e9e.",
     "Reset_To_Defaults": "R\u00e9tablir les valeurs par d\u00e9faut"
 }

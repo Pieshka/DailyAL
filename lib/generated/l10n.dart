@@ -8294,10 +8294,10 @@ class S {
     );
   }
 
-  /// `Used for autocomplete, image uploads and review summaries.`
+  /// `Used for image uploads, review summaries, and (if the toggle above is on) the related graph and search suggestions.`
   String get DAL_API_URL_desc {
     return Intl.message(
-      'Used for autocomplete, image uploads and review summaries.',
+      'Used for image uploads, review summaries, and (if the toggle above is on) the related graph and search suggestions.',
       name: 'DAL_API_URL_desc',
       desc: '',
       args: [],
@@ -8319,6 +8319,26 @@ class S {
     return Intl.message(
       'Where the app fetches its list of DAL servers.',
       name: 'DAL_Config_URL_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Related graph & search suggestions via hosted DAL`
+  String get Hosted_DAL_Features {
+    return Intl.message(
+      'Related graph & search suggestions via hosted DAL',
+      name: 'Hosted_DAL_Features',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Off by default: the built-in DAL generates these in-app. Turn on to delegate them to the hosted DAL API.`
+  String get Hosted_DAL_Features_desc {
+    return Intl.message(
+      'Off by default: the built-in DAL generates these in-app. Turn on to delegate them to the hosted DAL API.',
+      name: 'Hosted_DAL_Features_desc',
       desc: '',
       args: [],
     );

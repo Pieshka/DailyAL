@@ -688,6 +688,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Horizontal_List": MessageLookupByLibrary.simpleMessage("水平リスト"),
     "Horrible": MessageLookupByLibrary.simpleMessage("最悪"),
     "Horror": MessageLookupByLibrary.simpleMessage("ホラー"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "ホストDAL経由の関連アニメグラフと検索候補",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "既定ではオフです。内蔵DALがアプリ内でこれらを生成します。ホストDAL APIに委譲する場合はオンにしてください。",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("ホット"),
     "Hours": MessageLookupByLibrary.simpleMessage("時間"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage("ハンター×ハンター"),

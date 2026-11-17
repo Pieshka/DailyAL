@@ -666,6 +666,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Horizontal_List": MessageLookupByLibrary.simpleMessage("수평 목록"),
     "Horrible": MessageLookupByLibrary.simpleMessage("끔찍한"),
     "Horror": MessageLookupByLibrary.simpleMessage("공포"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "호스트 DAL을 통한 관련 그래프 및 검색 제안",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "기본값: 꺼짐. 내장 DAL이 앱 내에서 생성합니다. 호스트 DAL API에 위임하려면 켜세요.",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("더운"),
     "Hours": MessageLookupByLibrary.simpleMessage("시간"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage("헌터 x 헌터"),

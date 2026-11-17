@@ -9,6 +9,7 @@ import 'package:shelf/shelf.dart';
 
 import '../client/http_connect.dart';
 import '../client/request_payload/request_payload.dart';
+import '../services/anime_service.dart';
 import '../services/helpers.dart';
 
 class HandlerCore {
@@ -19,7 +20,9 @@ class HandlerCore {
 
   HandlerCore() {
     _pathMatchers = [
+      PathMatcher('anime', _handleAnimeSearch),
       PathMatcher('anime/*id', _handleAnime, ['api']),
+      PathMatcher('anime/*id/related', _handleAnimeRelated, ['nodes']),
       PathMatcher('manga/*id', _handleManga, ['api']),
       PathMatcher('news', _handleNews, ['data']),
       PathMatcher('featured', _handleFeatured, ['data']),
@@ -117,6 +120,31 @@ class HandlerCore {
   Future<Map<String, dynamic>> _handleAnime(
           PathMatcher path, Request request) =>
       _handleContent(ContentType.anime, path, request);
+
+  /// Related-anime graph (the feature previously served by the hosted Rust
+  /// DAL at GET /anime/{id}/related).
+  Future<Map<String, dynamic>> _handleAnimeRelated(
+      PathMatcher path, Request request) async {
+    final id = path.pathParam<int>(request.url.path);
+    return await AnimeService.i.relatedGraph(id);
+  }
+
+  /// Search suggestions for autocomplete (previously GET /anime on the
+  /// hosted DAL). Answers per query from the Jikan mirror.
+  Future<Map<String, dynamic>> _handleAnimeSearch(
+      PathMatcher path, Request request) async {
+    final query = queryParams<String?>(request, 'q');
+    final limit = queryParams<int>(request, 'limit', 10) ?? 10;
+    if (query == null || query.trim().isEmpty) {
+      return {'data': <Map<String, dynamic>>[]};
+    }
+    return {
+      'data': await AnimeService.i.autoComplete(
+        query,
+        limit: limit.clamp(1, 24),
+      ),
+    };
+  }
 
   Future<Map<String, dynamic>> _handleManga(
           PathMatcher path, Request request) =>
