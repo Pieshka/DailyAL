@@ -810,6 +810,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Horizontal_List": MessageLookupByLibrary.simpleMessage("Yatay Liste"),
     "Horrible": MessageLookupByLibrary.simpleMessage("Berbat"),
     "Horror": MessageLookupByLibrary.simpleMessage("Korku"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "Host edilen DAL üzerinden related graf ve arama önerileri",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "Varsayılan: kapalı; yerleşik DAL bunları uygulama içinde oluşturur. Host edilen DAL API\'sine devretmek için açın.",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("Sıcak"),
     "Hours": MessageLookupByLibrary.simpleMessage("Saat"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage("Avcı x Avcı"),

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:dailyanimelist/api/api_endpoint_settings.dart';
 import 'package:dailyanimelist/api/credmal.dart';
 import 'package:dailyanimelist/api/malconnect.dart';
 import 'package:dailyanimelist/api/maluser.dart';
@@ -630,11 +631,10 @@ class DalApi {
   }
 
   Future<AnimeGraph> getAnimeGraph(int id) async {
-    return AnimeGraph.fromJson(
-      await _apiGET(
-        'anime/$id/related',
-      ),
-    );
+    final data = ApiEndpointSettings.useExternalDalFeatures
+        ? await _apiGET('anime/$id/related')
+        : await httpGet('anime/$id/related');
+    return AnimeGraph.fromJson(data);
   }
 
   Future<bool> isFeatureEnabled(FeatureFlag flag) {
@@ -720,20 +720,32 @@ class DalApi {
     String text, [
     int limit = 10,
   ]) async {
-    final autoCompleteList = await _autoCompleteFuture;
-    if (autoCompleteList == null) {
-      return [];
+    if (ApiEndpointSettings.useExternalDalFeatures) {
+      final autoCompleteList = await _autoCompleteFuture;
+      if (autoCompleteList == null) {
+        return [];
+      }
+      final lowerCase = text.toLowerCase();
+      return autoCompleteList
+          .where((e) =>
+              e.title.toLowerCase().contains(lowerCase) ||
+              e.synonyms.contains(lowerCase))
+          .take(limit)
+          .toList();
     }
-    final lowerCase = text.toLowerCase();
-    return autoCompleteList
-        .where((e) =>
-            e.title.toLowerCase().contains(lowerCase) ||
-            e.synonyms.contains(lowerCase))
-        .take(limit)
-        .toList();
+    // Built-in DAL answers per query; the result is cached per search term.
+    final raw = await httpGet(
+        'anime?q=${Uri.encodeQueryComponent(text)}&limit=$limit');
+    final data = raw is Map ? raw['data'] : null;
+    return data is List ? AnimeAutoComplete.fromList(data) : [];
   }
 
   Future<List<AnimeAutoComplete>?> _getAutoCompleteFuture() async {
+    if (!ApiEndpointSettings.useExternalDalFeatures) {
+      // The built-in DAL answers each query on demand, so there is nothing
+      // to preload; mark the stream loaded without touching the network.
+      return const <AnimeAutoComplete>[];
+    }
     try {
       final cachedData = await CacheManager.instance
           .getValueForServiceAutoExpire(

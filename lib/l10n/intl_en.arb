@@ -1090,8 +1090,10 @@
     "Jikan_Base_URL": "Jikan API base URL",
     "Jikan_Base_URL_desc": "Used for search, friend profiles, characters and other community data.",
     "DAL_API_URL": "DAL hosted API URL",
-    "DAL_API_URL_desc": "Used for autocomplete, image uploads and review summaries.",
+    "DAL_API_URL_desc": "Used for image uploads, review summaries, and (if the toggle above is on) the related graph and search suggestions.",
     "DAL_Config_URL": "DAL server config URL",
     "DAL_Config_URL_desc": "Where the app fetches its list of DAL servers.",
+    "Hosted_DAL_Features": "Related graph & search suggestions via hosted DAL",
+    "Hosted_DAL_Features_desc": "Off by default: the built-in DAL generates these in-app. Turn on to delegate them to the hosted DAL API.",
     "Reset_To_Defaults": "Reset to defaults"
 }

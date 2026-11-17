@@ -822,6 +822,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Horrible": MessageLookupByLibrary.simpleMessage("Mengerikan"),
     "Horror": MessageLookupByLibrary.simpleMessage("Kengerian"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "Grafik related & saran pencarian via DAL hosted",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "Nonaktif secara bawaan: DAL bawaan membuatnya di dalam aplikasi. Aktifkan untuk mendelegasikannya ke API DAL hosted.",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("Panas"),
     "Hours": MessageLookupByLibrary.simpleMessage("Jam"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage(

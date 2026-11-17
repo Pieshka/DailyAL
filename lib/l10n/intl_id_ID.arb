@@ -1096,5 +1096,7 @@
     "DAL_API_URL_desc": "Dipakai untuk autocomplete, unggah gambar, dan ringkasan ulasan.",
     "DAL_Config_URL": "URL konfigurasi server DAL",
     "DAL_Config_URL_desc": "Tempat aplikasi mengambil daftar server DAL.",
+    "Hosted_DAL_Features": "Grafik related & saran pencarian via DAL hosted",
+    "Hosted_DAL_Features_desc": "Nonaktif secara bawaan: DAL bawaan membuatnya di dalam aplikasi. Aktifkan untuk mendelegasikannya ke API DAL hosted.",
     "Reset_To_Defaults": "Kembalikan ke bawaan"
 }

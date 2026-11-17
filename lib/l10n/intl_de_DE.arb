@@ -1097,5 +1097,7 @@
     "DAL_API_URL_desc": "Wird f\u00fcr Autovervollst\u00e4ndigung, Bild-Uploads und Bewertungs\u00fcbersichten genutzt.",
     "DAL_Config_URL": "DAL-Server-Konfigurations-URL",
     "DAL_Config_URL_desc": "Hier holt sich die App die Liste der DAL-Server.",
+    "Hosted_DAL_Features": "Verwandte-Graph & Suchvorschl\u00e4ge \u00fcber gehostete DAL",
+    "Hosted_DAL_Features_desc": "Standardm\u00e4\u00dfig deaktiviert: die integrierte DAL erstellt diese in der App. Aktivieren, um sie an die gehostete DAL-API zu delegieren.",
     "Reset_To_Defaults": "Auf Standard zur\u00fccksetzen"
 }

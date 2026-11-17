@@ -458,7 +458,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Cute_Guys": MessageLookupByLibrary.simpleMessage("Cute Guys"),
     "DAL_API_URL": MessageLookupByLibrary.simpleMessage("DAL hosted API URL"),
     "DAL_API_URL_desc": MessageLookupByLibrary.simpleMessage(
-      "Used for autocomplete, image uploads and review summaries.",
+      "Used for image uploads, review summaries, and (if the toggle above is on) the related graph and search suggestions.",
     ),
     "DAL_Config_URL": MessageLookupByLibrary.simpleMessage(
       "DAL server config URL",
@@ -800,6 +800,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "Horizontal_List": MessageLookupByLibrary.simpleMessage("Horizontal List"),
     "Horrible": MessageLookupByLibrary.simpleMessage("Horrible"),
     "Horror": MessageLookupByLibrary.simpleMessage("Horror"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "Related graph & search suggestions via hosted DAL",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "Off by default: the built-in DAL generates these in-app. Turn on to delegate them to the hosted DAL API.",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("Hot"),
     "Hours": MessageLookupByLibrary.simpleMessage("Hours"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage("Hunter x Hunter"),

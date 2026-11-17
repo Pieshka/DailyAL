@@ -864,6 +864,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Horrible": MessageLookupByLibrary.simpleMessage("Horrible"),
     "Horror": MessageLookupByLibrary.simpleMessage("Horreur"),
+    "Hosted_DAL_Features": MessageLookupByLibrary.simpleMessage(
+      "Graphe de related et suggestions de recherche via la DAL hébergée",
+    ),
+    "Hosted_DAL_Features_desc": MessageLookupByLibrary.simpleMessage(
+      "Désactivé par défaut : la DAL intégrée génère ces éléments dans l\'app. Activez pour les déléguer à l\'API DAL hébergée.",
+    ),
     "Hot": MessageLookupByLibrary.simpleMessage("Hot"),
     "Hours": MessageLookupByLibrary.simpleMessage("Heures"),
     "Hunter_x_Hunter": MessageLookupByLibrary.simpleMessage("Hunter X Hunter"),
