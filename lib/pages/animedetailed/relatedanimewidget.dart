@@ -112,7 +112,14 @@ class _RelatedAnimeWidgetState extends State<RelatedAnimeWidget>
 
   Widget _noContentView({bool isLoading = false}) {
     return TitlebarScreen(
-      Center(child: isLoading ? CircularProgressIndicator() : showNoContent()),
+      Center(
+        child: isLoading
+            ? CircularProgressIndicator()
+            : // Only reachable after the graph request failed (a missing or
+              // unusable graph); "No Content" made a dead backend look like
+              // the entry simply has no relations.
+              showNoContent(text: S.current.Couldnt_generate_graph),
+      ),
       appbarTitle: _appBarTitle,
       actions: _getActions(false),
       autoIncludeSearch: false,

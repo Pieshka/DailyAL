@@ -18,13 +18,15 @@ class AnimeGraph {
     this.edges,
   });
 
-  factory AnimeGraph.fromJson(Map<String, dynamic> json) {
+  /// A null body (a failed request) parses to an empty graph instead of
+  /// throwing, so callers can tell "nothing to draw" apart from a crash.
+  factory AnimeGraph.fromJson(Map<String, dynamic>? json) {
     return AnimeGraph(
-      nodes: json["nodes"] == null
+      nodes: json == null || json["nodes"] == null
           ? []
           : List<GraphNode>.from(
               json["nodes"]!.map((x) => GraphNode.fromJson(x))),
-      edges: json["edges"] == null
+      edges: json == null || json["edges"] == null
           ? []
           : List<GraphEdge>.from(
               json["edges"]!.map((x) => GraphEdge.fromJson(x))),
@@ -55,7 +57,10 @@ class GraphEdge {
   factory GraphEdge.fromJson(Map<String, dynamic> json) => GraphEdge(
         source: json["source"],
         target: json["target"],
-        relationType: relationTypeValues.map[json["relation_type"]]!,
+        // Unknown or missing relation types must not take the whole graph
+        // down; `other` is the catch-all bucket.
+        relationType: relationTypeValues.map[json["relation_type"]] ??
+            GRelationType.other,
       );
 
   Map<String, dynamic> toJson() => {
@@ -168,7 +173,7 @@ class GStartSeason {
 
   factory GStartSeason.fromJson(Map<String, dynamic> json) => GStartSeason(
         year: json["year"],
-        season: seasonValues.map[json["season"]]!,
+        season: seasonValues.map[json["season"]],
       );
 
   Map<String, dynamic> toJson() => {
